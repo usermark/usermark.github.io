@@ -69,6 +69,16 @@ cb.pack()
 ## TreeView
 可捲動的表格
 ```python
+def sort_column(col, reverse):
+    """依此欄位排序"""
+    items = [(tv.set(child, col), child) for child in tv.get_children()]  #取出欄位值對應項目
+    items.sort(reverse=reverse)
+
+    for index, (val, child) in enumerate(items):
+        tv.move(child, '', index)  # 依新的索引移動項目
+
+    tv.heading(col, command=lambda: sort_column(col, not reverse))  # 重新定義方法為反向排序
+
 vbar = Scrollbar(window)
 vbar.pack(side=RIGHT, fill=Y)
 
@@ -76,12 +86,17 @@ Style().configure('user.Treeview', rowheight=110)  # 自訂風格，調整欄高
 tv = Treeview(window, yscrollcommand=vbar.set, show='headings', style='user.Treeview')
 tv.pack(side=LEFT, fill=BOTH, expand=True)
 tv['columns'] = 'id', 'name', 'password', 'auth_code'
-tv.heading('#1', text='id')
+tv.heading('#1', text='id', command=lambda: sort_column('#1', False))
 tv.heading('#2', text='name')
 tv.heading('#3', text='password')
 tv.heading('#4', text='auth_code')
 vbar.config(command=tv.yview)
 ```
+
+## Widget
+winfo_exists() 可檢查是否存在/顯示
+
+winfo_children() 回傳底下所有widget
 
 ## Grid
 自動佈局，每三個項目為一列
