@@ -9,6 +9,7 @@ tkinter是python內建的GUI。
 # Hello World
 ```python
 from tkinter import *
+from tkinter.ttk import *
 
 
 class Application:
@@ -93,6 +94,20 @@ tv.heading('#4', text='auth_code')
 vbar.config(command=tv.yview)
 ```
 
+## PanedWindow
+可調整的佈局元件
+
+```python
+pw = PanedWindow(orient=HORIZONTAL)
+sidebar = Frame(pw, width=200, height=200, relief=GROOVE)
+main = Frame(pw, width=400, height=400, relief=GROOVE)
+
+pw.pack(fill=BOTH, expand=True)
+
+pw.add(sidebar)
+pw.add(main)
+```
+
 ## Widget
 winfo_exists() 可檢查是否存在/顯示
 
@@ -114,4 +129,4 @@ def auto_grid(parent, widget):
 - &lt;Button-3&gt; 右鍵點擊
 - &lt;Double-1&gt; 左鍵連擊
 
-參考連結：[http://tcl.tk/man/tcl8.7/TkCmd/bind.htm]()
+參考連結：<http://tcl.tk/man/tcl8.7/TkCmd/bind.html>

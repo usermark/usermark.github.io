@@ -74,7 +74,7 @@ adb server啟動以後，在本地的5037端口監聽。adb client通過本地�
 ```
 000Chost:version
 ```
-000C表示”host:version”這條命令的長度為12個字節。命令中使用了host前綴，目的是為了區分其他類型的命令(後面還會看到shell前綴的命令)，host前綴的命令可以理解為只在client與server這個數據通道上存在。
+000C表示”host:version”這條命令的長度為12個字節。命令中使用了host前綴，目的是為了區分其他類型的命令，host前綴的命令可以理解為只在client與server這個數據通道上存在。
 
 server收到client的請求後，返回的數據遵循如下格式：
 1. 如果成功，則返回四個字節的字符串”OKAY”
@@ -150,4 +150,4 @@ client.send(b'Hello')
 print(client.recv(1024))
 ```
 
-參考連結：[https://duanqz.github.io/2015-05-21-Intro-adb]()
+參考連結：<https://duanqz.github.io/2015-05-21-Intro-adb>
