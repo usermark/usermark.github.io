@@ -1,18 +1,8 @@
 ---
 layout: page
-title: About
+title: '關於我'
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
-
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
-
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
-
-
-[jekyll-organization]: https://github.com/jekyll
+<img src="/assets/mike.png" width="200px" align="right"/>
+我是Mike，熟悉Android開發，有七年以上程式開發經驗。喜歡學習新事物，所以自學Python並應用在工作上。
