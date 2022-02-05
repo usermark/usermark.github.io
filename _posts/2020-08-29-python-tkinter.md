@@ -125,7 +125,7 @@ def auto_grid(parent, widget):
 
 # Bind
 - &lt;Button-1&gt; 左鍵點擊
-- &lt;Button-2&gt; windows和unix是中鍵點擊，mac是右鍵點擊，可用`platform.system() == 'Darwin'`判斷
+- &lt;Button-2&gt; windows和unix是中鍵點擊，mac是右鍵點擊，可用`platform.system() == 'Darwin'`判斷，Darwin為mac
 - &lt;Button-3&gt; 右鍵點擊
 - &lt;Double-1&gt; 左鍵連擊
 

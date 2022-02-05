@@ -4,7 +4,7 @@ title: '[Blender] 作品集'
 date: 2021-07-06 21:51
 categories: 
 ---
-左右鍵切換模型
+按下鍵盤左右鍵切換模型
 <canvas id="c" tabindex="0" style="width: 100%"></canvas>
 <script type="module">
   import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r127/build/three.module.js';
