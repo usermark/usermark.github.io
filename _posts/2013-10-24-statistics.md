@@ -3,6 +3,7 @@ layout: post
 title: '統計學'
 date: 2013-10-24 08:35
 categories: 
+math: true 
 ---
 心理與教育統計學 (Statistics for Psychology and Education)：探討如何應用有關的統計方法，來研究並解決各種心理與教育問題和現象的一種統計學。
 ## 變數 (Variable)

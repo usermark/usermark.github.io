@@ -4,22 +4,25 @@ title: '[Android] Ubuntu18.04 (WSL)編譯Android7.1'
 date: 2022-02-05 13:41
 categories: 
 ---
-## (可選) 移動Ubuntu至其他硬碟
+- toc
+{: toc }
+
+# (可選) 移動Ubuntu至其他硬碟
 Linux子系統預設安裝在主硬碟裡，編譯AOSP需要至少200G的空間，可能會發生主硬碟空間不足的問題，如果不會可跳過此步驟。
 
-# 1.安裝choco
+## 1.安裝choco
 使用PowerShell輸入以下指令
 ```
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString(‘https://chocolatey.org/install.ps1')
 ```
 
-# 2.安裝LxRunOffline
+## 2.安裝LxRunOffline
 使用PowerShell輸入以下指令
 ```
 choco install lxrunoffline
 ```
 
-# 3.在另一個硬碟建資料夾並設置權限
+## 3.在另一個硬碟建資料夾並設置權限
 在D槽建立wsl資料夾，接著使用PowerShell輸入以下指令，來查看你的使用者名稱，例如我的輸出為usermark-pc\mike。
 ```
 whoami
@@ -30,7 +33,7 @@ whoami
 icacls D:\wsl /grant "usermark-pc\mike:(OI)(CI)(F)"
 ```
 
-# 4.使用LxRunOffline來移動Linux子系統
+## 4.使用LxRunOffline來移動Linux子系統
 使用PowerShell輸入以下指令
 ```
 lxrunoffline move -n Ubuntu -d D:\wsl\installed\Ubuntu
@@ -41,30 +44,30 @@ lxrunoffline move -n Ubuntu -d D:\wsl\installed\Ubuntu
 lxrunoffline get-dir -n Ubuntu
 ```
 
-## 設置編譯環境
+# 設置編譯環境
 
-# 1.安装JDK
+## 1.安装JDK
 使用bash輸入以下指令
 ```
 sudo apt-get update
 sudo apt-get install openjdk-8-jdk
 ```
 
-# 2.安裝工具包
+## 2.安裝工具包
 使用bash輸入以下指令，參考<https://source.android.com/setup/build/initializing#installing-required-packages-ubuntu-1804>
 ```
 sudo apt-get install git-core gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses5 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig
 ```
 
-# 3.開啟大小寫敏感
+## 3.開啟大小寫敏感
 使用PowerShell輸入以下指令
 ```
 fsutil.exe file setCaseSensitiveInfo D:\wsl enable
 ```
 
-## 下載AOSP
+# 下載AOSP
 
-# 1.安裝Repo
+## 1.安裝Repo
 參考<https://source.android.com/setup/develop#installing-repo>
 ```
 mkdir ~/bin
@@ -72,7 +75,7 @@ curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
 chmod a+x ~/bin/repo
 ```
 
-# 2.初始化Repo
+## 2.初始化Repo
 參考<https://source.android.com/setup/build/downloading#initializing-a-repo-client>
 ```
 # 建立資料夾，名稱自定，這裡命名為android
@@ -92,27 +95,27 @@ python3 ~/bin/repo init -u https://android.googlesource.com/platform/manifest -b
 python3 ~/bin/repo sync
 ```
 
-# 3.(可選) 清空輸出資料夾
+## 3.(可選) 清空輸出資料夾
 清空out目錄
 ```
 m clean
 ```
 
-## 編譯AOSP
+# 編譯AOSP
 
-# 1.初始化相關指令
+## 1.初始化相關指令
 *每次重開指令視窗都要先呼叫，否則會找不到指令m和emulator。*
 ```
 source build/envsetup.sh
 ```
 
-# 2.選擇編譯目標
+## 2.選擇編譯目標
 參考<https://source.android.com/setup/build/building#choose-a-target>
 ```
 lunch aosp_arm-eng
 ```
 
-# 3.讓bash支持32位元運行
+## 3.讓bash支持32位元運行
 安裝qemu並設置binfmt
 ```
 sudo apt install qemu-user-static
@@ -127,13 +130,13 @@ sudo service binfmt-support start
 prebuilts/misc/linux-x86/bison/bison: cannot execute binary file: Exec format error
 ```
 
-# 4.開始編譯
+## 4.開始編譯
 使用m -jN指令來編譯，此處的N一般建議設置為cpu核心數的1-2倍，參考<https://source.android.com/setup/build/building#build-the-code>	
 ```
 m -j8
 ```
 
-# 5.錯誤處理
+## 5.錯誤處理
 ### 報錯: ftruncate(fd_out, GetSize()): Invalid argument
 
 ```
@@ -218,7 +221,7 @@ jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA, \
 ./prebuilts/sdk/tools/jack-admin start-server
 ```
 
-## (可選) 重置AOSP異動
+# (可選) 重置AOSP異動
 參考<https://stackoverflow.com/questions/5012163/how-to-discard-changes-using-repo>
 ```
 # 重置異動
