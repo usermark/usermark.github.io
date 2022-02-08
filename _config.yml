@@ -25,6 +25,7 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 timezone: Asia/Taipei
 author: 
   name: Mike Chen
+  url: /about/
 paginate: 10
 
 # Build settings

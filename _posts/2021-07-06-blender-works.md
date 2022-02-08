@@ -2,6 +2,7 @@
 layout: post
 title: '[Blender] 作品集'
 date: 2021-07-06 21:51
+permalink: /blender-works/
 categories: 
 ---
 按下鍵盤左右鍵切換模型
