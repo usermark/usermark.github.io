@@ -34,7 +34,12 @@ icacls D:\wsl /grant "usermark-pc\mike:(OI)(CI)(F)"
 ```
 
 ## 4.使用LxRunOffline來移動Linux子系統
-使用PowerShell輸入以下指令
+使用PowerShell輸入以下指令，來查看Linux子系統的名稱，例如我的輸出為Ubuntu。
+```
+wsl -l
+```
+
+使用以下指令移動
 ```
 lxrunoffline move -n Ubuntu -d D:\wsl\installed\Ubuntu
 ```
