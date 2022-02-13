@@ -3,6 +3,7 @@ layout: post
 title: '[Java] 物件導向'
 date: 2013-10-27 05:44
 categories: 
+description: toString() 自訂 Box 類別，覆寫 toString()，可以輸出有用的資訊，而不再是 Box@1fb8ee3。
 ---
 # toString()
 自訂 Box 類別，覆寫 toString()，可以輸出有用的資訊，而不再是 Box@1fb8ee3。

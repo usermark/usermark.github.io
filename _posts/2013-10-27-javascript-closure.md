@@ -3,6 +3,7 @@ layout: post
 title: '[JavaScript] Closure'
 date: 2013-10-27 01:05
 categories: 
+description: 可以用來模擬 Java 的 private 封裝特性。
 ---
 可以用來模擬 Java 的 private 封裝特性。
 ``` js

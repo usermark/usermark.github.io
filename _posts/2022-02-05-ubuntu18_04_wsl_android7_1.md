@@ -52,7 +52,7 @@ lxrunoffline get-dir -n Ubuntu
 # 設置編譯環境
 
 ## 1.安装JDK
-使用bash輸入以下指令
+使用bash輸入以下指令，參考<https://source.android.com/setup/build/older-versions#for-ubuntu-15-04>
 ```
 sudo apt-get update
 sudo apt-get install openjdk-8-jdk
@@ -74,7 +74,7 @@ fsutil.exe file setCaseSensitiveInfo D:\wsl enable
 
 ## 1.安裝Repo
 參考<https://source.android.com/setup/develop#installing-repo>
-```
+```shell
 mkdir ~/bin
 curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
 chmod a+x ~/bin/repo
@@ -82,7 +82,7 @@ chmod a+x ~/bin/repo
 
 ## 2.初始化Repo
 參考<https://source.android.com/setup/build/downloading#initializing-a-repo-client>
-```
+```shell
 # 建立資料夾，名稱自定，這裡命名為android
 mkdir android
 cd android
@@ -94,6 +94,16 @@ git config --global user.email $your_email
 
 選定AOSP版本和分支，如下圖這裡選擇的是android-7.1.0_r7，參考<https://source.android.com/setup/start/build-numbers#source-code-tags-and-builds>
 ![](/assets/android_version.png)
+Repo要用python3運行，但系統預設為python2，有解法是採用以下方案，將python指令指向python3指令
+```
+sudo ln -s /usr/bin/python3 /usr/bin/python
+```
+repo sync時可以，但編譯時還是需要用到python2，就會出現該錯誤
+```
+SyntaxError: Missing parentheses in call to 'print'.
+```
+因此透過python3去呼叫repo較合適，系統預設則不去動。
+
 sync同步到本地，過程需要一些時間。
 ```
 python3 ~/bin/repo init -u https://android.googlesource.com/platform/manifest -b android-7.1.0_r7
@@ -122,7 +132,7 @@ lunch aosp_arm-eng
 
 ## 3.讓bash支持32位元運行
 安裝qemu並設置binfmt
-```
+```shell
 sudo apt install qemu-user-static
 sudo update-binfmts --install i386 /usr/bin/qemu-i386-static --magic '\x7fELF\x01\x01\x01\x03\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00\x03\x00\x01\x00\x00\x00' --mask '\xff\xff\xff\xff\xff\xff\xff\xfc\xff\xff\xff\xff\xff\xff\xff\xff\xf8\xff\xff\xff\xff\xff\xff\xff'
 ```
@@ -177,14 +187,14 @@ cp -f ijar ../../../out/host/linux-x86/bin/ijar
 修改build/core資料夾下的文件，$(DEX2OAT)後加上-j1參數
 
 dex_preopt_libart.mk
-```
+```make
 $(hide) ANDROID_LOG_TAGS="*:e" $(DEX2OAT) -j1 \
 	--runtime-arg -Xms$(DEX2OAT_XMS) --runtime-arg -Xmx$(DEX2OAT_XMX) \
 	--runtime-arg -classpath --runtime-arg $(DEX2OAT_CLASSPATH) 
 ```
 
 dex_preopt_libart_boot.mk
-```
+```make
 $(hide) ANDROID_LOG_TAGS="*:e" $(DEX2OAT) -j1 --runtime-arg -Xms$(DEX2OAT_IMAGE_XMS) \
 	--runtime-arg -Xmx$(DEX2OAT_IMAGE_XMX) \
 	--image-classes=$(PRELOADED_CLASSES) \
@@ -197,7 +207,7 @@ $(hide) ANDROID_LOG_TAGS="*:e" $(DEX2OAT) -j1 --runtime-arg -Xms$(DEX2OAT_IMAGE_
 java -XshowSettings 2>&1 | grep Heap
 ```
 例如在總記憶體8G的電腦輸出結果為1.77G，參考<https://2net.co.uk/blog/jack-server.html>
-```
+```shell
 sudo vim ~/.bash_profile
 # 最後一行加上
 export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4g"
@@ -228,7 +238,7 @@ jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA, \
 
 # (可選) 重置AOSP異動
 參考<https://stackoverflow.com/questions/5012163/how-to-discard-changes-using-repo>
-```
+```shell
 # 重置異動
 python3 ~/bin/repo forall -vc "git reset --hard"
 # 檢查異動
