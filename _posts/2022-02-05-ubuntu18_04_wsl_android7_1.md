@@ -200,27 +200,6 @@ $(hide) ANDROID_LOG_TAGS="*:e" $(DEX2OAT) -j1 --runtime-arg -Xms$(DEX2OAT_IMAGE_
 	--image-classes=$(PRELOADED_CLASSES) \
 ```
 
-### 報錯: GC overhead limit exceeded. Try increasing heap size with java option '-Xmx<size>'.
-
-運行jack-server編譯AOSP需要3G的記憶體配置，若電腦總記憶體小於16G，會產生該錯誤，可使用以下指令查看可配置的記憶體大小。
-```
-java -XshowSettings 2>&1 | grep Heap
-```
-例如在總記憶體8G的電腦輸出結果為1.77G，參考<https://2net.co.uk/blog/jack-server.html>
-```shell
-sudo vim ~/.bash_profile
-# 最後一行加上
-export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4g"
-# 儲存並離開後
-sudo source ~/.bash_profile
-```
-
-重啟jack服務
-```
-./prebuilts/sdk/tools/jack-admin kill-server
-./prebuilts/sdk/tools/jack-admin start-server
-```
-
 ### 報錯: SSL error when connecting to the Jack server. Try 'jack-diagnose'
 
 修改/etc/java-8-openjdk/security/java.security，找到jdk.tls.disabledAlgorithms，取消TLSv1, TLSv1.1
@@ -234,6 +213,37 @@ jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA, \
 ```
 ./prebuilts/sdk/tools/jack-admin kill-server
 ./prebuilts/sdk/tools/jack-admin start-server
+```
+
+### 報錯: GC overhead limit exceeded. Try increasing heap size with java option '-Xmx<size>'.
+
+運行jack-server編譯AOSP需要3G的記憶體配置，若電腦總記憶體小於16G，會產生該錯誤，可使用以下指令查看可配置的記憶體大小。
+```
+java -XshowSettings 2>&1 | grep Heap
+```
+例如在總記憶體8G的電腦輸出結果為1.77G，參考<https://2net.co.uk/blog/jack-server.html>
+```shell
+sudo vim ~/.bash_profile
+# 最後一行加上
+export JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4g"
+# 儲存並離開後
+source ~/.bash_profile
+```
+
+重啟jack服務
+```
+./prebuilts/sdk/tools/jack-admin kill-server
+./prebuilts/sdk/tools/jack-admin start-server
+```
+
+# 運行模擬器
+
+```
+emulator
+```
+因為wsl為指令模式，沒視窗可顯示，會出現下列錯誤。
+```
+SDL init failure, reason is: No available video devic
 ```
 
 # (可選) 重置AOSP異動
