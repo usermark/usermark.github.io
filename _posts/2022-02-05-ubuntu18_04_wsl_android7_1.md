@@ -243,7 +243,7 @@ emulator
 ```
 因為wsl為指令模式，沒視窗可顯示，會出現下列錯誤。
 ```
-SDL init failure, reason is: No available video devic
+SDL init failure, reason is: No available video device
 ```
 
 # (可選) 重置AOSP異動
