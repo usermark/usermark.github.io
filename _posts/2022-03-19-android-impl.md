@@ -6,6 +6,9 @@ categories:
 ---
 紀錄開發上常遇到的問題，避免重複踩坑。
 
+- toc
+{: toc }
+
 # 各種進制轉換成10進制
 
 ```java
@@ -26,6 +29,17 @@ assertEquals("10011", Integer.toBinaryString(19));
 assertEquals("23", Integer.toOctalString(19));
 // 10轉16
 assertEquals("c8", Integer.toHexString(200));
+```
+
+# 對齊或補0
+
+```java
+// 左對齊
+assertEquals("15   ", String.format("%-5d", 15));
+// 右對齊
+assertEquals("   15", String.format("% 5d", 15));
+// 前面補0
+assertEquals("00015", String.format("%05d", 15));
 ```
 
 # 加密
@@ -66,3 +80,74 @@ public static String getHmac256WithBase64(String message, String key) throws Exc
     return Base64.encodeToString(mac.doFinal(message.getBytes()), Base64.NO_WRAP);
 }
 ```
+
+# 客製化View的屬性
+
+需覆寫含兩個參數的建構子，才可應用在xml上。
+
+其中字型大小需特別注意，在Pixel 1080x1920的density為2.625，用getDimension()取得12sp的輸出會是52.5px，所以setTextSize()時要用TypedValue.COMPLEX_UNIT_PX轉換回去，才可正常顯示大小。
+```java
+public class CustomView extends LinearLayout {
+
+    private LayoutCustomBinding binding;
+
+    public CustomView(Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0, 0);
+    }
+
+    public CustomView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        binding = LayoutCustomBinding.inflate(LayoutInflater.from(context), this, true);
+
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CustomView, defStyleAttr, defStyleRes);
+        
+        // 設定內容
+        text = a.getString(R.styleable.CustomView_label);
+        // 需判斷getString()是否為空，如果沒做判斷，若未設置該屬性會有問題
+        if (!TextUtils.isEmpty(text)) {
+            binding.tv.setText(text);
+        }
+        // 設定大小
+        float size = a.getDimension(R.styleable.CustomView_labelSize, 0);
+        if (size > 0) {
+            binding.tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, size);
+        }
+        // 設定顏色
+        int color = a.getColor(R.styleable.CustomView_labelColor, Color.BLACK);
+        binding.tv.setTextColor(color);
+
+        a.recycle();
+    }
+}
+```
+
+layout_custom.xml
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
+```
+
+values/attrs.xml
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomView">
+        <attr name="label" format="string" />
+        <attr name="labelSize" format="dimension" />
+        <attr name="labelColor" format="color" />
+    </declare-styleable>
+</resources>
+```
+
+**參考資料**
+1. [Android中getDimension,getDimensionPixelOffset和getDimensionPixelSize 区别](https://blog.csdn.net/weixin_42814000/article/details/107069608?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&utm_relevant_index=1)
