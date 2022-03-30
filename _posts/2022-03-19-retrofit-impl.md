@@ -20,7 +20,14 @@ public class LogInterceptor implements Interceptor {
         Log.d("Mike", String.format("[%X] Request to %s\n%s",
                 chain.hashCode(), request.url(), bodyString));
 
-        okhttp3.Response response = chain.proceed(request);
+        Response response;
+        try {
+            response = chain.proceed(request);
+        } catch (SocketTimeoutException e) {
+            Log.d("Mike", String.format("[%X] Response timeout for %s",
+                    chain.hashCode(), request.url()));
+            throw e;
+        }
         ResponseBody responseBody = response.body();
         String responseBodyString = responseBody.string();
         Log.d("Mike", String.format("[%X] Response to %s(%d)\n%s",

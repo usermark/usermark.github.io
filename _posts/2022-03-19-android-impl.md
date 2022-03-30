@@ -149,5 +149,26 @@ values/attrs.xml
 </resources>
 ```
 
+# 底線背景
+
+不額外新建View來分隔項目，而是用drawable畫底線實現。
+
+參考<https://stackoverflow.com/questions/9915793/shape-drawable-as-background-a-line-at-the-bottom>
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:left="-1dp"
+        android:right="-1dp"
+        android:top="-1dp">
+        <shape>
+            <stroke
+                android:width="1dp"
+                android:color="@color/black" />
+        </shape>
+    </item>
+</layer-list>
+```
+
 **參考資料**
 1. [Android中getDimension,getDimensionPixelOffset和getDimensionPixelSize 区别](https://blog.csdn.net/weixin_42814000/article/details/107069608?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&utm_relevant_index=1)
