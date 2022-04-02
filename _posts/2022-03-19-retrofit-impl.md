@@ -6,6 +6,9 @@ categories:
 ---
 紀錄開發上常遇到的問題，避免重複踩坑。
 
+- toc
+{: toc }
+
 # 紀錄API請求和回應
 
 可使用寫好的套件 HttpLoggingInterceptor，參考<https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor>
@@ -51,6 +54,29 @@ public class LogInterceptor implements Interceptor {
         }
     }
 }
+```
+
+若要印出headers，可加上這段。
+
+注意：不要使用response.headers().names()跑for each處理，例如回傳的Set-Cookie有兩個，但該寫法只會印出一個。
+```java
+Headers headers = response.headers();
+for (int i = 0; i < headers.size(); i++) {
+    Log.d("Mike", headers.name(i) + ": " + headers.value(i));
+}
+```
+
+# 保持連線和Cookie
+
+參考<https://stackoverflow.com/questions/36706795/how-to-keep-session-using-retrofit-okhttpclient>
+```groovy
+implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.8.0'
+```
+
+```java
+OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder()
+        .cookieJar(new JavaNetCookieJar(new CookieManager()))
+        .build();
 ```
 
 # 修改FieldMap

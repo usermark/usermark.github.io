@@ -57,20 +57,7 @@ function checkPicAndSubmit(){
 
 # 實作
 
-由於有JSESSIONID辨識用戶，為了確保是同一個連線，需使用requests_html。
-
-第一次執行會有SSLCertVerificationError問題
-```shell
-[W:pyppeteer.chromium_downloader] start chromium download.
-Download may take a few minutes.
-Traceback (most recent call last):
-  略...
-ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1056)
-```
-修正如下，參考<https://github.com/miyakogi/pyppeteer/issues/219>
-```shell
-pip install -U "urllib3<1.25"
-```
+由於有JSESSIONID辨識用戶，為了確保是同一個連線，需使用requests.session()。
 
 完整程式碼
 ```python
@@ -79,10 +66,11 @@ import random
 
 import requests
 from bs4 import BeautifulSoup
-from requests_html import HTMLSession
+
+user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.83 Safari/537.36'
 
 def login():
-    session = HTMLSession()
+    session = requests.session()
     
     # 產生驗證碼
     url = "https://einvoice.nat.gov.tw/home/randNum?id=" + str(random.random())
@@ -94,10 +82,7 @@ def login():
     print('產生驗證碼', url, res.status_code)
     if res.status_code != requests.codes.ok:
         return
-    
-    # 紀錄cookies
-    JSESSIONID = res.cookies.get('JSESSIONID')
-    TS01791bcd = res.cookies.get('TS01791bcd')
+
     # 下載圖片
     with open('rand.jpg', 'wb') as file:
         for chunk in res:
@@ -111,13 +96,12 @@ def login():
     # 跑Ajax檢查驗證碼
     url = 'https://www.einvoice.nat.gov.tw/home/Ajax'
     payload = {
-        'checkString': captcha    
+        'checkString': captcha
     }
-    cookies = {
-        'JSESSIONID': JSESSIONID,
-        'TS01791bcd': TS01791bcd
+    headers = {
+        'User-Agent': user_agent
     }
-    res = session.post(url, data=payload, cookies=cookies)
+    res = session.post(url, data=payload, headers=headers)
     print('檢查驗證碼', url, res.status_code)
     if res.status_code != requests.codes.ok:
         return
@@ -153,6 +137,7 @@ def login():
         'rclink': ''
     }
     headers = {
+        'User-Agent': user_agent,
         'Host': "www.einvoice.nat.gov.tw",
         'Referer': "https://einvoice.nat.gov.tw/index",
         'Origin': "https://www.einvoice.nat.gov.tw"
@@ -167,8 +152,12 @@ def login():
         file.write(res.content)
     soup = BeautifulSoup(res.text, 'html.parser')
     print('title:', soup.title.string)
-    print('手機條碼:', res.html.search('"carrierId2":"\{carrier}"')['carrier'])
+    startIndex = res.text.index('userInternal.setUser({') + 21
+    endIndex = res.text.index(');', startIndex)
+    data = res.text[startIndex:endIndex]
+    # print(data)
+    print('手機條碼:', json.loads(data)['carrierId2'])
 
 if __name__ == "__main__":
-    login()        
+    login()
 ```
