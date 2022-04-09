@@ -132,7 +132,7 @@ comments:
     repository  : usermark.github.io # GitHub repo
     owner       : usermark # GitHub repo owner
     admin: # GitHub repo owner and collaborators, only these guys can initialize GitHub issues, IT IS A LIST.
-      usermark # - your GitHub Id
+      - usermark # - your GitHub Id
 
   ## Valine
   # please refer to https://valine.js.org/en/ for more info.
