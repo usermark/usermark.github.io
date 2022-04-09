@@ -6,7 +6,7 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 ## !USE TEXT THEME
-theme: jekyll-text-theme # Gem-based Jekyll Themes
+# theme: jekyll-text-theme # Gem-based Jekyll Themes
 # remote_theme: kitian616/jekyll-TeXt-theme # Jekyll Remote Theme, see https://github.com/benbalter/jekyll-remote-theme for more information.
 #
 # ,--------.      ,--.   ,--. ,--.
@@ -118,7 +118,7 @@ sharing:
 ## => Comments
 ##############################
 comments:
-  provider: false # false (default), "disqus", "gitalk", "valine", "custom"
+  provider: gitalk # false (default), "disqus", "gitalk", "valine", "custom"
 
   ## Disqus
   disqus:
@@ -127,12 +127,12 @@ comments:
   ## Gitalk
   # please refer to https://github.com/gitalk/gitalk for more info.
   gitalk:
-    clientID    : # GitHub Application Client ID
-    clientSecret: # GitHub Application Client Secret
-    repository  : # GitHub repo
-    owner       : # GitHub repo owner
+    clientID    : fe34fe28201c28ecaca2 # GitHub Application Client ID
+    clientSecret: 6b0f055d80dc258148f06400ce27502351d56921 # GitHub Application Client Secret
+    repository  : usermark.github.io # GitHub repo
+    owner       : usermark # GitHub repo owner
     admin: # GitHub repo owner and collaborators, only these guys can initialize GitHub issues, IT IS A LIST.
-      # - your GitHub Id
+      usermark # - your GitHub Id
 
   ## Valine
   # please refer to https://valine.js.org/en/ for more info.
