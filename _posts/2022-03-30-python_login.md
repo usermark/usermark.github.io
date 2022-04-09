@@ -152,7 +152,7 @@ def login():
         file.write(res.content)
     soup = BeautifulSoup(res.text, 'html.parser')
     print('title:', soup.title.string)
-    startIndex = res.text.index('userInternal.setUser({') + 21
+    startIndex = res.text.index('userInternal.setUser(') + 21
     endIndex = res.text.index(');', startIndex)
     data = res.text[startIndex:endIndex]
     # print(data)

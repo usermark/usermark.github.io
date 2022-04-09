@@ -86,6 +86,8 @@ public static String getHmac256WithBase64(String message, String key) throws Exc
 需覆寫含兩個參數的建構子，才可應用在xml上。
 
 其中字型大小需特別注意，在Pixel 1080x1920的density為2.625，用getDimension()取得12sp的輸出會是52.5px，所以setTextSize()時要用TypedValue.COMPLEX_UNIT_PX轉換回去，才可正常顯示大小。
+
+參考[Android中getDimension,getDimensionPixelOffset和getDimensionPixelSize 区别](https://blog.csdn.net/weixin_42814000/article/details/107069608?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&utm_relevant_index=1)
 ```java
 public class CustomView extends LinearLayout {
 
@@ -170,5 +172,90 @@ values/attrs.xml
 </layer-list>
 ```
 
-**參考資料**
-1. [Android中getDimension,getDimensionPixelOffset和getDimensionPixelSize 区别](https://blog.csdn.net/weixin_42814000/article/details/107069608?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_paycolumn_v3&utm_relevant_index=1)
+# 隱藏鍵盤
+
+```java
+public static void hideKeyboard(View view) {
+    InputMethodManager imm = (InputMethodManager) view.getContext()
+            .getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+}
+```
+
+# ProgressDialog改用ProgressBar
+
+設定clickable為true，避免點擊到底下的物件；設定elevation為2dp，置於所有物件的上層。
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mask"
+    android:clickable="true"
+    android:elevation="2dp"
+    android:focusable="true">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/loading"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+參考
+1. <https://stackoverflow.com/questions/36918219/how-to-disable-user-interaction-while-progressbar-is-visible-in-android>
+2. <https://stackoverflow.com/questions/44351354/android-constraintlayout-put-one-view-on-top-of-another-view>
+
+# 將keystore資料保存在build.gradle外
+
+當有重要資料，例如keystore的帳密不想直接寫在build.gradle內時，可改用properties保存。
+
+首先在根目錄新增keystore.properties
+```
+storePassword=my.keystore
+keyPassword=key_password
+keyAlias=my_key_alias
+storeFile=store_file
+appID=my_app_id
+```
+
+修改build.gralde，新增以下內容
+```groovy
+// Load keystore
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+    defaultConfig {
+        buildConfigField "String", "APP_ID", "\"$keystoreProperties.appID\""
+    }
+    signingConfigs {
+        release {
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+    }
+}
+```
+
+這樣做還有個好處是可將properties排除於git版控，只保留重要或敏感的資料於本地端。
+
+參考<https://stackoverflow.com/questions/20562189/sign-apk-without-putting-keystore-info-in-build-gradle>

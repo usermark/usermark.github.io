@@ -70,7 +70,7 @@ for (int i = 0; i < headers.size(); i++) {
 
 參考<https://stackoverflow.com/questions/36706795/how-to-keep-session-using-retrofit-okhttpclient>
 ```groovy
-implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.8.0'
+implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.9.3'
 ```
 
 ```java
