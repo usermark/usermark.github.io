@@ -143,6 +143,9 @@ comments:
     visitor     : # false (default)
     meta        : # "[nick, mail, link]" (default) nickname, E-mail, Personal-site
 
+  ## utteranc
+  custom:
+    repo        : usermark/usermark.github.io
 
 ## => Pageview
 ##############################
