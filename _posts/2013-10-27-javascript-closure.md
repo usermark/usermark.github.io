@@ -1,11 +1,11 @@
 ---
-layout: post
+layout: article
 title: '[JavaScript] Closure'
 date: 2013-10-27 01:05
-categories: 
-description: 可以用來模擬 Java 的 private 封裝特性。
+tags: JavaScript
 ---
 可以用來模擬 Java 的 private 封裝特性。
+<!--more-->
 ``` js
 function MyObject(name, size) {
     this._name = name;

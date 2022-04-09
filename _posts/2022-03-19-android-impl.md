@@ -1,14 +1,11 @@
 ---
-layout: post
+layout: article
 title: '[Android] 應用'
 date: 2022-03-19 17:00
-categories: 
+tags: Android
 ---
 紀錄開發上常遇到的問題，避免重複踩坑。
-
-- toc
-{: toc }
-
+<!--more-->
 # 各種進制轉換成10進制
 
 ```java
@@ -217,7 +214,7 @@ public static void hideKeyboard(View view) {
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
-參考
+**參考資料**
 1. <https://stackoverflow.com/questions/36918219/how-to-disable-user-interaction-while-progressbar-is-visible-in-android>
 2. <https://stackoverflow.com/questions/44351354/android-constraintlayout-put-one-view-on-top-of-another-view>
 

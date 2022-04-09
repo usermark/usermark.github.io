@@ -1,13 +1,13 @@
 ---
-layout: post
+layout: article
 title: '[Git] 在SourceTree上使用SSH Key與Github連線'
 date: 2022-03-03 13:33
-categories: 
+tags: Git SourceTree
 ---
 Github已廢除https輸入帳密的方式，需改用SSH Key連線。
 
 由於SourceTree內無法設定SSH Key，是直接讀取系統預設的，只能透過指令操作。
-
+<!--more-->
 # 產生SSH Key
 
 輸入以下指令產生金鑰，儲存位置預設/.ssh/id_rsa即可，且不設定密碼。

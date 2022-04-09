@@ -1,14 +1,11 @@
 ---
-layout: post
+layout: article
 title: '[Android] Retrofit應用'
 date: 2022-03-19 16:24
-categories: 
+tags: Android Retrofit
 ---
 紀錄開發上常遇到的問題，避免重複踩坑。
-
-- toc
-{: toc }
-
+<!--more-->
 # 紀錄API請求和回應
 
 可使用寫好的套件 HttpLoggingInterceptor，參考<https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor>

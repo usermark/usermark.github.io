@@ -1,9 +1,10 @@
 ---
-layout: post
+layout: article
 title: '[Android] adb forward'
 date: 2021-06-04 17:34
-categories: 
+tags: Android
 ---
+<!--more-->
 # adb forward
 轉發PC端4000端口到手機的9999端口
 ```
@@ -150,4 +151,4 @@ client.send(b'Hello')
 print(client.recv(1024))
 ```
 
-參考連結：<https://duanqz.github.io/2015-05-21-Intro-adb>
+參考<https://duanqz.github.io/2015-05-21-Intro-adb>

@@ -1,9 +1,10 @@
 ---
-layout: post
+layout: article
 title: '[Java] 語言基礎'
 date: 2013-10-27 01:15
-categories: 
+tags: Java
 ---
+<!--more-->
 # 存取修飾元 (Modifier)
 
 | | |

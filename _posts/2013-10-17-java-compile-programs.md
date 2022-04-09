@@ -1,11 +1,11 @@
 ---
-layout: post
+layout: article
 title: '[Java] 編譯程式'
 date: 2013-10-17 07:43
-categories: 
-description: java -cp [路徑] [完整的類別名稱]
+tags: Java
 ---
 假設 C:\demo 下有一個 HelloWorld.java，且無套件設定。
+<!--more-->
 ``` java
 public class HelloWorld {
     public static void main(String[] args) {

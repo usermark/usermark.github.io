@@ -1,14 +1,11 @@
 ---
-layout: post
+layout: article
 title: '[Python] 應用'
 date: 2022-04-02 16:45
-categories: 
+tags: Python
 ---
 紀錄開發上常遇到的問題，避免重複踩坑。
-
-- toc
-{: toc }
-
+<!--more-->
 # Requests紀錄API請求和回應
 
 參考<https://stackoverflow.com/questions/16337511/log-all-requests-from-the-python-requests-module>

@@ -1,12 +1,10 @@
 ---
-layout: post
+layout: article
 title: '[Android] Ubuntu18.04 (WSL)編譯Android7.1'
 date: 2022-02-05 13:41
-categories: 
+tags: Android AOSP WSL
 ---
-- toc
-{: toc }
-
+<!--more-->
 # (可選) 移動Ubuntu至其他硬碟
 Linux子系統預設安裝在主硬碟裡，編譯AOSP需要至少200G的空間，可能會發生主硬碟空間不足的問題，如果不會可跳過此步驟。
 

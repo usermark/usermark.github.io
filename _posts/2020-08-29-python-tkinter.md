@@ -1,11 +1,11 @@
 ---
-layout: post
+layout: article
 title: '[Python] tkinter'
 date: 2020-08-29 13:43
-categories: 
+tags: Python Tkinter
 ---
 tkinter是python內建的GUI。
-
+<!--more-->
 # Hello World
 ```python
 from tkinter import *
@@ -129,4 +129,4 @@ def auto_grid(parent, widget):
 - &lt;Button-3&gt; 右鍵點擊
 - &lt;Double-1&gt; 左鍵連擊
 
-參考連結：<http://tcl.tk/man/tcl8.7/TkCmd/bind.html>
+參考<http://tcl.tk/man/tcl8.7/TkCmd/bind.html>

@@ -1,12 +1,10 @@
 ---
-layout: post
+layout: article
 title: '投資理財'
 date: 2013-10-17 06:28
-categories: 
+tags: 
 ---
-- toc
-{: toc }
-
+<!--more-->
 # 觀念
 - 《一位投機者的告白》書中股票投資的「十律」與「十戒」：
 > 「十律」：<br>

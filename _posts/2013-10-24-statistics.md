@@ -1,12 +1,13 @@
 ---
-layout: post
+layout: article
 title: '統計學'
 date: 2013-10-24 08:35
-categories: 
-math: true 
+tags: 
+mathjax: true
 ---
 心理與教育統計學 (Statistics for Psychology and Education)：探討如何應用有關的統計方法，來研究並解決各種心理與教育問題和現象的一種統計學。
-## 變數 (Variable)
+<!--more-->
+# 變數 (Variable)
 實驗者要操作的為自變數 (Independent variable)，隨之變化而產生改變的為依變數 (Dependent variable)。共變數 (Covariate variable) 會影響自變數與依變數的因果關係，造成實驗誤差或抽樣誤差。例如：教學方法為自變數、學業成績為依變數、學生智力為共變數。
 
 |          | 同質性 | 不等性 | 可加性 | 可乘性 | 舉例                    |
@@ -16,7 +17,7 @@ math: true
 | 等距變項 |   *    |   *    |   *    |        | 溫度、智力              |
 | 比率變項 |   *    |   *    |   *    |   *    | 長度、重量（有絕對零點）| 
 
-## 平均數 (Mean)
+# 平均數 (Mean)
 
 $$\bar{x} = \frac{\sum_{i=1}^N X_{i}}{N}$$
 
