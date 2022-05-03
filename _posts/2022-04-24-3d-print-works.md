@@ -54,3 +54,18 @@ tags: 3D列印 作品集
 
 ![](/assets/org_car.png)
 
+# 卡車
+
+![](/assets/truck.png)
+
+# 電池收納盒
+
+白色耗材是使用購入機器時送的，成品只有一點牽絲不明顯，可見耗材品質還是有差。
+
+![](/assets/battery_case_2a.png)
+
+# 直立筆電架
+
+整體填充為20%。
+
+![](/assets/nb_support3.png)
