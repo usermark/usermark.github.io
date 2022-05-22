@@ -81,6 +81,8 @@ tags: 3D列印 作品集
 
 # 寶可夢
 
+![](/assets/pokemon.png)
+
 # 可調式筆電架
 
 整體填充為15%。
@@ -101,3 +103,13 @@ tags: 3D列印 作品集
 ![](/assets/moon.png)
 ![](/assets/moon2.png)
 <iframe width="560" height="315" src="https://www.youtube.com/embed/HvDsv-HgEEM" title="紅外線遙控發射器" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+# 收納盒
+
+耗時2天，層高使用0.28節省打印時間。
+
+![](/assets/box.png)
+
+# 花瓶
+
+![](/assets/case.png)
