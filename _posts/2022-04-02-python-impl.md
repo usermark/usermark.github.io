@@ -49,3 +49,15 @@ ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verif
 ```shell
 pip install -U "urllib3<1.25"
 ```
+
+# 輸出yaml換行格式
+
+```python
+def repr_str(dumper: yaml.SafeDumper, data):
+    if '\n' in data:
+        return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
+    return dumper.represent_str(data)
+
+yaml.add_representer(str, repr_str, Dumper=yaml.SafeDumper)
+print(yaml.safe_dump(foo))
+```

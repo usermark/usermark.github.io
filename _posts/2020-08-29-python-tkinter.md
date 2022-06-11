@@ -51,7 +51,11 @@ btn.pack()
 value = StringVar()
 value.set('Hello')
 entry = Entry(window, textvariable=value)
+# 插入，結果Hello World
 entry.insert(END, ' World')
+# 取代，結果Test
+entry.delete(0, END)
+entry.insert(0, 'Test')
 entry.pack()
 ```
 ## ScrolledText
