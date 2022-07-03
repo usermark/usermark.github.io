@@ -61,3 +61,25 @@ def repr_str(dumper: yaml.SafeDumper, data):
 yaml.add_representer(str, repr_str, Dumper=yaml.SafeDumper)
 print(yaml.safe_dump(foo))
 ```
+
+# os.popen()在Windows下出現 UnicodeDecodeError: 'cp950' codec can't decode byte
+
+os.popen()是封裝subprocess.Popen()，並用io.TextIOWrapper轉換bytes輸出成str的結果，而Windows下的cmd指令預設為cp950，會造成解析錯誤。
+
+```python
+proc = subprocess.Popen(cmd,
+                        shell=True,
+                        stdout=subprocess.PIPE,
+                        bufsize=buffering)
+return _wrap_close(io.TextIOWrapper(proc.stdout), proc)
+```
+
+所以針對Windows自行實作popen()，調整如下
+
+```python
+def popen(command):
+    if platform.system() == 'Darwin':
+        return os.popen(command)
+    proc = subprocess.Popen(command, stdout=subprocess.PIPE)
+    return io.TextIOWrapper(proc.stdout, encoding='UTF-8')
+```

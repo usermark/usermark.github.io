@@ -149,6 +149,8 @@ prebuilts/misc/linux-x86/bison/bison: cannot execute binary file: Exec format er
 m -j8
 ```
 
+在編譯期間，將防毒軟體關閉，可以增進檔案系統的效能。
+
 ## 5.錯誤處理
 ### 報錯: ftruncate(fd_out, GetSize()): Invalid argument
 
