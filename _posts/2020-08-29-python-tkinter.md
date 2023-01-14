@@ -112,6 +112,24 @@ pw.add(sidebar)
 pw.add(main)
 ```
 
+## Toplevel
+使用彈窗顯示QR code
+
+![](/assets/qrcode.png)
+
+```python
+import qrcode
+from PIL import ImageTk
+
+img = qrcode.make('Hello World')
+popup = Toplevel()
+popup.title('Hello World')
+global photo  # 圖片需放全域保存
+photo = ImageTk.PhotoImage(img.resize((200, 200)))
+label = Label(popup, image=photo)
+label.pack()
+```
+
 ## Widget
 winfo_exists() 可檢查是否存在/顯示
 
