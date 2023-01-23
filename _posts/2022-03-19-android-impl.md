@@ -256,3 +256,60 @@ android {
 這樣做還有個好處是可將properties排除於git版控，只保留重要或敏感的資料於本地端。
 
 參考<https://stackoverflow.com/questions/20562189/sign-apk-without-putting-keystore-info-in-build-gradle>
+
+# 使用AsyncTask注意事項
+
+SecondAsyncTask並不會和FirstAsyncTask並行執行，而是等FirstAsyncTask先跑完，才跑SecondAsyncTask。
+
+```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    for (int i = 0; i < 10; i++) {
+        new FirstAsyncTask().execute(i);
+    }
+    new SecondAsyncTask().execute();
+}
+
+static class FirstAsyncTask extends AsyncTask<Integer, Void, Void> {
+
+    @Override
+    protected Void doInBackground(Integer... params) {
+        Log.d("test", "first " + params[0]);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
+
+static class SecondAsyncTask extends AsyncTask<Void, Void, Void> {
+
+    @Override
+    protected Void doInBackground(Void... params) {
+        Log.d("test", "second");
+        return null;
+    }
+}
+```
+
+原因是AsyncTask，預設是跑SERIAL_EXECUTOR，採排隊的方式。
+
+若要並行執行，原本呼叫execute()部分要改成executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)即可。
+```java
+public static final Executor THREAD_POOL_EXECUTOR;
+
+static {
+    ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
+            CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_SECONDS, TimeUnit.SECONDS,
+            new SynchronousQueue<Runnable>(), sThreadFactory);
+    threadPoolExecutor.setRejectedExecutionHandler(sRunOnSerialPolicy);
+    THREAD_POOL_EXECUTOR = threadPoolExecutor;
+}
+
+private static volatile Executor sDefaultExecutor = SERIAL_EXECUTOR;
+```
+
+最後，官方已不建議再用AsyncTask，應自行實作主執行緒切換背景執行緒的方案。
