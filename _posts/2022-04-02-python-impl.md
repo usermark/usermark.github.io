@@ -62,21 +62,6 @@ yaml.add_representer(str, repr_str, Dumper=yaml.SafeDumper)
 print(yaml.safe_dump(foo))
 ```
 
-# 轉換Table資料為dict
-
-```python
-def dict_factory(cursor, row):
-    """轉換tuple為dict"""
-    return dict((col[0], row[idx]) for idx, col in enumerate(cursor.description))
-
-conn = sqlite3.connect('database.db')
-curs = conn.cursor()
-curs.execute("SELECT * FROM Product")
-result = [dict_factory(curs, item) for item in curs.fetchall()]
-curs.close()
-conn.close()
-```
-
 # os.popen()在Windows下出現 UnicodeDecodeError: 'cp950' codec can't decode byte
 
 os.popen()是封裝subprocess.Popen()，並用io.TextIOWrapper轉換bytes輸出成str的結果，而Windows下的cmd指令預設為cp950，會造成解析錯誤。
@@ -97,16 +82,6 @@ def popen(command):
         return os.popen(command)
     proc = subprocess.Popen(command, stdout=subprocess.PIPE)
     return io.TextIOWrapper(proc.stdout, encoding='UTF-8')
-```
-
-# 取得DB底下的所有Table
-
-參考<https://stackoverflow.com/questions/305378/list-of-tables-db-schema-dump-etc-using-the-python-sqlite3-api>
-```python
-conn = sqlite3.connect('database.db')
-curs = conn.cursor()
-curs.execute("SELECT name FROM sqlite_master WHERE type='table';")
-print(curs.fetchall())
 ```
 
 # Flask保留json排序
