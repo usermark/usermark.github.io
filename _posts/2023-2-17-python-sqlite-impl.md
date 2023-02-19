@@ -20,7 +20,9 @@ curs.close()
 conn.close()
 ```
 
-# 插入一筆資料
+注意：要小心別用到關鍵字作為表格名稱，例如order, group，參考 <https://www.sqlite.org/lang_keywords.html>
+
+# 插入資料
 
 ```python
 conn = sqlite3.connect('enterprise.db')
