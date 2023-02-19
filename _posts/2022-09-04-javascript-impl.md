@@ -21,7 +21,7 @@ if ($("#selector").length) {
 }
 ```
 
-# 使用ajax POST傳送josn資料給server
+# 使用ajax POST傳送json資料給server
 
 ```js
 $.ajax({
