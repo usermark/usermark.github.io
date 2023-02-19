@@ -34,6 +34,22 @@ conn.commit()  # 必要
 conn.close()
 ```
 
+# 查詢資料
+
+```python
+conn = sqlite3.connect('enterprise.db')
+curs = conn.cursor()
+curs.execute('SELECT critter FROM zoo WHERE damages BETWEEN 0 AND 1000')
+print(curs.fetchall())
+curs.close()
+conn.close()
+```
+
+輸出結果
+```
+[('duck',), ('bear',)]
+```
+
 # 取得DB底下的所有Table
 
 參考<https://stackoverflow.com/questions/305378/list-of-tables-db-schema-dump-etc-using-the-python-sqlite3-api>
