@@ -2,10 +2,109 @@
 layout: article
 title: '[Python] 應用'
 date: 2022-04-02 16:45
-tags: Python
+tags: Python AES
 ---
 紀錄開發上常遇到的問題，避免重複踩坑。
 <!--more-->
+# AES加解密
+
+需安裝pycryptodome套件
+```sh
+pipenv install pycryptodome
+```
+
+通常拿到的key是用Hex表示的字串，要用bytes.fromhex(key)轉換成bytes。
+
+加密後的結果為bytes，無法直接編碼成字串，所以中間會先轉成Base64。因此解密時，資料已經過Base64編碼，需Base64解碼後才丟進AES解密。
+
+```python
+import base64
+
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+
+
+aes_key = 'C6DFE59F58353AEF73549370CD98F0A9547EF16C74974C16520F0C868ECB78EC'
+# b'\xc6\xdf\xe5\x9fX5:\xefsT\x93p\xcd\x98\xf0\xa9T~\xf1lt\x97L\x16R\x0f\x0c\x86\x8e\xcbx\xec'
+data = 'Hello world'
+
+def aes_encrypt(key, text):
+    """AES加密"""
+    cipher = AES.new(bytes.fromhex(key), AES.MODE_ECB)
+    result = cipher.encrypt(pad(text.encode(), AES.block_size))
+    result_b64 = base64.b64encode(result)
+    result_str = result_b64.decode()
+    return result_str
+
+def aes_decrypt(key, text):
+    """AES解密"""
+    text_b64 = text.encode()
+    text_b = base64.b64decode(text_b64)
+    cipher = AES.new(bytes.fromhex(key), AES.MODE_ECB)
+    result = unpad(cipher.decrypt(text_b), AES.block_size)
+    result_str = result.decode()
+    return result_str
+
+if __name__ == '__main__':
+    text = aes_encrypt(aes_key, data)
+    print(text)
+    data = aes_decrypt(aes_key, text)
+    print(data)
+```
+
+輸出結果
+```
+LE1WdHzcoXb7ul3S9b5otQ==
+Hello world
+```
+
+# Redmine API管理議題
+
+參考<https://www.redmine.org/projects/redmine/wiki/rest_api>
+
+要使用redmine api，header需加上X-Redmine-API-Key，API存取金鑰要從"我的帳戶"取得。
+![](/assets/redmine_profile.png)
+
+```python
+import requests
+
+
+requests.packages.urllib3.disable_warnings()  # 關閉InsecureRequestWarning
+url = 'https://$redmine_url'
+api_key = '$api_key'
+
+def get_issue(issue_no):
+    res = requests.get(f'{url}{issue_no}.json?include=journals', 
+                       verify=False, 
+                       headers={'X-Redmine-API-Key': api_key})
+    if res.status_code != requests.codes.ok:
+        print(' 失敗', res.status_code)
+        return
+    issue = res.json()['issue']
+    print(' 主旨:', issue['subject'])
+    print(' 狀態:', issue['status']['name'])
+    assigned_to_name = None
+    if 'assigned_to' in issue:
+        assigned_to_name = issue['assigned_to']['name']
+    print(' 被分派者:', assigned_to_name)
+
+def update_issue(issue_no):
+    payload = {
+        'issue': {
+            'status_id': '5',  # 結案
+            'notes': 'Hello world'
+        }
+    }
+    res = requests.put(f'{url}{issue_no}.json', 
+                       verify=False, 
+                       headers={'X-Redmine-API-Key': api_key}, 
+                       json=payload)
+    if res.status_code != requests.codes.ok:
+        print(' 失敗', res.status_code)
+        return
+    print(' 成功')
+```
+
 # Requests紀錄API請求和回應
 
 參考<https://stackoverflow.com/questions/16337511/log-all-requests-from-the-python-requests-module>
