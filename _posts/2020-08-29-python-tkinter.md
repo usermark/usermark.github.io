@@ -98,6 +98,13 @@ tv.heading('#4', text='auth_code')
 vbar.config(command=tv.yview)
 ```
 
+展開/收合TreeView
+```python
+def tree_open(open):
+    for child in tv.get_children():
+        tv.item(child, open=open)
+```
+
 ## PanedWindow
 可調整的佈局元件
 
@@ -135,6 +142,7 @@ winfo_exists() 可檢查是否存在/顯示
 
 winfo_children() 回傳底下所有widget
 
+# 佈局
 ## Grid
 自動佈局，每三個項目為一列
 ```python
@@ -152,3 +160,59 @@ def auto_grid(parent, widget):
 - &lt;Double-1&gt; 左鍵連擊
 
 參考<http://tcl.tk/man/tcl8.7/TkCmd/bind.html>
+
+# lambda與閉包
+
+閉包會把上一層的變數偷渡捕捉進來自己的function scope，Javascript便是用閉包來模擬class。
+
+參考<https://medium.com/citycoddee/python進階技巧-4-lambda-function-與-closure-之謎-7a385a35e1d8>
+
+舉例來說，當用for迴圈實作多個元件與按鈕，下面的寫法submit()永遠只會取到最後被指派的元件。
+```python
+from tkinter import *
+from tkinter.ttk import *
+from tkinter.ttk import Button, Entry
+
+
+def submit(value):
+    print(value)
+
+window = Tk()
+for i in range(5):
+    input = Entry(window)
+    input.insert(0, str(i))
+    input.grid(row=i, column=0)
+    test = Button(window, text="Click me!", command=lambda: submit(input.get()))
+    test.grid(row=i, column=1)
+
+window.mainloop()
+```
+
+解法一，調整lambda寫法。
+```python
+test = Button(window, text="Click me!", command=lambda e=input.get(): submit(e))
+```
+
+解法二，將實作元件部分抽成function，使用閉包捕捉上一層的變數來用。
+```python
+from tkinter import *
+from tkinter.ttk import *
+from tkinter.ttk import Button, Entry
+
+
+def init_view(index):
+    # 使用閉包抓住變數
+    def submit():
+        print(input.get())
+    input = Entry(window)
+    input.insert(0, str(index))
+    input.grid(row=i, column=0)
+    test = Button(window, text="Click me!", command=submit)
+    test.grid(row=i, column=1)
+
+window = Tk()
+for i in range(5):
+    init_view(i)
+
+window.mainloop()
+```
