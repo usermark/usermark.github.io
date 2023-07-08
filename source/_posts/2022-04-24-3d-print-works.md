@@ -3,7 +3,9 @@ layout: article
 title: '[3D列印] 作品集'
 date: 2022-04-24 13:56
 permalink: /3d-print-works/
-tags: 3D列印 作品集
+tags:
+- 3D列印
+- 作品集
 ---
 使用創想Ender-3 S1 3D列印機作為3D列印的入門，支援雙Z軸、近端送料、自動調平、打印平台加熱。
 <!--more-->

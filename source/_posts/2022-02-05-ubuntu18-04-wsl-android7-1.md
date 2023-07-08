@@ -2,7 +2,10 @@
 layout: article
 title: '[Android] Ubuntu18.04 (WSL)編譯Android7.1'
 date: 2022-02-05 13:41
-tags: Android AOSP WSL
+tags:
+- Android
+- AOSP
+- WSL
 ---
 <!--more-->
 # (可選) 移動Ubuntu至其他硬碟

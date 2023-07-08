@@ -2,7 +2,9 @@
 layout: article
 title: '[JavaScript] 應用'
 date: 2022-09-04 10:22
-tags: JavaScript jQuery
+tags:
+- JavaScript
+- jQuery
 ---
 紀錄開發上常遇到的問題，避免重複踩坑。
 <!--more-->

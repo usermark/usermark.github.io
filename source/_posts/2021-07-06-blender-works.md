@@ -3,7 +3,9 @@ layout: article
 title: '[Blender] 作品集'
 date: 2021-07-06 21:51
 permalink: /blender-works/
-tags: Blender 作品集
+tags:
+- Blender
+- 作品集
 ---
 按下鍵盤左右鍵切換模型
 <canvas id="c" tabindex="0" style="width: 100%"></canvas>

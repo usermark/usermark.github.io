@@ -2,7 +2,9 @@
 layout: article
 title: '[Python] SQLite應用'
 date: 2023-02-17 07:24
-tags: Python SQLite
+tags:
+- Python
+- SQLite
 ---
 紀錄開發上常遇到的問題，避免重複踩坑。
 <!--more-->

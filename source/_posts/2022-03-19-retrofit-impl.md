@@ -2,7 +2,9 @@
 layout: article
 title: '[Android] Retrofit應用'
 date: 2022-03-19 16:24
-tags: Android Retrofit
+tags:
+- Android
+- Retrofit
 ---
 紀錄開發上常遇到的問題，避免重複踩坑。
 <!--more-->

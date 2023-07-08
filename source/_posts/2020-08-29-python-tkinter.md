@@ -2,7 +2,9 @@
 layout: article
 title: '[Python] tkinter'
 date: 2020-08-29 13:43
-tags: Python Tkinter
+tags:
+- Python
+- Tkinter
 ---
 tkinter是python內建的GUI。
 <!--more-->

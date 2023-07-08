@@ -2,7 +2,10 @@
 layout: article
 title: '[Python] Mac 安裝 Nginx + Gunicorn + Flask'
 date: 2022-11-10 09:36
-tags: Python Flask Nginx
+tags:
+- Python
+- Flask
+- Nginx
 ---
 <!--more-->
 # Flask Hello World程式

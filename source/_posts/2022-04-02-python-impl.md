@@ -2,7 +2,9 @@
 layout: article
 title: '[Python] 應用'
 date: 2022-04-02 16:45
-tags: Python AES
+tags:
+- Python
+- AES
 ---
 紀錄開發上常遇到的問題，避免重複踩坑。
 <!--more-->

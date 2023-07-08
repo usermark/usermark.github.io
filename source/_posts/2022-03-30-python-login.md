@@ -8,7 +8,6 @@ tags: Python
 <!--more-->
 
 僅供學習，切勿用於非法用途！
-{:.warning}
 
 # 分析
 

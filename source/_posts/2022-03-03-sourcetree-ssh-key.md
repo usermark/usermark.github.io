@@ -2,7 +2,9 @@
 layout: article
 title: '[Git] 在SourceTree上使用SSH Key與Github連線'
 date: 2022-03-03 13:33
-tags: Git SourceTree
+tags:
+- Git
+- SourceTree
 ---
 Github已廢除https輸入帳密的方式，需改用SSH Key連線。
 
