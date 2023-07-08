@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Flask Hello World程式建立hello資料夾，底下新增hello_world.py 12345678910from flask import Flask app &#x3D; Flask(__name__) @app.route(&amp;#x27;&#x2F;&amp;#x27;)def index():    return &amp;#x27;Hello World!&amp;#x27;if __name__ &#x3D;&#x3D; &amp;#x27;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Python] Mac 安裝 Nginx + Gunicorn + Flask">
+<meta property="og:url" content="https://usermark.github.io/2022/11/10/nginx-gunicorn-flask/index.html">
+<meta property="og:site_name" content="Mike的筆記">
+<meta property="og:description" content="Flask Hello World程式建立hello資料夾，底下新增hello_world.py 12345678910from flask import Flask app &#x3D; Flask(__name__) @app.route(&amp;#x27;&#x2F;&amp;#x27;)def index():    return &amp;#x27;Hello World!&amp;#x27;if __name__ &#x3D;&#x3D; &amp;#x27;">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2022-11-10T01:36:00.000Z">
+<meta property="article:modified_time" content="2022-11-10T14:51:15.748Z">
+<meta property="article:author" content="Mike Chen">
+<meta property="article:tag" content="Python Flask Nginx">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://usermark.github.io/2022/11/10/nginx-gunicorn-flask/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[Python] Mac 安裝 Nginx + Gunicorn + Flask | Mike的筆記</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mike的筆記</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2022/11/10/nginx-gunicorn-flask/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="Hello World">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [Python] Mac 安裝 Nginx + Gunicorn + Flask
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2022-11-10 09:36:00 / 修改時間：22:51:15" itemprop="dateCreated datePublished" datetime="2022-11-10T09:36:00+08:00">2022-11-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <span id="more"></span>
+<h1 id="Flask-Hello-World程式"><a href="#Flask-Hello-World程式" class="headerlink" title="Flask Hello World程式"></a>Flask Hello World程式</h1><p>建立hello資料夾，底下新增hello_world.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"> </span><br><span class="line">app = Flask(__name__)</span><br><span class="line"> </span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Hello World!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure>
+
+<p>安裝flask</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pipenv install flask</span><br><span class="line">pipenv run python3 hello_world.py</span><br></pre></td></tr></table></figure>
+
+<p>結果如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> * Serving Flask app &#x27;hello_world&#x27;</span><br><span class="line"> * Debug mode: off</span><br><span class="line">WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.</span><br><span class="line"> * Running on http://127.0.0.1:5000</span><br><span class="line">Press CTRL+C to quit</span><br></pre></td></tr></table></figure>
+
+<h1 id="使用Gunicorn"><a href="#使用Gunicorn" class="headerlink" title="使用Gunicorn"></a>使用Gunicorn</h1><p>安裝gunicorn</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pipenv install gunicorn</span><br><span class="line">pipenv run gunicorn hello_world:app</span><br></pre></td></tr></table></figure>
+
+<p>結果如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[2022-11-10 22:40:45 +0800] [37663] [INFO] Starting gunicorn 20.1.0</span><br><span class="line">[2022-11-10 22:40:45 +0800] [37663] [INFO] Listening at: http://127.0.0.1:8000 (37663)</span><br><span class="line">[2022-11-10 22:40:45 +0800] [37663] [INFO] Using worker: sync</span><br><span class="line">[2022-11-10 22:40:45 +0800] [37671] [INFO] Booting worker with pid: 37671</span><br></pre></td></tr></table></figure>
+
+<h1 id="使用Nginx反向代理本地的Gunicorn服務"><a href="#使用Nginx反向代理本地的Gunicorn服務" class="headerlink" title="使用Nginx反向代理本地的Gunicorn服務"></a>使用Nginx反向代理本地的Gunicorn服務</h1><p>安裝Nginx</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew update</span><br><span class="line">brew install nginx</span><br></pre></td></tr></table></figure>
+
+<p>使用以下指令得知相關配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew info nginx</span><br></pre></td></tr></table></figure>
+
+<p>結果如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">==&gt; nginx: stable 1.23.2 (bottled), HEAD</span><br><span class="line">HTTP(S) server and reverse proxy, and IMAP/POP3 proxy server</span><br><span class="line">https://nginx.org/</span><br><span class="line">/usr/local/Cellar/nginx/1.23.2 (26 files, 2.2MB) *</span><br><span class="line">  Poured from bottle on 2022-11-09 at 20:34:30</span><br><span class="line">From: https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/nginx.rb</span><br><span class="line">License: BSD-2-Clause</span><br><span class="line">==&gt; Dependencies</span><br><span class="line">Required: openssl@1.1 ✔, pcre2 ✔</span><br><span class="line">==&gt; Options</span><br><span class="line">--HEAD</span><br><span class="line">	Install HEAD version</span><br><span class="line">==&gt; Caveats</span><br><span class="line">Docroot is: /usr/local/var/www</span><br><span class="line"></span><br><span class="line">The default port has been set in /usr/local/etc/nginx/nginx.conf to 8080 so that</span><br><span class="line">nginx can run without sudo.</span><br><span class="line"></span><br><span class="line">nginx will load all files in /usr/local/etc/nginx/servers/.</span><br><span class="line"></span><br><span class="line">To restart nginx after an upgrade:</span><br><span class="line">  brew services restart nginx</span><br><span class="line">Or, if you don&#x27;t want/need a background service you can just run:</span><br><span class="line">  /usr/local/opt/nginx/bin/nginx -g daemon off;</span><br><span class="line">==&gt; Analytics</span><br><span class="line">install: 49,084 (30 days), 114,716 (90 days), 459,040 (365 days)</span><br><span class="line">install-on-request: 49,004 (30 days), 114,535 (90 days), 458,238 (365 days)</span><br><span class="line">build-error: 0 (30 days)</span><br></pre></td></tr></table></figure>
+
+<p>將hello資料夾移至 &#x2F;usr&#x2F;local&#x2F;var&#x2F;www 底下</p>
+<p>修改Nginx設定檔 &#x2F;usr&#x2F;local&#x2F;etc&#x2F;nginx&#x2F;nginx.conf</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  localhost;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   hello;</span><br><span class="line">        index  index.html index.html;</span><br><span class="line">        proxy_pass http://127.0.0.1:8000;</span><br><span class="line">        proxy_redirect off;</span><br><span class="line">        proxy_set_header Host $host:80;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>檢查配置是否正確</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure>
+
+<p>重新啟動Nginx</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+
+<p><strong>參考資料</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.gushiciku.cn/pl/pNKQ/zh-tw">Nginx + Gunicorn + Flask 整合配置</a></li>
+<li><a target="_blank" rel="noopener" href="https://iter01.com/521092.html">Mac 安裝 Nginx</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python-Flask-Nginx/" rel="tag"># Python Flask Nginx</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/09/04/javascript-impl/" rel="prev" title="[JavaScript] 應用">
+      <i class="fa fa-chevron-left"></i> [JavaScript] 應用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/13/low-cost-host/" rel="next" title="[Web] 低成本架站">
+      [Web] 低成本架站 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Flask-Hello-World%E7%A8%8B%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">Flask Hello World程式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Gunicorn"><span class="nav-number">2.</span> <span class="nav-text">使用Gunicorn</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Nginx%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E6%9C%AC%E5%9C%B0%E7%9A%84Gunicorn%E6%9C%8D%E5%8B%99"><span class="nav-number">3.</span> <span class="nav-text">使用Nginx反向代理本地的Gunicorn服務</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mike Chen</p>
+  <div class="site-description" itemprop="description">Hello World</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">標籤</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mike Chen</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 強力驅動
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
