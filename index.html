@@ -188,7 +188,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2023-07-08 15:48:51" itemprop="dateModified" datetime="2023-07-08T15:48:51+08:00">2023-07-08</time>
+                <time title="修改時間：2023-07-09 15:06:36" itemprop="dateModified" datetime="2023-07-09T15:06:36+08:00">2023-07-09</time>
               </span>
 
           
@@ -334,7 +334,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2023-04-05 21:15:48" itemprop="dateModified" datetime="2023-04-05T21:15:48+08:00">2023-04-05</time>
+                <time title="修改時間：2023-07-09 15:13:44" itemprop="dateModified" datetime="2023-07-09T15:13:44+08:00">2023-07-09</time>
               </span>
 
           
@@ -348,15 +348,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <span id="more"></span>
-
-<p>參考<a target="_blank" rel="noopener" href="https://www.redmine.org/projects/redmine/wiki/rest_api">https://www.redmine.org/projects/redmine/wiki/rest_api</a></p>
-<p>要使用redmine api，header需加上X-Redmine-API-Key，API存取金鑰要從”我的帳戶”取得。<br><img src="/assets/redmine_profile.png"></p>
-<h1 id="管理議題"><a href="#管理議題" class="headerlink" title="管理議題"></a>管理議題</h1><p>Redmine API的議題提供json檢視，用GET取得議題單內容，用PUT更新議題內容和狀態。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">requests.packages.urllib3.disable_warnings()  <span class="comment"># 關閉InsecureRequestWarning</span></span><br><span class="line">url = <span class="string">&#x27;https://$redmine_url&#x27;</span></span><br><span class="line">api_key = <span class="string">&#x27;$api_key&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_issue</span>(<span class="params">issue_no</span>):</span><br><span class="line">    res = requests.get(<span class="string">f&#x27;<span class="subst">&#123;url&#125;</span><span class="subst">&#123;issue_no&#125;</span>.json?include=journals&#x27;</span>, </span><br><span class="line">                       verify=<span class="literal">False</span>, </span><br><span class="line">                       headers=&#123;<span class="string">&#x27;X-Redmine-API-Key&#x27;</span>: api_key&#125;)</span><br><span class="line">    <span class="keyword">if</span> res.status_code != requests.codes.ok:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;失敗&#x27;</span>, res.status_code)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    issue = res.json()[<span class="string">&#x27;issue&#x27;</span>]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;主旨:&#x27;</span>, issue[<span class="string">&#x27;subject&#x27;</span>])</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;狀態:&#x27;</span>, issue[<span class="string">&#x27;status&#x27;</span>][<span class="string">&#x27;name&#x27;</span>])</span><br><span class="line">    assigned_to_name = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;assigned_to&#x27;</span> <span class="keyword">in</span> issue:</span><br><span class="line">        assigned_to_name = issue[<span class="string">&#x27;assigned_to&#x27;</span>][<span class="string">&#x27;name&#x27;</span>]</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;被分派者:&#x27;</span>, assigned_to_name)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">update_issue</span>(<span class="params">issue_no</span>):</span><br><span class="line">    payload = &#123;</span><br><span class="line">        <span class="string">&#x27;issue&#x27;</span>: &#123;</span><br><span class="line">            <span class="string">&#x27;status_id&#x27;</span>: <span class="string">&#x27;5&#x27;</span>,  <span class="comment"># 結案</span></span><br><span class="line">            <span class="string">&#x27;notes&#x27;</span>: <span class="string">&#x27;Hello world&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    res = requests.put(<span class="string">f&#x27;<span class="subst">&#123;url&#125;</span><span class="subst">&#123;issue_no&#125;</span>.json&#x27;</span>, </span><br><span class="line">                       verify=<span class="literal">False</span>, </span><br><span class="line">                       headers=&#123;<span class="string">&#x27;X-Redmine-API-Key&#x27;</span>: api_key&#125;, </span><br><span class="line">                       json=payload)</span><br><span class="line">    <span class="keyword">if</span> res.status_code != requests.codes.ok:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;失敗&#x27;</span>, res.status_code)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;成功&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
-<h1 id="填工時"><a href="#填工時" class="headerlink" title="填工時"></a>填工時</h1><p>請求內容使用xml格式，資料需encode()後才代入data參數。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">requests.packages.urllib3.disable_warnings()  <span class="comment"># 關閉InsecureRequestWarning</span></span><br><span class="line">url = <span class="string">&#x27;https://$redmine_url/time_entries.xml&#x27;</span></span><br><span class="line">api_key = <span class="string">&#x27;$api_key&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">input_time_entry</span>(<span class="params">issue_id, activity_id, hours, comments, date</span>):</span><br><span class="line">    payload = <span class="string">f&#x27;&lt;time_entry issue_id=&quot;<span class="subst">&#123;issue_id&#125;</span>&quot; &#x27;</span> \</span><br><span class="line">              <span class="string">f&#x27;activity_id=&quot;<span class="subst">&#123;activity_id&#125;</span>&quot; hours=&quot;<span class="subst">&#123;hours&#125;</span>&quot; &#x27;</span> \</span><br><span class="line">              <span class="string">f&#x27;comments=&quot;<span class="subst">&#123;comments&#125;</span>&quot; spent_on=&quot;<span class="subst">&#123;date&#125;</span>&quot; /&gt;&#x27;</span></span><br><span class="line">    <span class="built_in">print</span>(payload)</span><br><span class="line">    res = requests.post(url,</span><br><span class="line">                        verify=<span class="literal">False</span>,</span><br><span class="line">                        headers=&#123;<span class="string">&#x27;X-Redmine-API-Key&#x27;</span>: api_key, <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/xml&#x27;</span>&#125;,</span><br><span class="line">                        data=payload.encode())</span><br><span class="line">    <span class="built_in">print</span>(res.status_code)</span><br></pre></td></tr></table></figure>
+          <p>透過Redmine API方便控管議題。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/04/03/python-redmine-api/#more" rel="contents">
+                閱讀全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -406,7 +406,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2023-04-04 18:05:20" itemprop="dateModified" datetime="2023-04-04T18:05:20+08:00">2023-04-04</time>
+                <time title="修改時間：2023-07-09 15:12:04" itemprop="dateModified" datetime="2023-07-09T15:12:04+08:00">2023-07-09</time>
               </span>
 
           
@@ -420,22 +420,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <span id="more"></span>
-<p>下載官網上Windows embeddable package (64-bit)<br><img src="/assets/python_version_list.png"></p>
-<p>放至D槽目錄並解壓縮。</p>
-<p><img src="/assets/python_dir.png"></p>
-<p>新增環境變數於Path</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">D:\ProgramFiles\python-3.11.1</span><br><span class="line">D:\ProgramFiles\python-3.11.1\Scripts</span><br></pre></td></tr></table></figure>
-<p><img src="/assets/python_var_path.png"></p>
-<p>直接執行pip指令會看到下方錯誤<br><img src="/assets/python_pip_error.png"></p>
-<p>需要新增path，但不是環境變數，先輸入下方指令查看</p>
-<figure class="highlight ps"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python <span class="literal">-m</span> site</span><br></pre></td></tr></table></figure>
-<p><img src="/assets/python_m_site.png"></p>
-<p>在python311._pth新增兩行，如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">python311.zip</span><br><span class="line">.</span><br><span class="line"></span><br><span class="line"># Uncomment to run site.main() automatically</span><br><span class="line">#import site</span><br><span class="line">Lib</span><br><span class="line">Lib\site-packages</span><br></pre></td></tr></table></figure>
-
-<p>再次執行pip便可正常使用，不管是安裝pipenv或其它套件都跟以前一樣。<br><img src="/assets/python_pip.png"></p>
-
+          <p>有遇到要特別安裝Python於D槽的需求，因做為server要讓C槽保持乾淨。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/03/24/python-d/#more" rel="contents">
+                閱讀全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -773,7 +766,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2023-07-08 21:54:28" itemprop="dateModified" datetime="2023-07-08T21:54:28+08:00">2023-07-08</time>
+                <time title="修改時間：2023-07-09 15:14:58" itemprop="dateModified" datetime="2023-07-09T15:14:58+08:00">2023-07-09</time>
               </span>
 
           
@@ -787,47 +780,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <span id="more"></span>
-<h1 id="Flask-Hello-World程式"><a href="#Flask-Hello-World程式" class="headerlink" title="Flask Hello World程式"></a>Flask Hello World程式</h1><p>建立hello資料夾，底下新增hello_world.py</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"> </span><br><span class="line">app = Flask(__name__)</span><br><span class="line"> </span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Hello World!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure>
-
-<p>安裝flask</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pipenv install flask</span><br><span class="line">pipenv run python3 hello_world.py</span><br></pre></td></tr></table></figure>
-
-<p>結果如下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> * Serving Flask app &#x27;hello_world&#x27;</span><br><span class="line"> * Debug mode: off</span><br><span class="line">WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.</span><br><span class="line"> * Running on http://127.0.0.1:5000</span><br><span class="line">Press CTRL+C to quit</span><br></pre></td></tr></table></figure>
-
-<h1 id="使用Gunicorn"><a href="#使用Gunicorn" class="headerlink" title="使用Gunicorn"></a>使用Gunicorn</h1><p>安裝gunicorn</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pipenv install gunicorn</span><br><span class="line">pipenv run gunicorn hello_world:app</span><br></pre></td></tr></table></figure>
-
-<p>結果如下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[2022-11-10 22:40:45 +0800] [37663] [INFO] Starting gunicorn 20.1.0</span><br><span class="line">[2022-11-10 22:40:45 +0800] [37663] [INFO] Listening at: http://127.0.0.1:8000 (37663)</span><br><span class="line">[2022-11-10 22:40:45 +0800] [37663] [INFO] Using worker: sync</span><br><span class="line">[2022-11-10 22:40:45 +0800] [37671] [INFO] Booting worker with pid: 37671</span><br></pre></td></tr></table></figure>
-
-<h1 id="使用Nginx反向代理本地的Gunicorn服務"><a href="#使用Nginx反向代理本地的Gunicorn服務" class="headerlink" title="使用Nginx反向代理本地的Gunicorn服務"></a>使用Nginx反向代理本地的Gunicorn服務</h1><p>安裝Nginx</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">brew update</span><br><span class="line">brew install nginx</span><br></pre></td></tr></table></figure>
-
-<p>使用以下指令得知相關配置</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew info nginx</span><br></pre></td></tr></table></figure>
-
-<p>結果如下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">==&gt; nginx: stable 1.23.2 (bottled), HEAD</span><br><span class="line">HTTP(S) server and reverse proxy, and IMAP/POP3 proxy server</span><br><span class="line">https://nginx.org/</span><br><span class="line">/usr/local/Cellar/nginx/1.23.2 (26 files, 2.2MB) *</span><br><span class="line">  Poured from bottle on 2022-11-09 at 20:34:30</span><br><span class="line">From: https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/nginx.rb</span><br><span class="line">License: BSD-2-Clause</span><br><span class="line">==&gt; Dependencies</span><br><span class="line">Required: openssl@1.1 ✔, pcre2 ✔</span><br><span class="line">==&gt; Options</span><br><span class="line">--HEAD</span><br><span class="line">	Install HEAD version</span><br><span class="line">==&gt; Caveats</span><br><span class="line">Docroot is: /usr/local/var/www</span><br><span class="line"></span><br><span class="line">The default port has been set in /usr/local/etc/nginx/nginx.conf to 8080 so that</span><br><span class="line">nginx can run without sudo.</span><br><span class="line"></span><br><span class="line">nginx will load all files in /usr/local/etc/nginx/servers/.</span><br><span class="line"></span><br><span class="line">To restart nginx after an upgrade:</span><br><span class="line">  brew services restart nginx</span><br><span class="line">Or, if you don&#x27;t want/need a background service you can just run:</span><br><span class="line">  /usr/local/opt/nginx/bin/nginx -g daemon off;</span><br><span class="line">==&gt; Analytics</span><br><span class="line">install: 49,084 (30 days), 114,716 (90 days), 459,040 (365 days)</span><br><span class="line">install-on-request: 49,004 (30 days), 114,535 (90 days), 458,238 (365 days)</span><br><span class="line">build-error: 0 (30 days)</span><br></pre></td></tr></table></figure>
-
-<p>將hello資料夾移至 &#x2F;usr&#x2F;local&#x2F;var&#x2F;www 底下</p>
-<p>修改Nginx設定檔 &#x2F;usr&#x2F;local&#x2F;etc&#x2F;nginx&#x2F;nginx.conf</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  localhost;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   hello;</span><br><span class="line">        index  index.html index.html;</span><br><span class="line">        proxy_pass http://127.0.0.1:8000;</span><br><span class="line">        proxy_redirect off;</span><br><span class="line">        proxy_set_header Host $host:80;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>檢查配置是否正確</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure>
-
-<p>重新啟動Nginx</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
-
-<p><strong>參考資料</strong></p>
-<ol>
-<li><a target="_blank" rel="noopener" href="https://www.gushiciku.cn/pl/pNKQ/zh-tw">Nginx + Gunicorn + Flask 整合配置</a></li>
-<li><a target="_blank" rel="noopener" href="https://iter01.com/521092.html">Mac 安裝 Nginx</a></li>
-</ol>
-
+          <p>Mac使用Flask架站入門。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/11/10/nginx-gunicorn-flask/#more" rel="contents">
+                閱讀全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
