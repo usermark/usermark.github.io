@@ -275,7 +275,7 @@ static class FirstAsyncTask extends AsyncTask<Integer, Void, Void> {
 
     @Override
     protected Void doInBackground(Integer... params) {
-        Log.d("test", "first " + params[0]);
+        Log.d("Mike", "first " + params[0]);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -289,7 +289,7 @@ static class SecondAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        Log.d("test", "second");
+        Log.d("Mike", "second");
         return null;
     }
 }

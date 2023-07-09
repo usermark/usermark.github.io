@@ -4,6 +4,7 @@ title: '[Python] Redmine API'
 date: 2023-04-03 18:04
 tags: Python
 ---
+透過Redmine API方便控管議題。
 <!--more-->
 
 參考<https://www.redmine.org/projects/redmine/wiki/rest_api>

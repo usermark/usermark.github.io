@@ -7,6 +7,7 @@ tags:
 - Flask
 - Nginx
 ---
+Mac使用Flask架站入門。
 <!--more-->
 # Flask Hello World程式
 建立hello資料夾，底下新增hello_world.py
