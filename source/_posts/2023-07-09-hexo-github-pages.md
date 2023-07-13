@@ -214,6 +214,17 @@ hexo g -d
 
 完成後，便可在個人頁面 https://username.github.io 查看部署結果。
 
+# 錯誤處理
+
+## No layout: index.html
+
+少了主題，當從其他主機clone專案後，還需clone NexT
+
+輸入指令clone NexT主題後便可
+```sh
+git clone https://github.com/theme-next/hexo-theme-next themes/next
+```
+
 **參考資料**
 1. [【學習筆記】如何使用 Hexo + GitHub Pages 架設個人網誌](https://hackmd.io/@Heidi-Liu/note-hexo-github)
 2. [十分鐘超詳細替 Hexo Next 開啟 Gitalk 留言版](https://israynotarray.com/hexo/20191206/2397475810/)
