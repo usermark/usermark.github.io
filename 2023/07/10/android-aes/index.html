@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="與server通訊要求用AES加密，但Android加密後，送到server卻報錯。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Android] AES加解密在Android和Java結果不一致">
+<meta property="og:url" content="https://usermark.github.io/2023/07/10/android-aes/index.html">
+<meta property="og:site_name" content="Mike的筆記">
+<meta property="og:description" content="與server通訊要求用AES加密，但Android加密後，送到server卻報錯。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2023-07-10T05:46:28.000Z">
+<meta property="article:modified_time" content="2023-07-30T00:14:40.450Z">
+<meta property="article:author" content="Mike Chen">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="AES">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://usermark.github.io/2023/07/10/android-aes/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[Android] AES加解密在Android和Java結果不一致 | Mike的筆記</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mike的筆記</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2023/07/10/android-aes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/mike.png">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [Android] AES加解密在Android和Java結果不一致
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2023-07-10 13:46:28" itemprop="dateCreated datePublished" datetime="2023-07-10T13:46:28+08:00">2023-07-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2023-07-30 08:14:40" itemprop="dateModified" datetime="2023-07-30T08:14:40+08:00">2023-07-30</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>與server通訊要求用AES加密，但Android加密後，送到server卻報錯。</p>
+<span id="more"></span>
+
+<p>先提供加密的實作方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AESUtil</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">KEY_ALGORITHM</span> <span class="operator">=</span> <span class="string">&quot;AES&quot;</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">DEFAULT_CIPHER_ALGORITHM</span> <span class="operator">=</span> <span class="string">&quot;AES/ECB/PKCS5Padding&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">encrypt</span><span class="params">(String data, String key)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Cipher</span> <span class="variable">cipher</span> <span class="operator">=</span> Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);</span><br><span class="line">            <span class="type">byte</span>[] byteContent = data.getBytes(StandardCharsets.UTF_8);</span><br><span class="line">            cipher.init(Cipher.ENCRYPT_MODE, getSecretKey(key));</span><br><span class="line">            <span class="type">byte</span>[] result = cipher.doFinal(byteContent);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>(Base64.encodeBase64(result), StandardCharsets.UTF_8);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> SecretKeySpec <span class="title function_">getSecretKey</span><span class="params">(String key)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">KeyGenerator</span> <span class="variable">kg</span> <span class="operator">=</span> KeyGenerator.getInstance(KEY_ALGORITHM);</span><br><span class="line">            <span class="type">SecureRandom</span> <span class="variable">secureRandom</span> <span class="operator">=</span> SecureRandom.getInstance(<span class="string">&quot;SHA1PRNG&quot;</span>);</span><br><span class="line">            secureRandom.setSeed(key.getBytes(StandardCharsets.UTF_8));</span><br><span class="line">            System.out.println(<span class="string">&quot;secureRandom.getProvider()=&quot;</span> + secureRandom.getProvider());</span><br><span class="line">            kg.init(<span class="number">128</span>, secureRandom);</span><br><span class="line">            <span class="type">SecretKey</span> <span class="variable">secretKey</span> <span class="operator">=</span> kg.generateKey();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">SecretKeySpec</span>(secretKey.getEncoded(), KEY_ALGORITHM);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>同樣是對Hello world字串作加密，每次執行，在Java會得到同樣的結果StB5b2z9qPuulJ7rt2V1hQ&#x3D;&#x3D;，但在Android跑結果都不同。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AESUtil.encrypt(<span class="string">&quot;Hello world&quot;</span>, <span class="string">&quot;C6DFE59F58353AEF73549370CD98F0A9&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>原因是SecureRandom不一致，Java的Provider是使用SUN version 17，Android則是AndroidOpenSSL version 1.0。</p>
+<p>彙整資訊為下表：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Java</th>
+<th>Android</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AES加密結果</td>
+<td>固定</td>
+<td>每次跑都不同</td>
+</tr>
+<tr>
+<td>Provider</td>
+<td>SUN version 17</td>
+<td>AndroidOpenSSL version 1.0</td>
+</tr>
+</tbody></table>
+<p>解法是將Java實作的<a href="(https://github.com/frohoff/jdk8u-jdk/blob/master/src/share/classes/java/security/SecureRandom.java)">SecureRandom</a>搬進Android，首先找到source code</p>
+<p>複製SecureRandom進專案後，重新命名為<a target="_blank" rel="noopener" href="https://github.com/usermark/AesSample/blob/master/app/src/main/java/com/github/usermark/aessample/sun/SunSecureRandom.java">SunSecureRandom</a>，將原先彈性取用SHA演算法的寫法改為自行實作的SHA。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">init</span><span class="params">(<span class="type">byte</span>[] seed)</span> &#123;</span><br><span class="line">        digest = <span class="keyword">new</span> <span class="title class_">SHA</span>();</span><br><span class="line"><span class="comment">//        try &#123;</span></span><br><span class="line"><span class="comment">//            /*</span></span><br><span class="line"><span class="comment">//             * Use the local SUN implementation to avoid native</span></span><br><span class="line"><span class="comment">//             * performance overhead.</span></span><br><span class="line"><span class="comment">//             */</span></span><br><span class="line"><span class="comment">//            digest = MessageDigest.getInstance(&quot;SHA&quot;, &quot;SUN&quot;);</span></span><br><span class="line"><span class="comment">//        &#125; catch (NoSuchProviderException | NoSuchAlgorithmException e) &#123;</span></span><br><span class="line"><span class="comment">//            // Fallback to any available.</span></span><br><span class="line"><span class="comment">//            try &#123;</span></span><br><span class="line"><span class="comment">//                digest = MessageDigest.getInstance(&quot;SHA&quot;);</span></span><br><span class="line"><span class="comment">//            &#125; catch (NoSuchAlgorithmException exc) &#123;</span></span><br><span class="line"><span class="comment">//                throw new InternalError(</span></span><br><span class="line"><span class="comment">//                    &quot;internal error: SHA-1 not available.&quot;, exc);</span></span><br><span class="line"><span class="comment">//            &#125;</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (seed != <span class="literal">null</span>) &#123;</span><br><span class="line">           engineSetSeed(seed);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/usermark/AesSample/blob/master/app/src/main/java/com/github/usermark/aessample/sun/SHA.java">SHA</a>新增3個method，讓SunSecureRandom可以使用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="title function_">update</span><span class="params">(<span class="type">byte</span>[] input)</span> &#123;</span><br><span class="line">    engineUpdate(input, <span class="number">0</span>, input.length);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">byte</span>[] digest() &#123;</span><br><span class="line">    <span class="keyword">return</span> engineDigest();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">byte</span>[] digest(<span class="type">byte</span>[] input) &#123;</span><br><span class="line">    update(input);</span><br><span class="line">    <span class="keyword">return</span> digest();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>原本<a target="_blank" rel="noopener" href="https://github.com/usermark/AesSample/blob/master/app/src/main/java/com/github/usermark/aessample/sun/Unsafe.java">Unsafe</a>都是呼叫底層native，改成自行實作的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Unsafe</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Unsafe</span><span class="params">()</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Unsafe</span> <span class="variable">theUnsafe</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Unsafe</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Unsafe <span class="title function_">getUnsafe</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> theUnsafe;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getInt</span><span class="params">(<span class="type">byte</span>[] o, <span class="type">long</span> offset)</span> &#123;</span><br><span class="line">        <span class="type">ByteBuffer</span> <span class="variable">bf</span> <span class="operator">=</span> ByteBuffer.wrap(o, (<span class="type">int</span>) offset, <span class="number">4</span>);</span><br><span class="line">        <span class="keyword">return</span> bf.getInt();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">putInt</span><span class="params">(<span class="type">byte</span>[] o, <span class="type">long</span> offset, <span class="type">int</span> x)</span> &#123;</span><br><span class="line">        <span class="type">ByteBuffer</span> <span class="variable">bf</span> <span class="operator">=</span> ByteBuffer.wrap(o);</span><br><span class="line">        bf.putInt((<span class="type">int</span>) offset, x);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>改寫取得SecretKey的方式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> SecretKeySpec <span class="title function_">getSecretKey</span><span class="params">(String key)</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="type">KeyGenerator</span> <span class="variable">kg</span> <span class="operator">=</span> KeyGenerator.getInstance(KEY_ALGORITHM);</span><br><span class="line">        kg.init(<span class="number">128</span>);</span><br><span class="line">        <span class="type">SecretKey</span> <span class="variable">secretKey</span> <span class="operator">=</span> kg.generateKey();</span><br><span class="line">        <span class="type">byte</span>[] keyBytes = secretKey.getEncoded();</span><br><span class="line">        <span class="type">SunSecureRandom</span> <span class="variable">sunRandom</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SunSecureRandom</span>();</span><br><span class="line">        sunRandom.engineSetSeed(key.getBytes(StandardCharsets.UTF_8));</span><br><span class="line">        sunRandom.engineNextBytes(keyBytes);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">SecretKeySpec</span>(keyBytes, KEY_ALGORITHM);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最終不管是在Java或Android上跑都可以得到同樣的加密結果，完整實作範例於此 <a target="_blank" rel="noopener" href="https://github.com/usermark/AesSample">https://github.com/usermark/AesSample</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Android/" rel="tag"># Android</a>
+              <a href="/tags/AES/" rel="tag"># AES</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/07/09/hexo-github-pages/" rel="prev" title="[Hexo] 用Hexo + Github Pages架設個人網誌">
+      <i class="fa fa-chevron-left"></i> [Hexo] 用Hexo + Github Pages架設個人網誌
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/07/30/rpi4-android-tv/" rel="next" title="[Raspberry Pi] Android TV">
+      [Raspberry Pi] Android TV <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mike Chen"
+      src="/assets/mike.png">
+  <p class="site-author-name" itemprop="name">Mike Chen</p>
+  <div class="site-description" itemprop="description">現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/usermark" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;usermark" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:trexcobras@gmail.com" title="E-Mail → mailto:trexcobras@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mike Chen</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'fe34fe28201c28ecaca2',
+      clientSecret: '6b0f055d80dc258148f06400ce27502351d56921',
+      repo        : 'usermark.github.io',
+      owner       : 'usermark',
+      admin       : ['usermark'],
+      id          : '3d6f83b4fc3771949a3fd6694e164c19',
+        language: 'zh-TW',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

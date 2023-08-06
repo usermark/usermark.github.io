@@ -28,7 +28,7 @@
 <meta property="og:description" content="原本是用Jekyll + Github Pages架設個人網誌，轉移到Hexo後發現真得很方便，這次便將安裝過程紀錄下來。">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2023-07-09T07:32:03.000Z">
-<meta property="article:modified_time" content="2023-07-09T09:20:51.502Z">
+<meta property="article:modified_time" content="2023-07-30T00:14:40.449Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="Hexo">
 <meta property="article:tag" content="Github Pages">
@@ -167,7 +167,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/assets/mike.png">
       <meta itemprop="name" content="Mike Chen">
-      <meta itemprop="description" content="Hello World">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -184,10 +184,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">發表於</span>
-              
 
-              <time title="創建時間：2023-07-09 15:32:03 / 修改時間：17:20:51" itemprop="dateCreated datePublished" datetime="2023-07-09T15:32:03+08:00">2023-07-09</time>
+              <time title="創建時間：2023-07-09 15:32:03" itemprop="dateCreated datePublished" datetime="2023-07-09T15:32:03+08:00">2023-07-09</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2023-07-30 08:14:40" itemprop="dateModified" datetime="2023-07-30T08:14:40+08:00">2023-07-30</time>
+              </span>
 
           
 
@@ -278,6 +284,10 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo cl</span><br><span class="line">hexo g -d</span><br></pre></td></tr></table></figure>
 
 <p>完成後，便可在個人頁面 <a target="_blank" rel="noopener" href="https://username.github.io/">https://username.github.io</a> 查看部署結果。</p>
+<h1 id="錯誤處理"><a href="#錯誤處理" class="headerlink" title="錯誤處理"></a>錯誤處理</h1><h2 id="No-layout-index-html"><a href="#No-layout-index-html" class="headerlink" title="No layout: index.html"></a>No layout: index.html</h2><p>少了主題，當從其他主機clone專案後，還需clone NexT</p>
+<p>輸入指令clone NexT主題後便可</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/theme-next/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
+
 <p><strong>參考資料</strong></p>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://hackmd.io/@Heidi-Liu/note-hexo-github">【學習筆記】如何使用 Hexo + GitHub Pages 架設個人網誌</a></li>
@@ -305,7 +315,10 @@
     <a href="/2023/06/30/fd-leak/" rel="prev" title="[Android] FD leak">
       <i class="fa fa-chevron-left"></i> [Android] FD leak
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2023/07/10/android-aes/" rel="next" title="[Android] AES加解密在Android和Java結果不一致">
+      [Android] AES加解密在Android和Java結果不一致 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -365,7 +378,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9DHexo"><span class="nav-number">1.</span> <span class="nav-text">安裝Hexo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96Hexo"><span class="nav-number">2.</span> <span class="nav-text">初始化Hexo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hexo%E7%9B%B8%E9%97%9C%E6%8C%87%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">Hexo相關指令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%87%E6%8F%9B%E4%B8%BB%E9%A1%8C%E7%82%BANexT"><span class="nav-number">4.</span> <span class="nav-text">切換主題為NexT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E9%A0%81%E9%9D%A2%EF%BC%9A%E9%97%9C%E6%96%BC"><span class="nav-number">5.</span> <span class="nav-text">新增頁面：關於</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E9%A0%81%E9%9D%A2%EF%BC%9A%E6%A8%99%E7%B1%A4"><span class="nav-number">6.</span> <span class="nav-text">新增頁面：標籤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E5%8A%9F%E8%83%BD%EF%BC%9AGitalk"><span class="nav-number">7.</span> <span class="nav-text">新增功能：Gitalk</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0Github-Pages"><span class="nav-number">8.</span> <span class="nav-text">部署到Github Pages</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9DHexo"><span class="nav-number">1.</span> <span class="nav-text">安裝Hexo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96Hexo"><span class="nav-number">2.</span> <span class="nav-text">初始化Hexo</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hexo%E7%9B%B8%E9%97%9C%E6%8C%87%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">Hexo相關指令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%87%E6%8F%9B%E4%B8%BB%E9%A1%8C%E7%82%BANexT"><span class="nav-number">4.</span> <span class="nav-text">切換主題為NexT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E9%A0%81%E9%9D%A2%EF%BC%9A%E9%97%9C%E6%96%BC"><span class="nav-number">5.</span> <span class="nav-text">新增頁面：關於</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E9%A0%81%E9%9D%A2%EF%BC%9A%E6%A8%99%E7%B1%A4"><span class="nav-number">6.</span> <span class="nav-text">新增頁面：標籤</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E5%8A%9F%E8%83%BD%EF%BC%9AGitalk"><span class="nav-number">7.</span> <span class="nav-text">新增功能：Gitalk</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0Github-Pages"><span class="nav-number">8.</span> <span class="nav-text">部署到Github Pages</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%8C%AF%E8%AA%A4%E8%99%95%E7%90%86"><span class="nav-number">9.</span> <span class="nav-text">錯誤處理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#No-layout-index-html"><span class="nav-number">9.1.</span> <span class="nav-text">No layout: index.html</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -374,21 +387,21 @@
     <img class="site-author-image" itemprop="image" alt="Mike Chen"
       src="/assets/mike.png">
   <p class="site-author-name" itemprop="name">Mike Chen</p>
-  <div class="site-description" itemprop="description">Hello World</div>
+  <div class="site-description" itemprop="description">現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -400,6 +413,9 @@
       <span class="links-of-author-item">
         <a href="mailto:trexcobras@gmail.com" title="E-Mail → mailto:trexcobras@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
       </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
   </div>
 
 
