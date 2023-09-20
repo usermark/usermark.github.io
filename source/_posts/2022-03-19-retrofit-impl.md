@@ -65,6 +65,22 @@ for (int i = 0; i < headers.size(); i++) {
 }
 ```
 
+# 請求加上token認證
+
+例如使用Google API需要獲得token後，才有權限使用。
+
+```java
+public class TokenInterceptor implements Interceptor {
+    @Override
+    public Response intercept(Chain chain) throws IOException {
+        Request request = chain.request().newBuilder()
+                .header("Authorization", "Bearer " + token)
+                .build();
+        return chain.proceed(request);
+    }
+}
+```
+
 # 保持連線和Cookie
 
 參考<https://stackoverflow.com/questions/36706795/how-to-keep-session-using-retrofit-okhttpclient>
@@ -103,3 +119,142 @@ public class FieldMapInterceptor implements Interceptor {
     }
 }
 ```
+
+# 上送檔案(body為raw)
+
+以Google Photos API的uploads為例。用Jetpack新提供的相片挑選工具，取得要上送的照片URI後，轉換成InputStream上送至服務。
+
+```java
+public interface PhotoAPI {
+    @Headers({
+            "Content-type: application/octet-stream",
+            "X-Goog-Upload-Protocol: raw"
+    })
+    @POST("uploads")
+    Call<ResponseBody> uploadMediaItem(@Header("X-Goog-Upload-Content-Type") String mimeType, @Body RequestBody file);
+}
+
+public class MainActivity extends AppCompatActivity {
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMultipleMedia =
+            registerForActivityResult(new ActivityResultContracts.PickMultipleVisualMedia(50), uris -> {
+                if (uris.isEmpty()) {
+                    Log.d("Mike", "No media selected");
+                    return;
+                }
+                Log.d("Mike", "Number of items selected: " + uris.size());
+                for (Uri uri : uris) {
+                    ContentResolver contentResolver = getContentResolver();
+                    try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
+                        if (cursor.moveToFirst()) {
+                            String displayName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME));
+                            uploadMediaItem(displayName, contentResolver.getType(uri), contentResolver.openInputStream(uri));
+                        }
+                    } catch (Exception e) {
+                        Log.e("Mike", e.getMessage(), e);
+                    }
+                }
+            });
+
+    public void onUploadClick() {
+        pickMultipleMedia.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageAndVideo.INSTANCE)
+                .build());
+    }
+
+    public void uploadMediaItem(String fileName, String mimeType, InputStream in) {
+        OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder()
+                .addInterceptor(new TokenInterceptor());
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://photoslibrary.googleapis.com/v1/")
+                .client(httpBuilder.build())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        RequestBody body = new RequestBody() {
+            @Nullable
+            @Override
+            public MediaType contentType() {
+                return MediaType.parse(mimeType);
+            }
+
+            @Override
+            public void writeTo(BufferedSink sink) throws IOException {
+                try (Source source = Okio.source(in)) {
+                    sink.writeAll(source);
+                }
+            }
+        };
+        
+        retrofit.create(PhotoAPI.class).uploadMediaItem(mimeType, body)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+    }
+}
+```
+
+**參考**
+1. https://developers.google.com/photos/library/guides/upload-media?hl=en#uploading-bytes
+2. https://developer.android.com/training/data-storage/shared/photopicker?hl=zh-tw
+
+# 上送檔案(body為form-data)
+
+以工作上遇到的日誌上送為例。
+
+```java
+public interface CustomAPI {
+    @POST("Upload")
+    Call<ResponseBody> uploadLog(@Body RequestBody body);
+}
+```
+
+```java
+public void uploadLog(String date, File zipFile) {
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl("https://xxx/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+    final RequestBody body = new MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("date", date)
+            .addFormDataPart("log", zipFile.getName(), RequestBody.create(null, zipFile))
+            .build();
+
+    retrofit.create(CustomAPI.class).uploadLog(body)
+            .enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+}
+```
+
+# 串接Google API遇到java.lang.IllegalArgumentException: Malformed URL
+
+以Google Photos API的mediaItems:batchCreate為例。因其使用gRPC轉碼語法，若直接使用會有問題，endpoint開頭加上./即可。
+
+```java
+public interface PhotoAPI {
+    @POST("./mediaItems:batchCreate")
+    Call<BatchCreateMediaItemsResponse> batchCreateMediaItems(@Body BatchCreateMediaItemsRequest request);
+}
+```
+
+**參考**
+1. https://developers.google.com/photos/library/reference/rest/v1/mediaItems/batchCreate?hl=zh-tw
+2. https://stackoverflow.com/questions/54406788/retrofit-how-to-use-colon-in-url

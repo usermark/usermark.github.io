@@ -25,7 +25,7 @@ tags:
 
 # 簡易筆電架
 
-由於MacBook Pro底部採流線型設計，該筆電架無法有效固定，會滑動:sweat_smile:
+由於MacBook Pro底部採流線型設計，該筆電架無法有效固定，會滑動。
 
 ![](/assets/nb_support.png)
 ![](/assets/nb_support2.png)
