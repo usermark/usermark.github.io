@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-**參考**
+**參考資料**
 1. https://developers.google.com/photos/library/guides/upload-media?hl=en#uploading-bytes
 2. https://developer.android.com/training/data-storage/shared/photopicker?hl=zh-tw
 
@@ -255,6 +255,6 @@ public interface PhotoAPI {
 }
 ```
 
-**參考**
+**參考資料**
 1. https://developers.google.com/photos/library/reference/rest/v1/mediaItems/batchCreate?hl=zh-tw
 2. https://stackoverflow.com/questions/54406788/retrofit-how-to-use-colon-in-url
