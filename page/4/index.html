@@ -158,6 +158,119 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2013/10/24/economics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/assets/mike.png">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2013/10/24/economics/" class="post-title-link" itemprop="url">經濟學</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2013-10-24 14:42:00" itemprop="dateCreated datePublished" datetime="2013-10-24T14:42:00+08:00">2013-10-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2023-07-08 20:44:57" itemprop="dateModified" datetime="2023-07-08T20:44:57+08:00">2023-07-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<h1 id="單利"><a href="#單利" class="headerlink" title="單利"></a>單利</h1><p>所茲生的利息<code>不會加入本金再循環計息</code>，也就是說計息的本金從期初到期末都是一樣的。<br>設期初本金為 PV，名目利率為 Rn，期間為 t 年：</p>
+<p>$$利息 &#x3D; PV<em>Rn</em>t$$</p>
+<p>$$期末終值 (FV) &#x3D; PV + 利息 &#x3D; PV + PV<em>Rn</em>t &#x3D; PV*(1+Rn*t)$$</p>
+<h1 id="複利"><a href="#複利" class="headerlink" title="複利"></a>複利</h1><p><strong>付息期間</strong>：就是每間隔多久結算一次利息，以單利計算。也就是每過一個付息期間，借款者就必須支付貸款者利息。這樣有時候也很麻煩，借款者支付利息非常頻繁，於是就有借款者希望不要每期都支付該筆利息，同意<code>將利息加入本金，做為下期的計息本金</code>。也就是將付息期間一到，便自動將「利息轉貸款」的意思，這就是複利的基本精神。<br>設期初本金為 PV，每期之利率為 rate，付息期間為 n 期：</p>
+<p>$$期末終值 (FV) &#x3D; PV*(1+rate)^n$$</p>
+<table>
+<thead>
+<tr>
+<th>期數</th>
+<th align="left">期初本金</th>
+<th align="left">期末終值 (FV)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td align="left"></td>
+<td align="left">$$PV$$</td>
+</tr>
+<tr>
+<td>1</td>
+<td align="left">$$PV$$</td>
+<td align="left">$$PV*(1+rate)$$</td>
+</tr>
+<tr>
+<td>2</td>
+<td align="left">$$PV*(1+rate)$$</td>
+<td align="left">$$PV*(1+rate)<em>(1+rate) &#x3D; PV</em>(1+rate)^2$$</td>
+</tr>
+<tr>
+<td>3</td>
+<td align="left">$$PV*(1+rate)^2$$</td>
+<td align="left">$$PV*(1+rate)^2*(1+rate) &#x3D; PV*(1+rate)^3$$</td>
+</tr>
+<tr>
+<td></td>
+<td align="left">…</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>n</td>
+<td align="left">$$PV*(1+rate)^(n-1)$$</td>
+<td align="left">$$PV*(1+rate)^n$$</td>
+</tr>
+</tbody></table>
+<p>每期利率可以用<code>名目利率除上每年計息的次數</code>來換算，例如 Rn &#x2F; 2 就是半年利率；Rn &#x2F; 4 就是季利率；Rn &#x2F; 12 就是月利率。所以，每年計息次數以 m 表示，期數 n 就變成每年付息次數 m 乘上年數 t，也就是：</p>
+<p>$$rate &#x3D; Rn &#x2F; m$$</p>
+<p>$$n &#x3D; m*t$$</p>
+<p>$$期末終值 (FV) &#x3D; PV*(1+Rn&#x2F;m)^(m*t)$$</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2013/10/24/statistics/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -636,14 +749,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -661,7 +774,18 @@
   </div>
 
 
-
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- sidebar -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="1915238009"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
       </div>
 
     </div>
