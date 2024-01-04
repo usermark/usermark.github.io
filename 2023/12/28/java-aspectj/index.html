@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="實務上遇到的專案使用純JSP開發，是個骨灰級專案，並未導入Sprint。若要使用AOP來做事，就得自行導入。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Java] AspectJ入門">
+<meta property="og:url" content="https://usermark.github.io/2023/12/28/java-aspectj/index.html">
+<meta property="og:site_name" content="Mike的筆記">
+<meta property="og:description" content="實務上遇到的專案使用純JSP開發，是個骨灰級專案，並未導入Sprint。若要使用AOP來做事，就得自行導入。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://usermark.github.io/assets/download_aspectj_lib.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ajdt_old.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ajdt.png">
+<meta property="og:image" content="https://usermark.github.io/assets/add_ajdt.png">
+<meta property="og:image" content="https://usermark.github.io/assets/add_ajdt_next.png">
+<meta property="og:image" content="https://usermark.github.io/assets/wizard.png">
+<meta property="og:image" content="https://usermark.github.io/assets/eclipse_add_aspectj.png">
+<meta property="og:image" content="https://usermark.github.io/assets/aj_lib.png">
+<meta property="og:image" content="https://usermark.github.io/assets/add_aj_lib.png">
+<meta property="og:image" content="https://usermark.github.io/assets/show_aj_view.png">
+<meta property="og:image" content="https://usermark.github.io/assets/show_aj_view2.png">
+<meta property="og:image" content="https://usermark.github.io/assets/build_auto.png">
+<meta property="og:image" content="https://usermark.github.io/assets/show_aj_view3.png">
+<meta property="og:image" content="https://usermark.github.io/assets/mike_class_de.png">
+<meta property="og:image" content="https://usermark.github.io/assets/export_jar.png">
+<meta property="og:image" content="https://usermark.github.io/assets/add_demoa_lib.png">
+<meta property="og:image" content="https://usermark.github.io/assets/inpath.png">
+<meta property="og:image" content="https://usermark.github.io/assets/aspect_path.png">
+<meta property="article:published_time" content="2023-12-27T23:04:37.000Z">
+<meta property="article:modified_time" content="2024-01-04T14:17:54.302Z">
+<meta property="article:author" content="Mike Chen">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Eclipse">
+<meta property="article:tag" content="AOP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://usermark.github.io/assets/download_aspectj_lib.png">
+
+<link rel="canonical" href="https://usermark.github.io/2023/12/28/java-aspectj/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[Java] AspectJ入門 | Mike的筆記</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mike的筆記</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2023/12/28/java-aspectj/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [Java] AspectJ入門
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2023-12-28 07:04:37" itemprop="dateCreated datePublished" datetime="2023-12-28T07:04:37+08:00">2023-12-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2024-01-04 22:17:54" itemprop="dateModified" datetime="2024-01-04T22:17:54+08:00">2024-01-04</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="閱讀次數" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">閱讀次數：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>實務上遇到的專案使用純JSP開發，是個骨灰級專案，並未導入Sprint。若要使用AOP來做事，就得自行導入。</p>
+<span id="more"></span>
+
+<h1 id="下載AspectJ-library"><a href="#下載AspectJ-library" class="headerlink" title="下載AspectJ library"></a>下載AspectJ library</h1><p><a target="_blank" rel="noopener" href="https://eclipse.dev/aspectj/downloads.php">https://eclipse.dev/aspectj/downloads.php</a><br>先抓jar檔，這裡視專案使用的Java版本來選定，因專案用到的Java 8，因此選定1.8.14。<br><img src="/assets/download_aspectj_lib.png"></p>
+<h1 id="安裝Eclipse外掛AJDT"><a href="#安裝Eclipse外掛AJDT" class="headerlink" title="安裝Eclipse外掛AJDT"></a>安裝Eclipse外掛AJDT</h1><p>工欲善其事，必先利其器。首先至官網 <a target="_blank" rel="noopener" href="https://www.eclipse.org/ajdt/downloads/">https://www.eclipse.org/ajdt/downloads/</a> 抓取最新版。<br><img src="/assets/ajdt_old.png"></p>
+<p>結果看到只有支援到IDE 4.4，且最後發布到2013年就沒有，好了書包收一收可以離開。</p>
+<p>開玩笑地，該項目後來遷移到Github上，改來這抓取<br><a target="_blank" rel="noopener" href="https://github.com/eclipse-aspectj/aspectj/blob/master/docs/developer/IDE.md">https://github.com/eclipse-aspectj/aspectj/blob/master/docs/developer/IDE.md</a><br><img src="/assets/ajdt.png"></p>
+<p>打開Eclipse IDE後，Help &gt; Install New Software &gt; Add 輸入如下：<br><img src="/assets/add_ajdt.png"></p>
+<p>勾選必要元件後，進行安裝。<br><img src="/assets/add_ajdt_next.png"></p>
+<p>待安裝完成後，開始練習寫一個範例程式，順便介紹工具的使用方式。</p>
+<h1 id="入門"><a href="#入門" class="headerlink" title="入門"></a>入門</h1><p>新增專案時，會發現多了AspectJ的資料夾，不用理會，先手動建Java Project，後面會說明如何加上AspectJ模組，好模擬實務上在現有專案導入AOP的情境。<br><img src="/assets/wizard.png"></p>
+<p>手動建好DemoA專案後，新增類別</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.github.usermark;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Mike</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doSomething</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Mike likes to play sports&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Mike</span>().doSomething();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>打開專案的Properties，至Project Natures手動新增AspectJ Nature。<br><img src="/assets/eclipse_add_aspectj.png"></p>
+<p>將剛才抓的jar檔用zip編輯器打開，找到aspectjrt.jar後取出。<br><img src="/assets/aj_lib.png"></p>
+<p>打開專案的Properties，至Jave Build Path加入aspectjrt.jar。<br><img src="/assets/add_aj_lib.png"></p>
+<p>接著新增類別</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.github.usermark;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.JoinPoint;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.Aspect;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.Before;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogAspect</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Before(&quot;execution(* com.github.usermark.*.do*(..))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addPrint</span><span class="params">(JoinPoint joinPoint)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">className</span> <span class="operator">=</span> joinPoint.getTarget().getClass().getName();</span><br><span class="line">        <span class="type">String</span> <span class="variable">methodName</span> <span class="operator">=</span> joinPoint.getSignature().getName();</span><br><span class="line">        System.out.println(String.format(<span class="string">&quot;prepare exec %s.%s&quot;</span>, className, methodName));    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到這裡會好奇，這樣修改有什麼作用。這時AJDT就派上用場，選擇IDE選單 Window &gt; Show View &gt; Other<br><img src="/assets/show_aj_view.png"></p>
+<p>找到AspectJ底下的Cross References，選擇Open。<br><img src="/assets/show_aj_view2.png"></p>
+<p>同時確認Build Automatically是勾選啟用的。<br><img src="/assets/build_auto.png"></p>
+<p>這時就會看到切入點JointPoint是有成功的。<br><img src="/assets/show_aj_view3.png"></p>
+<p>實際執行會得到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">prepare exec com.github.usermark.Mike.doSomething</span><br><span class="line">Mike likes to play sports</span><br></pre></td></tr></table></figure>
+
+<p>如果好奇aspect背後到底做了什麼，施了什麼魔法，可打開編譯後的class檔查看，便可得知它只是針對編譯後的class注入程式碼而已。但別小看這樣的行為，它可以減少實際開發要撰寫的程式碼，且更彈性的注入。即使是後續新增的方法，只要有符合其條件，都會做注入。<br><img src="/assets/mike_class_de.png"></p>
+<h1 id="進階-Inpath"><a href="#進階-Inpath" class="headerlink" title="進階 Inpath"></a>進階 Inpath</h1><p>這讓注入第三方jar，即已編譯過的class成為可能。<br>實際操作一遍，先將DemoA專案打包成jar檔，供其他專案使用。<br>在專案上按右鍵，選擇Export &gt; Jar file<br><img src="/assets/export_jar.png"></p>
+<p>產生jar檔後，接著建立新專案DemoB，引用DemoA.jar。<br><img src="/assets/add_demoa_lib.png"></p>
+<p>同樣，打開專案的Properties，至Project Natures手動新增AspectJ Nature。<br>再來新增類別。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.github.usermark;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Bill</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doSleep</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Bill usually goes to bed at nine&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Mike</span>().doSomething();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Bill</span>().doSleep();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>先執行看看會得到錯誤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.NoClassDefFoundError: org/aspectj/lang/Signature</span><br><span class="line">    at com.github.usermark.Bill.main(Bill.java:10)</span><br><span class="line">Caused by: java.lang.ClassNotFoundException: org.aspectj.lang.Signature</span><br><span class="line">    at java.net.URLClassLoader.findClass(URLClassLoader.java:387)</span><br><span class="line">    at java.lang.ClassLoader.loadClass(ClassLoader.java:418)</span><br><span class="line">    at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:352)</span><br><span class="line">    at java.lang.ClassLoader.loadClass(ClassLoader.java:351)</span><br><span class="line">    ... 1 more</span><br></pre></td></tr></table></figure>
+
+<p>因少引入aspectjrt.jar，至Jave Build Path加入aspectjrt.jar後，再次執行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">prepare exec com.github.usermark.Mike.doSomething</span><br><span class="line">Mike likes to play sports</span><br><span class="line">Bill usually goes to bed at nine</span><br></pre></td></tr></table></figure>
+
+<p>接著新增類別</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.github.usermark;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.JoinPoint;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.After;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.Aspect;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogEndAspect</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@After(&quot;execution(* com.github.usermark.*.do*(..))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addPrint</span><span class="params">(JoinPoint joinPoint)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">className</span> <span class="operator">=</span> joinPoint.getTarget().getClass().getName();</span><br><span class="line">        <span class="type">String</span> <span class="variable">methodName</span> <span class="operator">=</span> joinPoint.getSignature().getName();</span><br><span class="line">        System.out.println(String.format(<span class="string">&quot;already exec %s.%s&quot;</span>, className, methodName));    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>實際執行得到結果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">prepare exec com.github.usermark.Mike.doSomething</span><br><span class="line">Mike likes to play sports</span><br><span class="line">Bill usually goes to bed at nine</span><br><span class="line">already exec com.github.usermark.Bill.doSleep</span><br></pre></td></tr></table></figure>
+
+<p>可以看到第三方的jar裡面的Mike類別並未注入新的LogEndAspect。<br>打開專案的Properties，至AspectJ Build的Inpath分頁新增DemoA.jar。<br><img src="/assets/inpath.png"></p>
+<p>再次執行，可以看到Mike底下多了一行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">prepare exec com.github.usermark.Mike.doSomething</span><br><span class="line">Mike likes to play sports</span><br><span class="line">already exec com.github.usermark.Mike.doSomething</span><br><span class="line">Bill usually goes to bed at nine</span><br><span class="line">already exec com.github.usermark.Bill.doSleep</span><br></pre></td></tr></table></figure>
+
+<h1 id="進階-Aspect-Path"><a href="#進階-Aspect-Path" class="headerlink" title="進階 Aspect Path"></a>進階 Aspect Path</h1><p>這樣Bill類別能否注入jar裡面的LogAspect，當然可以！<br>打開專案的Properties，至AspectJ Build的Aspect Path分頁新增DemoA.jar。<br><img src="/assets/aspect_path.png"></p>
+<p>再次執行，可以看到Bill上面多了一行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">prepare exec com.github.usermark.Mike.doSomething</span><br><span class="line">Mike likes to play sports</span><br><span class="line">already exec com.github.usermark.Mike.doSomething</span><br><span class="line">prepare exec com.github.usermark.Bill.doSleep</span><br><span class="line">Bill usually goes to bed at nine</span><br><span class="line">already exec com.github.usermark.Bill.doSleep</span><br></pre></td></tr></table></figure>
+
+<p><strong>參考資料</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://javadoop.com/post/aspectj">AspectJ 使用介绍</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/Eclipse/" rel="tag"># Eclipse</a>
+              <a href="/tags/AOP/" rel="tag"># AOP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/12/23/eclipse-add-gradle/" rel="prev" title="[Eclipse] Add Gradle Nature無作用">
+      <i class="fa fa-chevron-left"></i> [Eclipse] Add Gradle Nature無作用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/01/01/3d-print-gcode/" rel="next" title="[3D列印] 斷料、跳電補救續印教學">
+      [3D列印] 斷料、跳電補救續印教學 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8B%E8%BC%89AspectJ-library"><span class="nav-number">1.</span> <span class="nav-text">下載AspectJ library</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9DEclipse%E5%A4%96%E6%8E%9BAJDT"><span class="nav-number">2.</span> <span class="nav-text">安裝Eclipse外掛AJDT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%A5%E9%96%80"><span class="nav-number">3.</span> <span class="nav-text">入門</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%B2%E9%9A%8E-Inpath"><span class="nav-number">4.</span> <span class="nav-text">進階 Inpath</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%B2%E9%9A%8E-Aspect-Path"><span class="nav-number">5.</span> <span class="nav-text">進階 Aspect Path</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mike Chen</p>
+  <div class="site-description" itemprop="description">現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/usermark" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;usermark" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:trexcobras@gmail.com" title="E-Mail → mailto:trexcobras@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- sidebar -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="1915238009"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mike Chen</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="訪客總數">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="總瀏覽次數">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'fe34fe28201c28ecaca2',
+      clientSecret: '6b0f055d80dc258148f06400ce27502351d56921',
+      repo        : 'usermark.github.io',
+      owner       : 'usermark',
+      admin       : ['usermark'],
+      id          : 'e5774d90b5031cba7443d5f364f9baaa',
+        language: 'zh-TW',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
