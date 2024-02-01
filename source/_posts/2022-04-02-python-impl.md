@@ -8,6 +8,76 @@ tags:
 ---
 紀錄開發上常遇到的問題，避免重複踩坑。
 <!--more-->
+# 讀取yaml檔
+
+需安裝pyyaml套件
+```sh
+pipenv install pyyaml
+```
+
+```python
+import yaml
+
+with open('config.yml', encoding='UTF-8') as stream:
+    configs = yaml.safe_load(stream)
+```
+
+# 讀取zip檔內的文字檔內容
+
+```python
+import zipfile
+
+with zipfile.ZipFile('path/to/zip_file', 'r') as zip_ref:
+    linesb = zip_ref.open(zip_ref.namelist()[0]).readlines()  # 開啟zip檔內第一個檔案
+    print(''.join([lineb.decode('UTF-8') for lineb in linesb]))
+```
+
+# 解壓縮rar檔
+
+需安裝unrar套件，並新增環境變數 UNRAR_LIB_PATH = C:\Program Files (x86)\UnrarDLL\x64\UnRAR64.dll
+```sh
+pipenv install unrar
+```
+
+```python
+from unrar import rarfile
+
+with rarfile.RarFile('path/to/rar_file') as rar_ref:
+    rar_ref.extract(rar_ref.namelist()[0], 'unrar/to/path')  # 解壓縮第一個檔案
+```
+
+# 開啟資料夾
+
+```python
+import subprocess
+
+def open_folder(path):
+    """開啟資料夾"""
+    if platform.system() == 'Darwin':
+        subprocess.call(['open', path])
+    else:
+        subprocess.call(['start', path], shell=True)
+```
+
+# NAS連線並取檔
+
+需安裝pysmb套件
+```sh
+pipenv install pysmb
+```
+
+```python
+from smb.SMBConnection import SMBConnection
+
+conn = SMBConnection('user', 'pwd', '', '', domain='your_domain')
+if not conn.connect('ip', port=445, timeout=10):
+    print('連線失敗')
+    return
+with open('path/to/output_file', 'wb') as output_file:
+    conn.retrieveFile('share_folder', 'path/to/file', output_file)
+conn.close()
+```
+
 # AES加解密
 
 需安裝pycryptodome套件

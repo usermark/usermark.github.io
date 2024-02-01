@@ -63,6 +63,8 @@ themes.xml
 
 # 調整Dialog樣式
 
+預設的樣式如下，通常會為了整體UI風格調整標題和按鈕顏色。
+
 ```java
 new AlertDialog.Builder(MainActivity.this)
         .setTitle("Title")

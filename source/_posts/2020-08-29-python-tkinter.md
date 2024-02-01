@@ -1,6 +1,6 @@
 ---
 layout: article
-title: '[Python] tkinter'
+title: '[Python] Tkinter'
 date: 2020-08-29 13:43
 tags:
 - Python
@@ -18,6 +18,7 @@ class Application:
     def __init__(self):
         window = Tk()
         window.title('Hello World')
+        window.geometry('800x600')
         window.mainloop()
 
 
@@ -26,6 +27,24 @@ if __name__ == "__main__":
 ```
 
 # 基本元件介紹
+## Widget
+winfo_exists() 可檢查是否存在/顯示
+winfo_children() 回傳底下所有widget
+
+## Frame
+```python
+Style().configure('red.TFrame', background='red')  # 自訂風格，字尾必為.TFrame，調整背景為紅色
+f = Frame(window, style='user.TFrame')
+```
+清空Frame
+```python
+def clear_frame(frame):
+  """清空Frame"""
+  for widgets in frame.winfo_children():
+    widgets.destroy()
+
+```
+
 ## Label
 可透過['text']或config修改文字，config可修改UI屬性
 ```python
@@ -86,18 +105,28 @@ def sort_column(col, reverse):
 
     tv.heading(col, command=lambda: sort_column(col, not reverse))  # 重新定義方法為反向排序
 
-vbar = Scrollbar(window)
-vbar.pack(side=RIGHT, fill=Y)
+def reset():
+    """清除Treeview內容"""
+    tv.delete(tv.get_children())
 
-Style().configure('user.Treeview', rowheight=110)  # 自訂風格，調整欄高為110
-tv = Treeview(window, yscrollcommand=vbar.set, show='headings', style='user.Treeview')
+
+vbar = Scrollbar(window, orient='vertical')
+vbar.pack(side=RIGHT, fill=Y)
+hbar = Scrollbar(window, orient='horizontal')
+hbar.pack(side=BOTTOM, fill=X)
+
+Style().configure('user.Treeview', rowheight=110)  # 自訂風格，字尾必為.Treeview，調整欄高為110
+# height表顯示5行資料列，不含標題
+tv = Treeview(window, xscrollcommand=hbar.set, yscrollcommand=vbar.set, show='headings', height=5, style='user.Treeview')
 tv.pack(side=LEFT, fill=BOTH, expand=True)
-tv['columns'] = 'id', 'name', 'password', 'auth_code'
+tv['columns'] = 'id', 'name', 'password', 'auth_code'  # 不可以有中括弧
 tv.heading('#1', text='id', command=lambda: sort_column('#1', False))
 tv.heading('#2', text='name')
 tv.heading('#3', text='password')
 tv.heading('#4', text='auth_code')
+tv.column('#1', width=130, stretch=NO)  # 調整欄位寬度
 vbar.config(command=tv.yview)
+hbar.config(command=tv.xview)
 ```
 
 展開/收合TreeView
@@ -105,6 +134,24 @@ vbar.config(command=tv.yview)
 def tree_open(open):
     for child in tv.get_children():
         tv.item(child, open=open)
+```
+
+欄位可選取
+```python
+tv.bind('<Double-1>', _on_double_click)
+
+def _on_double_click(event):
+    col = tv.identify_column(event.x)
+    rowid = tv.identify_row(event.y)
+    box = tv.bbox(rowid, col)
+    text = tv.item(rowid, 'values')[int(col[1:])-1]
+    
+    edit_entry = Entry(tv, width=box[2])
+    edit_entry.insert(0, text)
+    edit_entry.select_range(0, END)
+    edit_entry.focus_set()
+    edit_entry.bind('<FocusOut>', lambda event: event.widget.destroy())
+    edit_entry.place(x=box[0], y=box[1], w=box[2], h=box[3])
 ```
 
 ## PanedWindow
@@ -139,13 +186,16 @@ label = Label(popup, image=photo)
 label.pack()
 ```
 
-## Widget
-winfo_exists() 可檢查是否存在/顯示
-
-winfo_children() 回傳底下所有widget
-
 # 佈局
+## Pack
+```python
+label.pack(anchor=W)  # 靠左呈現
+```
+
 ## Grid
+```python
+label.grid(row=0, column=0, sticky=W)  # 靠左呈現
+```
 自動佈局，每三個項目為一列
 ```python
 def auto_grid(parent, widget):

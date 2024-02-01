@@ -23,6 +23,10 @@ ssh-keygen -t rsa -b 4096 -C "your_email"
 ```shell
 cat ~/.ssh/id_rsa.pub
 ```
+
+或是使用PuTTYgen查看，選單Conversions > Import key
+![](/assets/puttygen.png)
+
 登入Github網頁版，到Settings > SSH and GPG keys > New SSH key，貼上剛複製的內容。
 
 # SourceTree設定
