@@ -82,6 +82,15 @@ entry.pack()
 ## ScrolledText
 沒有textvariable屬性，只能用insert()修改文字
 
+```python
+result_text = ScrolledText(master)
+# 取代
+result_text.delete(1.0, END)
+result_text.insert(1.0, 'Hello World')
+
+data = result_text.get(1.0, END)[:-1]  # 取值時，要小心結尾換行
+```
+
 ## Combobox
 下拉式選單
 ```python

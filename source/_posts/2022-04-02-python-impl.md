@@ -78,6 +78,24 @@ with open('path/to/output_file', 'wb') as output_file:
 conn.close()
 ```
 
+## 支援SMB2/3
+
+需安裝smbprotocol套件
+```sh
+pipenv install smbprotocol
+```
+
+參考 https://github.com/jborean93/smbprotocol/blob/master/examples/high-level/file-management.py
+```python
+from smbclient import register_session, open_file
+
+register_session('ip', username='user', password='pwd')
+
+with open('path/to/output_file', 'wb') as output_file:
+    with open_file(r"\\ip\path\to\file", mode="rb") as fd:
+        output_file.write(fd.read())
+```
+
 # AES加解密
 
 需安裝pycryptodome套件
