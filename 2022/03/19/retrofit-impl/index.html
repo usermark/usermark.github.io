@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="紀錄開發上常遇到的問題，避免重複踩坑。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Android] Retrofit應用">
+<meta property="og:url" content="https://usermark.github.io/2022/03/19/retrofit-impl/index.html">
+<meta property="og:site_name" content="Mike的筆記">
+<meta property="og:description" content="紀錄開發上常遇到的問題，避免重複踩坑。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2022-03-19T08:24:00.000Z">
+<meta property="article:modified_time" content="2024-02-27T07:30:08.703Z">
+<meta property="article:author" content="Mike Chen">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="Retrofit">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://usermark.github.io/2022/03/19/retrofit-impl/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[Android] Retrofit應用 | Mike的筆記</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mike的筆記</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2022/03/19/retrofit-impl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [Android] Retrofit應用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2022-03-19 16:24:00" itemprop="dateCreated datePublished" datetime="2022-03-19T16:24:00+08:00">2022-03-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2024-02-27 15:30:08" itemprop="dateModified" datetime="2024-02-27T15:30:08+08:00">2024-02-27</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="閱讀次數" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">閱讀次數：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>紀錄開發上常遇到的問題，避免重複踩坑。</p>
+<span id="more"></span>
+<h1 id="紀錄API請求和回應"><a href="#紀錄API請求和回應" class="headerlink" title="紀錄API請求和回應"></a>紀錄API請求和回應</h1><p>可使用寫好的套件 HttpLoggingInterceptor，參考<a target="_blank" rel="noopener" href="https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor">https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor</a></p>
+<p>或自行實作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LogInterceptor</span> <span class="keyword">implements</span> <span class="title class_">Interceptor</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Response <span class="title function_">intercept</span><span class="params">(Chain chain)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> chain.request();</span><br><span class="line">        <span class="type">String</span> <span class="variable">bodyString</span> <span class="operator">=</span> bodyToString(request);</span><br><span class="line">        Log.d(<span class="string">&quot;Mike&quot;</span>, String.format(<span class="string">&quot;[%X] Request to %s\n%s&quot;</span>,</span><br><span class="line">                chain.hashCode(), request.url(), bodyString));</span><br><span class="line"></span><br><span class="line">        Response response;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            response = chain.proceed(request);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (SocketTimeoutException e) &#123;</span><br><span class="line">            Log.d(<span class="string">&quot;Mike&quot;</span>, String.format(<span class="string">&quot;[%X] Response timeout for %s&quot;</span>,</span><br><span class="line">                    chain.hashCode(), request.url()));</span><br><span class="line">            <span class="keyword">throw</span> e;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">ResponseBody</span> <span class="variable">responseBody</span> <span class="operator">=</span> response.body();</span><br><span class="line">        <span class="type">String</span> <span class="variable">responseBodyString</span> <span class="operator">=</span> responseBody.string();</span><br><span class="line">        Log.d(<span class="string">&quot;Mike&quot;</span>, String.format(<span class="string">&quot;[%X] Response to %s(%d)\n%s&quot;</span>,</span><br><span class="line">                chain.hashCode(), response.request().url(), response.code(), responseBodyString));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> response.newBuilder().body(</span><br><span class="line">                ResponseBody.create(responseBody.contentType(), responseBodyString.getBytes())).build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String <span class="title function_">bodyToString</span><span class="params">(Request request)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Request</span> <span class="variable">copy</span> <span class="operator">=</span> request.newBuilder().build();</span><br><span class="line">            <span class="type">Buffer</span> <span class="variable">buffer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Buffer</span>();</span><br><span class="line">            <span class="keyword">if</span> (copy.body() != <span class="literal">null</span>) &#123;</span><br><span class="line">                copy.body().writeTo(buffer);</span><br><span class="line">                <span class="keyword">return</span> buffer.readUtf8();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>若要印出headers，可加上這段。</p>
+<p>注意：不要使用response.headers().names()跑for each處理，例如回傳的Set-Cookie有兩個，但該寫法只會印出一個。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Headers</span> <span class="variable">headers</span> <span class="operator">=</span> response.headers();</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; headers.size(); i++) &#123;</span><br><span class="line">    Log.d(<span class="string">&quot;Mike&quot;</span>, headers.name(i) + <span class="string">&quot;: &quot;</span> + headers.value(i));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="請求加上token認證"><a href="#請求加上token認證" class="headerlink" title="請求加上token認證"></a>請求加上token認證</h1><p>例如使用Google API需要獲得token後，才有權限使用。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TokenInterceptor</span> <span class="keyword">implements</span> <span class="title class_">Interceptor</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Response <span class="title function_">intercept</span><span class="params">(Chain chain)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> chain.request().newBuilder()</span><br><span class="line">                .header(<span class="string">&quot;Authorization&quot;</span>, <span class="string">&quot;Bearer &quot;</span> + token)</span><br><span class="line">                .build();</span><br><span class="line">        <span class="keyword">return</span> chain.proceed(request);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="保持連線和Cookie"><a href="#保持連線和Cookie" class="headerlink" title="保持連線和Cookie"></a>保持連線和Cookie</h1><p>參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/36706795/how-to-keep-session-using-retrofit-okhttpclient">https://stackoverflow.com/questions/36706795/how-to-keep-session-using-retrofit-okhttpclient</a></p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">implementation <span class="string">&#x27;com.squareup.okhttp3:okhttp-urlconnection:4.9.3&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient.<span class="type">Builder</span> <span class="variable">httpBuilder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OkHttpClient</span>.Builder()</span><br><span class="line">        .cookieJar(<span class="keyword">new</span> <span class="title class_">JavaNetCookieJar</span>(<span class="keyword">new</span> <span class="title class_">CookieManager</span>()))</span><br><span class="line">        .build();</span><br></pre></td></tr></table></figure>
+
+<h1 id="修改FieldMap"><a href="#修改FieldMap" class="headerlink" title="修改FieldMap"></a>修改FieldMap</h1><p>使用情境是有多個API都要傳同個欄位和值，例如UUID或時間戳記。</p>
+<p>使用下列方式可對所有API都加上該值；但若是遇到只有部分需要，則不適用。建議改用Builder類別包住Map操作，然後將常用的欄位寫成public的method。</p>
+<p>參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/56515769/okhttp3-interceptor-add-fields-to-request-body">https://stackoverflow.com/questions/56515769/okhttp3-interceptor-add-fields-to-request-body</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FieldMapInterceptor</span> <span class="keyword">implements</span> <span class="title class_">Interceptor</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Response <span class="title function_">intercept</span><span class="params">(Chain chain)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> chain.request();</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">&quot;POST&quot;</span>.equals(request.method()) &amp;&amp; request.body() <span class="keyword">instanceof</span> FormBody) &#123;</span><br><span class="line">            FormBody.<span class="type">Builder</span> <span class="variable">bodyBuilder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FormBody</span>.Builder();</span><br><span class="line">            <span class="type">FormBody</span> <span class="variable">formBody</span> <span class="operator">=</span> (FormBody) request.body();</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; formBody.size(); i++) &#123;</span><br><span class="line">                bodyBuilder.addEncoded(formBody.encodedName(i), formBody.encodedValue(i));</span><br><span class="line">            &#125;</span><br><span class="line">            bodyBuilder.add(<span class="string">&quot;key&quot;</span>, <span class="string">&quot;value&quot;</span>);</span><br><span class="line">            request = request.newBuilder().post(bodyBuilder.build()).build();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> chain.proceed(request);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="上送檔案-body為raw"><a href="#上送檔案-body為raw" class="headerlink" title="上送檔案(body為raw)"></a>上送檔案(body為raw)</h1><p>以Google Photos API的uploads為例。用Jetpack新提供的相片挑選工具，取得要上送的照片URI後，轉換成InputStream上送至服務。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">PhotoAPI</span> &#123;</span><br><span class="line">    <span class="meta">@Headers(&#123;</span></span><br><span class="line"><span class="meta">            &quot;Content-type: application/octet-stream&quot;,</span></span><br><span class="line"><span class="meta">            &quot;X-Goog-Upload-Protocol: raw&quot;</span></span><br><span class="line"><span class="meta">    &#125;)</span></span><br><span class="line">    <span class="meta">@POST(&quot;uploads&quot;)</span></span><br><span class="line">    Call&lt;ResponseBody&gt; <span class="title function_">uploadMediaItem</span><span class="params">(<span class="meta">@Header(&quot;X-Goog-Upload-Content-Type&quot;)</span> String mimeType, <span class="meta">@Body</span> RequestBody file)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainActivity</span> <span class="keyword">extends</span> <span class="title class_">AppCompatActivity</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> ActivityResultLauncher&lt;PickVisualMediaRequest&gt; pickMultipleMedia =</span><br><span class="line">            registerForActivityResult(<span class="keyword">new</span> <span class="title class_">ActivityResultContracts</span>.PickMultipleVisualMedia(<span class="number">50</span>), uris -&gt; &#123;</span><br><span class="line">                <span class="keyword">if</span> (uris.isEmpty()) &#123;</span><br><span class="line">                    Log.d(<span class="string">&quot;Mike&quot;</span>, <span class="string">&quot;No media selected&quot;</span>);</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                Log.d(<span class="string">&quot;Mike&quot;</span>, <span class="string">&quot;Number of items selected: &quot;</span> + uris.size());</span><br><span class="line">                <span class="keyword">for</span> (Uri uri : uris) &#123;</span><br><span class="line">                    <span class="type">ContentResolver</span> <span class="variable">contentResolver</span> <span class="operator">=</span> getContentResolver();</span><br><span class="line">                    <span class="keyword">try</span> (<span class="type">Cursor</span> <span class="variable">cursor</span> <span class="operator">=</span> contentResolver.query(uri, <span class="literal">null</span>, <span class="literal">null</span>, <span class="literal">null</span>, <span class="literal">null</span>)) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (cursor.moveToFirst()) &#123;</span><br><span class="line">                            <span class="type">String</span> <span class="variable">displayName</span> <span class="operator">=</span> cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME));</span><br><span class="line">                            uploadMediaItem(displayName, contentResolver.getType(uri), contentResolver.openInputStream(uri));</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                        Log.e(<span class="string">&quot;Mike&quot;</span>, e.getMessage(), e);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onUploadClick</span><span class="params">()</span> &#123;</span><br><span class="line">        pickMultipleMedia.launch(<span class="keyword">new</span> <span class="title class_">PickVisualMediaRequest</span>.Builder()</span><br><span class="line">                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageAndVideo.INSTANCE)</span><br><span class="line">                .build());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">uploadMediaItem</span><span class="params">(String fileName, String mimeType, InputStream in)</span> &#123;</span><br><span class="line">        OkHttpClient.<span class="type">Builder</span> <span class="variable">httpBuilder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OkHttpClient</span>.Builder()</span><br><span class="line">                .addInterceptor(<span class="keyword">new</span> <span class="title class_">TokenInterceptor</span>());</span><br><span class="line">        <span class="type">Retrofit</span> <span class="variable">retrofit</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">                .baseUrl(<span class="string">&quot;https://photoslibrary.googleapis.com/v1/&quot;</span>)</span><br><span class="line">                .client(httpBuilder.build())</span><br><span class="line">                .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="type">RequestBody</span> <span class="variable">body</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RequestBody</span>() &#123;</span><br><span class="line">            <span class="meta">@Nullable</span></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> MediaType <span class="title function_">contentType</span><span class="params">()</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> MediaType.parse(mimeType);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">writeTo</span><span class="params">(BufferedSink sink)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">                <span class="keyword">try</span> (<span class="type">Source</span> <span class="variable">source</span> <span class="operator">=</span> Okio.source(in)) &#123;</span><br><span class="line">                    sink.writeAll(source);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        </span><br><span class="line">        retrofit.create(PhotoAPI.class).uploadMediaItem(mimeType, body)</span><br><span class="line">                .enqueue(<span class="keyword">new</span> <span class="title class_">Callback</span>&lt;ResponseBody&gt;() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onResponse</span><span class="params">(Call&lt;ResponseBody&gt; call, Response&lt;ResponseBody&gt; response)</span> &#123;</span><br><span class="line">                        </span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onFailure</span><span class="params">(Call&lt;ResponseBody&gt; call, Throwable t)</span> &#123;</span><br><span class="line"></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>參考資料</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://developers.google.com/photos/library/guides/upload-media?hl=en#uploading-bytes">https://developers.google.com/photos/library/guides/upload-media?hl=en#uploading-bytes</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.android.com/training/data-storage/shared/photopicker?hl=zh-tw">https://developer.android.com/training/data-storage/shared/photopicker?hl=zh-tw</a></li>
+</ol>
+<h1 id="上送檔案-body為form-data"><a href="#上送檔案-body為form-data" class="headerlink" title="上送檔案(body為form-data)"></a>上送檔案(body為form-data)</h1><p>以工作上遇到的日誌上送為例。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">CustomAPI</span> &#123;</span><br><span class="line">    <span class="meta">@POST(&quot;Upload&quot;)</span></span><br><span class="line">    Call&lt;ResponseBody&gt; <span class="title function_">uploadLog</span><span class="params">(<span class="meta">@Body</span> RequestBody body)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">uploadLog</span><span class="params">(String date, File zipFile)</span> &#123;</span><br><span class="line">    <span class="type">Retrofit</span> <span class="variable">retrofit</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">            .baseUrl(<span class="string">&quot;https://xxx/&quot;</span>)</span><br><span class="line">            .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> <span class="type">RequestBody</span> <span class="variable">body</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MultipartBody</span>.Builder()</span><br><span class="line">            .setType(MultipartBody.FORM)</span><br><span class="line">            .addFormDataPart(<span class="string">&quot;date&quot;</span>, date)</span><br><span class="line">            .addFormDataPart(<span class="string">&quot;log&quot;</span>, zipFile.getName(), RequestBody.create(<span class="literal">null</span>, zipFile))</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    retrofit.create(CustomAPI.class).uploadLog(body)</span><br><span class="line">            .enqueue(<span class="keyword">new</span> <span class="title class_">Callback</span>&lt;ResponseBody&gt;() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onResponse</span><span class="params">(Call&lt;ResponseBody&gt; call, Response&lt;ResponseBody&gt; response)</span> &#123;</span><br><span class="line">                    </span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onFailure</span><span class="params">(Call&lt;ResponseBody&gt; call, Throwable t)</span> &#123;</span><br><span class="line"></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="串接Google-API遇到java-lang-IllegalArgumentException-Malformed-URL"><a href="#串接Google-API遇到java-lang-IllegalArgumentException-Malformed-URL" class="headerlink" title="串接Google API遇到java.lang.IllegalArgumentException: Malformed URL"></a>串接Google API遇到java.lang.IllegalArgumentException: Malformed URL</h1><p>以Google Photos API的mediaItems:batchCreate為例。因其使用gRPC轉碼語法，若直接使用會有問題，endpoint開頭加上.&#x2F;即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">PhotoAPI</span> &#123;</span><br><span class="line">    <span class="meta">@POST(&quot;./mediaItems:batchCreate&quot;)</span></span><br><span class="line">    Call&lt;BatchCreateMediaItemsResponse&gt; <span class="title function_">batchCreateMediaItems</span><span class="params">(<span class="meta">@Body</span> BatchCreateMediaItemsRequest request)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>參考資料</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://developers.google.com/photos/library/reference/rest/v1/mediaItems/batchCreate?hl=zh-tw">https://developers.google.com/photos/library/reference/rest/v1/mediaItems/batchCreate?hl=zh-tw</a></li>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/54406788/retrofit-how-to-use-colon-in-url">https://stackoverflow.com/questions/54406788/retrofit-how-to-use-colon-in-url</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Android/" rel="tag"># Android</a>
+              <a href="/tags/Retrofit/" rel="tag"># Retrofit</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/03/03/sourcetree-ssh-key/" rel="prev" title="[Git] 在SourceTree上使用SSH Key與Github連線">
+      <i class="fa fa-chevron-left"></i> [Git] 在SourceTree上使用SSH Key與Github連線
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/03/19/android-impl/" rel="next" title="[Android] 應用">
+      [Android] 應用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%80%E9%8C%84API%E8%AB%8B%E6%B1%82%E5%92%8C%E5%9B%9E%E6%87%89"><span class="nav-number">1.</span> <span class="nav-text">紀錄API請求和回應</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AB%8B%E6%B1%82%E5%8A%A0%E4%B8%8Atoken%E8%AA%8D%E8%AD%89"><span class="nav-number">2.</span> <span class="nav-text">請求加上token認證</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%9D%E6%8C%81%E9%80%A3%E7%B7%9A%E5%92%8CCookie"><span class="nav-number">3.</span> <span class="nav-text">保持連線和Cookie</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9FieldMap"><span class="nav-number">4.</span> <span class="nav-text">修改FieldMap</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8A%E9%80%81%E6%AA%94%E6%A1%88-body%E7%82%BAraw"><span class="nav-number">5.</span> <span class="nav-text">上送檔案(body為raw)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8A%E9%80%81%E6%AA%94%E6%A1%88-body%E7%82%BAform-data"><span class="nav-number">6.</span> <span class="nav-text">上送檔案(body為form-data)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%B2%E6%8E%A5Google-API%E9%81%87%E5%88%B0java-lang-IllegalArgumentException-Malformed-URL"><span class="nav-number">7.</span> <span class="nav-text">串接Google API遇到java.lang.IllegalArgumentException: Malformed URL</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mike Chen</p>
+  <div class="site-description" itemprop="description">現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/usermark" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;usermark" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:trexcobras@gmail.com" title="E-Mail → mailto:trexcobras@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- sidebar -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="1915238009"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mike Chen</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="訪客總數">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="總瀏覽次數">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'fe34fe28201c28ecaca2',
+      clientSecret: '6b0f055d80dc258148f06400ce27502351d56921',
+      repo        : 'usermark.github.io',
+      owner       : 'usermark',
+      admin       : ['usermark'],
+      id          : '9973262dddf47497da9b3246c96d7f84',
+        language: 'zh-TW',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
