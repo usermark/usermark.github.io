@@ -1,13 +1,41 @@
 ---
 layout: article
-title: '[Python] SQLite應用'
+title: '[Python] SQL應用'
 date: 2023-02-17 07:24
 tags:
 - Python
+- SQL
 - SQLite
+- DB2
 ---
 紀錄開發上常遇到的問題，避免重複踩坑。
 <!--more-->
+# 連線資料庫
+
+*SQLite*
+```python
+import sqlite3
+
+conn = sqlite3.connect('enterprise.db')
+```
+
+*DB2*
+需安裝ibm-db套件
+```sh
+pipenv install ibm-db
+```
+
+參考 https://github.com/ibmdb/python-ibmdb?tab=readme-ov-file#installation
+將 C:\Users\{使用者}\AppData\Local\Programs\Python\Python{版本號}\Lib\site-packages 底下 clidriver 資料夾移動到 C:\Program Files
+
+```python
+import os
+os.add_dll_directory('C:\\Program Files\\clidriver\\bin')
+import ibm_db
+
+conn = ibm_db.connect('DATABASE=enterprise;HOSTNAME=ip;PORT=50000;PROTOCOL=TCPIP;UID=user;PWD=pwd', '', '')
+```
+
 # 建立Table
 
 若db檔案不存在，會自動建立。
@@ -38,6 +66,7 @@ conn.close()
 
 # 查詢資料
 
+*SQLite*
 ```python
 conn = sqlite3.connect('enterprise.db')
 curs = conn.cursor()
@@ -52,8 +81,25 @@ conn.close()
 [('duck',), ('bear',)]
 ```
 
+*DB2*
+```python
+conn = ibm_db.connect('DATABASE=enterprise;HOSTNAME=ip;PORT=50000;PROTOCOL=TCPIP;UID=user;PWD=pwd', '', '')
+stmt = ibm_db.exec_immediate(conn, 'SELECT critter FROM zoo WHERE damages BETWEEN 0 AND 1000')
+result = ibm_db.fetch_assoc(stmt)
+for index, item in enumerate(result.keys()):
+    print(item)
+```
+
+# 分頁查詢
+
+*DB2*
+```sql
+SELECT * FROM (SELECT rownumber() OVER (ORDER BY critter) as ROWID, a.* FROM zoo a) WHERE ROWID BETWEEN 11 AND 20
+```
+
 # 取得DB底下的所有Table
 
+*SQLite*
 參考<https://stackoverflow.com/questions/305378/list-of-tables-db-schema-dump-etc-using-the-python-sqlite3-api>
 ```python
 conn = sqlite3.connect('database.db')
