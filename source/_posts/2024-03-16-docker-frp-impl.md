@@ -83,20 +83,21 @@ remotePort = 6001
 ```
 serverAddr 要是frps的IP。
 重新執行，結果如下
+![](/assets/frpc.png)
 
 # 測試
 
 進入frpc做測試，並監聽4000 port，等待接收。
 ```sh
 docker exec -it frpc sh
-ls | nc -l -p 4000
+echo "hello" | nc -l -p 4000
 ```
 
 另外打開cmd視窗，輸入
 ```sh
 telnet localhost 6001
 ```
-若有收到回應，表示成功囉!
+若有收到回應hello，表示成功囉!
 流程大致是telnet打向本地主機的6001 port，會轉送給frps主機的6001 port。根據frpc.toml配置會轉送給frpc主機的4000 port。
 這樣既使frpc主機在內網，也能對外開放其服務。
 
