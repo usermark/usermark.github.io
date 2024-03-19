@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://usermark.github.io/assets/qrcode.png">
 <meta property="article:published_time" content="2020-08-29T05:43:00.000Z">
-<meta property="article:modified_time" content="2024-02-01T14:37:28.747Z">
+<meta property="article:modified_time" content="2024-03-16T07:40:36.178Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="Tkinter">
@@ -195,7 +195,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2024-02-01 22:37:28" itemprop="dateModified" datetime="2024-02-01T22:37:28+08:00">2024-02-01</time>
+                <time title="修改時間：2024-03-16 15:40:36" itemprop="dateModified" datetime="2024-03-16T15:40:36+08:00">2024-03-16</time>
               </span>
 
           
@@ -240,6 +240,8 @@
 </ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">value = StringVar()</span><br><span class="line">value.<span class="built_in">set</span>(<span class="string">&#x27;Hello&#x27;</span>)</span><br><span class="line">entry = Entry(window, textvariable=value)</span><br><span class="line"><span class="comment"># 插入，結果Hello World</span></span><br><span class="line">entry.insert(END, <span class="string">&#x27; World&#x27;</span>)</span><br><span class="line"><span class="comment"># 取代，結果Test</span></span><br><span class="line">entry.delete(<span class="number">0</span>, END)</span><br><span class="line">entry.insert(<span class="number">0</span>, <span class="string">&#x27;Test&#x27;</span>)</span><br><span class="line">entry.pack()</span><br></pre></td></tr></table></figure>
 <h2 id="ScrolledText"><a href="#ScrolledText" class="headerlink" title="ScrolledText"></a>ScrolledText</h2><p>沒有textvariable屬性，只能用insert()修改文字</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">result_text = ScrolledText(master)</span><br><span class="line"><span class="comment"># 取代</span></span><br><span class="line">result_text.delete(<span class="number">1.0</span>, END)</span><br><span class="line">result_text.insert(<span class="number">1.0</span>, <span class="string">&#x27;Hello World&#x27;</span>)</span><br><span class="line"></span><br><span class="line">data = result_text.get(<span class="number">1.0</span>, END)[:-<span class="number">1</span>]  <span class="comment"># 取值時，要小心結尾換行</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="Combobox"><a href="#Combobox" class="headerlink" title="Combobox"></a>Combobox</h2><p>下拉式選單</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cb = Combobox(window)</span><br><span class="line">cb[<span class="string">&#x27;values&#x27;</span>] = <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">5</span>))</span><br><span class="line">cb.config(state=<span class="string">&#x27;readonly&#x27;</span>)  <span class="comment"># 可設成唯讀</span></span><br><span class="line">cb.current(<span class="number">0</span>)  <span class="comment"># 指定選取索引0</span></span><br><span class="line">cb.pack()</span><br></pre></td></tr></table></figure>
 
@@ -380,14 +382,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">40</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>

@@ -22,19 +22,21 @@
 
   <meta name="description" content="紀錄開發上常遇到的問題，避免重複踩坑。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[Python] SQLite應用">
-<meta property="og:url" content="https://usermark.github.io/2023/02/17/python-sqlite-impl/index.html">
+<meta property="og:title" content="[Python] SQL應用">
+<meta property="og:url" content="https://usermark.github.io/2023/02/17/python-sql-impl/index.html">
 <meta property="og:site_name" content="Mike的筆記">
 <meta property="og:description" content="紀錄開發上常遇到的問題，避免重複踩坑。">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2023-02-16T23:24:00.000Z">
-<meta property="article:modified_time" content="2023-07-08T13:54:47.020Z">
+<meta property="article:modified_time" content="2024-03-16T07:40:36.197Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="Python">
+<meta property="article:tag" content="SQL">
 <meta property="article:tag" content="SQLite">
+<meta property="article:tag" content="DB2">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://usermark.github.io/2023/02/17/python-sqlite-impl/">
+<link rel="canonical" href="https://usermark.github.io/2023/02/17/python-sql-impl/">
 
 
 <script id="page-configurations">
@@ -47,7 +49,7 @@
   };
 </script>
 
-  <title>[Python] SQLite應用 | Mike的筆記</title>
+  <title>[Python] SQL應用 | Mike的筆記</title>
   
 
 
@@ -163,7 +165,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2023/02/17/python-sqlite-impl/">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2023/02/17/python-sql-impl/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -176,7 +178,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          [Python] SQLite應用
+          [Python] SQL應用
         </h1>
 
         <div class="post-meta">
@@ -193,7 +195,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2023-07-08 21:54:47" itemprop="dateModified" datetime="2023-07-08T21:54:47+08:00">2023-07-08</time>
+                <time title="修改時間：2024-03-16 15:40:36" itemprop="dateModified" datetime="2024-03-16T15:40:36+08:00">2024-03-16</time>
               </span>
 
           
@@ -216,18 +218,34 @@
       
         <p>紀錄開發上常遇到的問題，避免重複踩坑。</p>
 <span id="more"></span>
+<h1 id="連線資料庫"><a href="#連線資料庫" class="headerlink" title="連線資料庫"></a>連線資料庫</h1><p><em>SQLite</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sqlite3</span><br><span class="line"></span><br><span class="line">conn = sqlite3.connect(<span class="string">&#x27;enterprise.db&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><em>DB2</em><br>需安裝ibm-db套件</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv install ibm-db</span><br></pre></td></tr></table></figure>
+
+<p>參考 <a target="_blank" rel="noopener" href="https://github.com/ibmdb/python-ibmdb?tab=readme-ov-file#installation">https://github.com/ibmdb/python-ibmdb?tab=readme-ov-file#installation</a><br>將 C:\Users{使用者}\AppData\Local\Programs\Python\Python{版本號}\Lib\site-packages 底下 clidriver 資料夾移動到 C:\Program Files</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.add_dll_directory(<span class="string">&#x27;C:\\Program Files\\clidriver\\bin&#x27;</span>)</span><br><span class="line"><span class="keyword">import</span> ibm_db</span><br><span class="line"></span><br><span class="line">conn = ibm_db.connect(<span class="string">&#x27;DATABASE=enterprise;HOSTNAME=ip;PORT=50000;PROTOCOL=TCPIP;UID=user;PWD=pwd&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <h1 id="建立Table"><a href="#建立Table" class="headerlink" title="建立Table"></a>建立Table</h1><p>若db檔案不存在，會自動建立。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">conn = sqlite3.connect(<span class="string">&#x27;enterprise.db&#x27;</span>)</span><br><span class="line">curs = conn.cursor()</span><br><span class="line">curs.execute(<span class="string">&#x27;&#x27;&#x27;CREATE TABLE IF NOT EXISTS zoo</span></span><br><span class="line"><span class="string">                (critter VARCHAR(20) PRIMARY KEY,</span></span><br><span class="line"><span class="string">                 count INT,</span></span><br><span class="line"><span class="string">                 damages FLOAT)&#x27;&#x27;&#x27;</span>)</span><br><span class="line">curs.close()</span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
 
 <p>注意：要小心別用到關鍵字作為表格名稱，例如order, group，參考 <a target="_blank" rel="noopener" href="https://www.sqlite.org/lang_keywords.html">https://www.sqlite.org/lang_keywords.html</a></p>
 <h1 id="插入資料"><a href="#插入資料" class="headerlink" title="插入資料"></a>插入資料</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">conn = sqlite3.connect(<span class="string">&#x27;enterprise.db&#x27;</span>)</span><br><span class="line">curs = conn.cursor()</span><br><span class="line">curs.execute(<span class="string">&#x27;INSERT INTO zoo VALUES (?, ?, ?)&#x27;</span>, (<span class="string">&#x27;duck&#x27;</span>, <span class="number">5</span>, <span class="number">0.0</span>))</span><br><span class="line">curs.execute(<span class="string">&quot;INSERT INTO zoo VALUES (&#x27;&#123;0&#125;&#x27;, &#123;1&#125;, &#123;2&#125;)&quot;</span>.<span class="built_in">format</span>(<span class="string">&#x27;bear&#x27;</span>, <span class="number">2</span>, <span class="number">1000.0</span>))  <span class="comment"># 第二種寫法</span></span><br><span class="line">curs.close()</span><br><span class="line">conn.commit()  <span class="comment"># 必要</span></span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
 
-<h1 id="查詢資料"><a href="#查詢資料" class="headerlink" title="查詢資料"></a>查詢資料</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">conn = sqlite3.connect(<span class="string">&#x27;enterprise.db&#x27;</span>)</span><br><span class="line">curs = conn.cursor()</span><br><span class="line">curs.execute(<span class="string">&#x27;SELECT critter FROM zoo WHERE damages BETWEEN 0 AND 1000&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(curs.fetchall())</span><br><span class="line">curs.close()</span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
+<h1 id="查詢資料"><a href="#查詢資料" class="headerlink" title="查詢資料"></a>查詢資料</h1><p><em>SQLite</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">conn = sqlite3.connect(<span class="string">&#x27;enterprise.db&#x27;</span>)</span><br><span class="line">curs = conn.cursor()</span><br><span class="line">curs.execute(<span class="string">&#x27;SELECT critter FROM zoo WHERE damages BETWEEN 0 AND 1000&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(curs.fetchall())</span><br><span class="line">curs.close()</span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
 
 <p>輸出結果</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[(&#x27;duck&#x27;,), (&#x27;bear&#x27;,)]</span><br></pre></td></tr></table></figure>
 
-<h1 id="取得DB底下的所有Table"><a href="#取得DB底下的所有Table" class="headerlink" title="取得DB底下的所有Table"></a>取得DB底下的所有Table</h1><p>參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/305378/list-of-tables-db-schema-dump-etc-using-the-python-sqlite3-api">https://stackoverflow.com/questions/305378/list-of-tables-db-schema-dump-etc-using-the-python-sqlite3-api</a></p>
+<p><em>DB2</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conn = ibm_db.connect(<span class="string">&#x27;DATABASE=enterprise;HOSTNAME=ip;PORT=50000;PROTOCOL=TCPIP;UID=user;PWD=pwd&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">stmt = ibm_db.exec_immediate(conn, <span class="string">&#x27;SELECT critter FROM zoo WHERE damages BETWEEN 0 AND 1000&#x27;</span>)</span><br><span class="line">result = ibm_db.fetch_assoc(stmt)</span><br><span class="line"><span class="keyword">for</span> index, item <span class="keyword">in</span> <span class="built_in">enumerate</span>(result.keys()):</span><br><span class="line">    <span class="built_in">print</span>(item)</span><br></pre></td></tr></table></figure>
+
+<h1 id="分頁查詢"><a href="#分頁查詢" class="headerlink" title="分頁查詢"></a>分頁查詢</h1><p><em>DB2</em></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> (<span class="keyword">SELECT</span> rownumber() <span class="keyword">OVER</span> (<span class="keyword">ORDER</span> <span class="keyword">BY</span> critter) <span class="keyword">as</span> ROWID, a.<span class="operator">*</span> <span class="keyword">FROM</span> zoo a) <span class="keyword">WHERE</span> ROWID <span class="keyword">BETWEEN</span> <span class="number">11</span> <span class="keyword">AND</span> <span class="number">20</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="取得DB底下的所有Table"><a href="#取得DB底下的所有Table" class="headerlink" title="取得DB底下的所有Table"></a>取得DB底下的所有Table</h1><p><em>SQLite</em><br>參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/305378/list-of-tables-db-schema-dump-etc-using-the-python-sqlite3-api">https://stackoverflow.com/questions/305378/list-of-tables-db-schema-dump-etc-using-the-python-sqlite3-api</a></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">conn = sqlite3.connect(<span class="string">&#x27;database.db&#x27;</span>)</span><br><span class="line">curs = conn.cursor()</span><br><span class="line">curs.execute(<span class="string">&quot;SELECT name FROM sqlite_master WHERE type=&#x27;table&#x27;;&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(curs.fetchall())</span><br></pre></td></tr></table></figure>
 
 <h1 id="轉換Table資料為dict"><a href="#轉換Table資料為dict" class="headerlink" title="轉換Table資料為dict"></a>轉換Table資料為dict</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">dict_factory</span>(<span class="params">cursor, row</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;轉換tuple為dict&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">dict</span>((col[<span class="number">0</span>], row[idx]) <span class="keyword">for</span> idx, col <span class="keyword">in</span> <span class="built_in">enumerate</span>(cursor.description))</span><br><span class="line"></span><br><span class="line">conn = sqlite3.connect(<span class="string">&#x27;database.db&#x27;</span>)</span><br><span class="line">curs = conn.cursor()</span><br><span class="line">curs.execute(<span class="string">&quot;SELECT * FROM Product&quot;</span>)</span><br><span class="line">result = [dict_factory(curs, item) <span class="keyword">for</span> item <span class="keyword">in</span> curs.fetchall()]</span><br><span class="line">curs.close()</span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
@@ -240,7 +258,9 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/SQL/" rel="tag"># SQL</a>
               <a href="/tags/SQLite/" rel="tag"># SQLite</a>
+              <a href="/tags/DB2/" rel="tag"># DB2</a>
           </div>
 
         
@@ -315,7 +335,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8BTable"><span class="nav-number">1.</span> <span class="nav-text">建立Table</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E8%B3%87%E6%96%99"><span class="nav-number">2.</span> <span class="nav-text">插入資料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E8%A9%A2%E8%B3%87%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text">查詢資料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%96%E5%BE%97DB%E5%BA%95%E4%B8%8B%E7%9A%84%E6%89%80%E6%9C%89Table"><span class="nav-number">4.</span> <span class="nav-text">取得DB底下的所有Table</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%89%E6%8F%9BTable%E8%B3%87%E6%96%99%E7%82%BAdict"><span class="nav-number">5.</span> <span class="nav-text">轉換Table資料為dict</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%A3%E7%B7%9A%E8%B3%87%E6%96%99%E5%BA%AB"><span class="nav-number">1.</span> <span class="nav-text">連線資料庫</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8BTable"><span class="nav-number">2.</span> <span class="nav-text">建立Table</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E8%B3%87%E6%96%99"><span class="nav-number">3.</span> <span class="nav-text">插入資料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E8%A9%A2%E8%B3%87%E6%96%99"><span class="nav-number">4.</span> <span class="nav-text">查詢資料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%86%E9%A0%81%E6%9F%A5%E8%A9%A2"><span class="nav-number">5.</span> <span class="nav-text">分頁查詢</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%96%E5%BE%97DB%E5%BA%95%E4%B8%8B%E7%9A%84%E6%89%80%E6%9C%89Table"><span class="nav-number">6.</span> <span class="nav-text">取得DB底下的所有Table</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%89%E6%8F%9BTable%E8%B3%87%E6%96%99%E7%82%BAdict"><span class="nav-number">7.</span> <span class="nav-text">轉換Table資料為dict</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -329,14 +349,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">40</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -478,7 +498,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'usermark.github.io',
       owner       : 'usermark',
       admin       : ['usermark'],
-      id          : '39072c10a915f59ae07997a7f0ba7fbb',
+      id          : '457b4f74b2c2f0cc24a349af7790ebd3',
         language: 'zh-TW',
       distractionFreeMode: true
     });
