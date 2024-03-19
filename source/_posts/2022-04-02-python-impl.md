@@ -59,6 +59,18 @@ def open_folder(path):
         subprocess.call(['start', path], shell=True)
 ```
 
+# 取得日期
+
+```python
+import time
+from datetime import datetime, timedelta
+
+today = time.strftime('%Y%m%d')
+print(today)
+yesterday = datetime.today() + timedelta(days=-1)
+print(yesterday.strftime('%Y%m%d'))
+```
+
 # NAS連線並取檔
 
 需安裝pysmb套件
