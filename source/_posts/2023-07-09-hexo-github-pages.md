@@ -72,6 +72,12 @@ npm install
 hexo new [layout] <title>
 ```
 
+新增文章草稿
+```sh
+hexo new draft <title>
+```
+原理是將文章建在 source/_drafts 資料夾下，若要本地預覽使用 hexo server --draft
+
 清除靜態檔和快取
 ```sh
 hexo cl
@@ -228,3 +234,4 @@ git clone https://github.com/theme-next/hexo-theme-next themes/next
 **參考資料**
 1. [【學習筆記】如何使用 Hexo + GitHub Pages 架設個人網誌](https://hackmd.io/@Heidi-Liu/note-hexo-github)
 2. [十分鐘超詳細替 Hexo Next 開啟 Gitalk 留言版](https://israynotarray.com/hexo/20191206/2397475810/)
+3. [Hexo 文章保存为草稿](https://novnan.github.io/Hexo/hexo-draft/)

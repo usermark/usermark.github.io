@@ -11,6 +11,18 @@ Netscape 開發了名為安全通訊端層（Secure Socket Layer，SSL）的上�
 
 參考 [什麼是 TLS（傳輸層安全性）？](https://www.cloudflare.com/zh-tw/learning/ssl/transport-layer-security-tls/)
 
+# Cipher suite
+
+使用在 TLS 時的演算法集合名稱。
+
+參考 [簡介 HTTPS / TLS 安全通訊協議](https://rickhw.github.io/2021/08/20/ComputerScience/HTTPS-TLS/)
+
+# GPG
+
+GPG (The GNU Privacy Guard，又稱 GnuPG)，是一套實作 OpenPGP 標準規開源軟體。Github 也支援 GPG 金鑰。
+
+參考 [GPG 筆記 - 產生 ECC 金鑰及加解密檔案](https://blog.darkthread.net/blog/gpg-gen-key-n-encrypt/)
+
 # Docker
 
 Docker 容器透過封裝應用程式與其相依性配置形成輕量的映像，且可直接運行在宿主機（host machine）上，減少對宿主機負荷的同時提供更多容器服務使用。而輕量化帶來的好處除了上述所提，它也讓 Docker 容器提供一致性的發布環境，使開發團隊可輕易地攜帶與轉換運行環境，提高協同作業的便利性。
