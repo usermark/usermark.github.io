@@ -32,6 +32,25 @@ with zipfile.ZipFile('path/to/zip_file', 'r') as zip_ref:
     print(''.join([lineb.decode('UTF-8') for lineb in linesb]))
 ```
 
+## 讀取加密zip檔內的文字檔內容
+
+需安裝pyzipper套件
+```sh
+pipenv install pyzipper
+```
+
+```python
+import pyzipper
+import zlib
+
+with pyzipper.AESZipFile(output_path) as zip_ref:
+    try:
+        linesb = zip_ref.open(zip_ref.namelist()[0], pwd='your/password'.encode()).readlines()
+        print(''.join([lineb.decode('UTF-8') for lineb in linesb]))
+    except zlib.error as e:
+        print('密碼錯誤', e)
+```
+
 # 解壓縮rar檔
 
 需安裝unrar套件，並新增環境變數 UNRAR_LIB_PATH = C:\Program Files (x86)\UnrarDLL\x64\UnRAR64.dll
