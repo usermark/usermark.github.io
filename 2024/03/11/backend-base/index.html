@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://usermark.github.io/assets/VM_vs_Containers.png">
 <meta property="article:published_time" content="2024-03-11T07:17:57.000Z">
-<meta property="article:modified_time" content="2024-03-19T13:11:28.089Z">
+<meta property="article:modified_time" content="2024-04-05T02:12:09.886Z">
 <meta property="article:author" content="Mike Chen">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://usermark.github.io/assets/VM_vs_Containers.png">
@@ -193,7 +193,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2024-03-19 21:11:28" itemprop="dateModified" datetime="2024-03-19T21:11:28+08:00">2024-03-19</time>
+                <time title="修改時間：2024-04-05 10:12:09" itemprop="dateModified" datetime="2024-04-05T10:12:09+08:00">2024-04-05</time>
               </span>
 
           
@@ -218,6 +218,10 @@
 <span id="more"></span>
 <h1 id="TLS"><a href="#TLS" class="headerlink" title="TLS"></a>TLS</h1><p>Netscape 開發了名為安全通訊端層（Secure Socket Layer，SSL）的上一代加密協議，TLS 由此演變而來。</p>
 <p>參考 <a target="_blank" rel="noopener" href="https://www.cloudflare.com/zh-tw/learning/ssl/transport-layer-security-tls/">什麼是 TLS（傳輸層安全性）？</a></p>
+<h1 id="Cipher-suite"><a href="#Cipher-suite" class="headerlink" title="Cipher suite"></a>Cipher suite</h1><p>使用在 TLS 時的演算法集合名稱。</p>
+<p>參考 <a target="_blank" rel="noopener" href="https://rickhw.github.io/2021/08/20/ComputerScience/HTTPS-TLS/">簡介 HTTPS &#x2F; TLS 安全通訊協議</a></p>
+<h1 id="GPG"><a href="#GPG" class="headerlink" title="GPG"></a>GPG</h1><p>GPG (The GNU Privacy Guard，又稱 GnuPG)，是一套實作 OpenPGP 標準規開源軟體。Github 也支援 GPG 金鑰。</p>
+<p>參考 <a target="_blank" rel="noopener" href="https://blog.darkthread.net/blog/gpg-gen-key-n-encrypt/">GPG 筆記 - 產生 ECC 金鑰及加解密檔案</a></p>
 <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>Docker 容器透過封裝應用程式與其相依性配置形成輕量的映像，且可直接運行在宿主機（host machine）上，減少對宿主機負荷的同時提供更多容器服務使用。而輕量化帶來的好處除了上述所提，它也讓 Docker 容器提供一致性的發布環境，使開發團隊可輕易地攜帶與轉換運行環境，提高協同作業的便利性。<br>從這張圖得知，Container 並沒有 OS，容量自然就小，而且啟動速度快。<br><img src="/assets/VM_vs_Containers.png"><br>Volume 是 Docker 最推薦存放 persisting data（ 數據 ）的機制，因為他不會增加 container 的容量。</p>
 <p>參考 <a target="_blank" rel="noopener" href="https://github.com/twtrubiks/docker-tutorial">Docker 基本教學 - 從無到有 Docker-Beginners-Guide</a></p>
 <h1 id="Kubernetes-K8s"><a href="#Kubernetes-K8s" class="headerlink" title="Kubernetes (K8s)"></a>Kubernetes (K8s)</h1><p> 是一項 Docker 容器編排工具。K8s 的前身是 Google 內部的 Borg 叢集管理系統，解決了過去管理者需各別管理不同主機內的容器，且為了確保所有容器服務正常，需設置對應的監控系統並手動重新部署有問題環境的困擾。<br>參考 <a target="_blank" rel="noopener" href="https://blog.cloud-ace.tw/application-modernization/devops/docker-k8s-gke-intro/">Kubernetes 是什麼？Docker、K8s、GKE 架構與優勢比較</a></p>
@@ -305,7 +309,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TLS"><span class="nav-number">1.</span> <span class="nav-text">TLS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">2.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes-K8s"><span class="nav-number">3.</span> <span class="nav-text">Kubernetes (K8s)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Kubernetes-Engine%EF%BC%88GKE%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">Google Kubernetes Engine（GKE）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Serverless-%E7%84%A1%E4%BC%BA%E6%9C%8D%E5%99%A8-%E6%9C%8D%E5%8B%99"><span class="nav-number">4.</span> <span class="nav-text">Serverless (無伺服器)服務</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Cloud-Run"><span class="nav-number">4.1.</span> <span class="nav-text">Google Cloud Run</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TLS"><span class="nav-number">1.</span> <span class="nav-text">TLS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cipher-suite"><span class="nav-number">2.</span> <span class="nav-text">Cipher suite</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPG"><span class="nav-number">3.</span> <span class="nav-text">GPG</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">4.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes-K8s"><span class="nav-number">5.</span> <span class="nav-text">Kubernetes (K8s)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Kubernetes-Engine%EF%BC%88GKE%EF%BC%89"><span class="nav-number">5.1.</span> <span class="nav-text">Google Kubernetes Engine（GKE）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Serverless-%E7%84%A1%E4%BC%BA%E6%9C%8D%E5%99%A8-%E6%9C%8D%E5%8B%99"><span class="nav-number">6.</span> <span class="nav-text">Serverless (無伺服器)服務</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Cloud-Run"><span class="nav-number">6.1.</span> <span class="nav-text">Google Cloud Run</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -319,14 +323,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-count">41</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>

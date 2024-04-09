@@ -158,6 +158,179 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2022/02/05/ubuntu18-04-wsl-android7-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/02/05/ubuntu18-04-wsl-android7-1/" class="post-title-link" itemprop="url">[Android] Ubuntu18.04 (WSL)編譯Android7.1</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2022-02-05 13:41:00" itemprop="dateCreated datePublished" datetime="2022-02-05T13:41:00+08:00">2022-02-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2023-07-09 15:23:12" itemprop="dateModified" datetime="2023-07-09T15:23:12+08:00">2023-07-09</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+<h1 id="可選-移動Ubuntu至其他硬碟"><a href="#可選-移動Ubuntu至其他硬碟" class="headerlink" title="(可選) 移動Ubuntu至其他硬碟"></a>(可選) 移動Ubuntu至其他硬碟</h1><p>Linux子系統預設安裝在主硬碟裡，編譯AOSP需要至少200G的空間，可能會發生主硬碟空間不足的問題，如果不會可跳過此步驟。</p>
+<h2 id="1-安裝choco"><a href="#1-安裝choco" class="headerlink" title="1.安裝choco"></a>1.安裝choco</h2><p>使用PowerShell輸入以下指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString(‘https://chocolatey.org/install.ps1&#x27;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-安裝LxRunOffline"><a href="#2-安裝LxRunOffline" class="headerlink" title="2.安裝LxRunOffline"></a>2.安裝LxRunOffline</h2><p>使用PowerShell輸入以下指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">choco install lxrunoffline</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-在另一個硬碟建資料夾並設置權限"><a href="#3-在另一個硬碟建資料夾並設置權限" class="headerlink" title="3.在另一個硬碟建資料夾並設置權限"></a>3.在另一個硬碟建資料夾並設置權限</h2><p>在D槽建立wsl資料夾，接著使用PowerShell輸入以下指令，來查看你的使用者名稱，例如我的輸出為usermark-pc\mike。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whoami</span><br></pre></td></tr></table></figure>
+
+<p>使用以下指令來開啟D:\wsl資料夾權限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">icacls D:\wsl /grant &quot;usermark-pc\mike:(OI)(CI)(F)&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-使用LxRunOffline來移動Linux子系統"><a href="#4-使用LxRunOffline來移動Linux子系統" class="headerlink" title="4.使用LxRunOffline來移動Linux子系統"></a>4.使用LxRunOffline來移動Linux子系統</h2><p>使用PowerShell輸入以下指令，來查看Linux子系統的名稱，例如我的輸出為Ubuntu。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl -l</span><br></pre></td></tr></table></figure>
+
+<p>使用以下指令移動</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lxrunoffline move -n Ubuntu -d D:\wsl\installed\Ubuntu</span><br></pre></td></tr></table></figure>
+
+<p>移動過程需要一些時間，完成後可用以下指令確認，輸出訊息會是d:\wsl\installed\Ubuntu</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lxrunoffline get-dir -n Ubuntu</span><br></pre></td></tr></table></figure>
+
+<h1 id="設置編譯環境"><a href="#設置編譯環境" class="headerlink" title="設置編譯環境"></a>設置編譯環境</h1><h2 id="1-安装JDK"><a href="#1-安装JDK" class="headerlink" title="1.安装JDK"></a>1.安装JDK</h2><p>使用bash輸入以下指令，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/older-versions#for-ubuntu-15-04">https://source.android.com/setup/build/older-versions#for-ubuntu-15-04</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install openjdk-8-jdk</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-安裝工具包"><a href="#2-安裝工具包" class="headerlink" title="2.安裝工具包"></a>2.安裝工具包</h2><p>使用bash輸入以下指令，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/initializing#installing-required-packages-ubuntu-1804">https://source.android.com/setup/build/initializing#installing-required-packages-ubuntu-1804</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git-core gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses5 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-開啟大小寫敏感"><a href="#3-開啟大小寫敏感" class="headerlink" title="3.開啟大小寫敏感"></a>3.開啟大小寫敏感</h2><p>使用PowerShell輸入以下指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fsutil.exe file setCaseSensitiveInfo D:\wsl enable</span><br></pre></td></tr></table></figure>
+
+<h1 id="下載AOSP"><a href="#下載AOSP" class="headerlink" title="下載AOSP"></a>下載AOSP</h1><h2 id="1-安裝Repo"><a href="#1-安裝Repo" class="headerlink" title="1.安裝Repo"></a>1.安裝Repo</h2><p>參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/develop#installing-repo">https://source.android.com/setup/develop#installing-repo</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/bin</span><br><span class="line">curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo</span><br><span class="line">chmod a+x ~/bin/repo</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-初始化Repo"><a href="#2-初始化Repo" class="headerlink" title="2.初始化Repo"></a>2.初始化Repo</h2><p>參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/downloading#initializing-a-repo-client">https://source.android.com/setup/build/downloading#initializing-a-repo-client</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">建立資料夾，名稱自定，這裡命名為android</span></span><br><span class="line">mkdir android</span><br><span class="line">cd android</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">設置git的使用者名稱和email</span></span><br><span class="line">git config --global user.name $your_name</span><br><span class="line">git config --global user.email $your_email</span><br></pre></td></tr></table></figure>
+
+<p>選定AOSP版本和分支，如下圖這裡選擇的是android-7.1.0_r7，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/start/build-numbers#source-code-tags-and-builds">https://source.android.com/setup/start/build-numbers#source-code-tags-and-builds</a><br><img src="/assets/android_version.png"><br>Repo要用python3運行，但系統預設為python2，有解法是採用以下方案，將python指令指向python3指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -s /usr/bin/python3 /usr/bin/python</span><br></pre></td></tr></table></figure>
+<p>repo sync時可以，但編譯時還是需要用到python2，就會出現該錯誤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SyntaxError: Missing parentheses in call to &#x27;print&#x27;.</span><br></pre></td></tr></table></figure>
+<p>因此透過python3去呼叫repo較合適，系統預設則不去動。</p>
+<p>sync同步到本地，過程需要一些時間。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 ~/bin/repo init -u https://android.googlesource.com/platform/manifest -b android-7.1.0_r7</span><br><span class="line">python3 ~/bin/repo sync</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-可選-清空輸出資料夾"><a href="#3-可選-清空輸出資料夾" class="headerlink" title="3.(可選) 清空輸出資料夾"></a>3.(可選) 清空輸出資料夾</h2><p>清空out目錄</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m clean</span><br></pre></td></tr></table></figure>
+
+<h1 id="編譯AOSP"><a href="#編譯AOSP" class="headerlink" title="編譯AOSP"></a>編譯AOSP</h1><h2 id="1-初始化相關指令"><a href="#1-初始化相關指令" class="headerlink" title="1.初始化相關指令"></a>1.初始化相關指令</h2><p><em>每次重開指令視窗都要先呼叫，否則會找不到指令m和emulator。</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source build/envsetup.sh</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-選擇編譯目標"><a href="#2-選擇編譯目標" class="headerlink" title="2.選擇編譯目標"></a>2.選擇編譯目標</h2><p>參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/building#choose-a-target">https://source.android.com/setup/build/building#choose-a-target</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lunch aosp_arm-eng</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-讓bash支持32位元運行"><a href="#3-讓bash支持32位元運行" class="headerlink" title="3.讓bash支持32位元運行"></a>3.讓bash支持32位元運行</h2><p>安裝qemu並設置binfmt</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install qemu-user-static</span><br><span class="line">sudo update-binfmts --install i386 /usr/bin/qemu-i386-static --magic &#x27;\x7fELF\x01\x01\x01\x03\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00\x03\x00\x01\x00\x00\x00&#x27; --mask &#x27;\xff\xff\xff\xff\xff\xff\xff\xfc\xff\xff\xff\xff\xff\xff\xff\xff\xf8\xff\xff\xff\xff\xff\xff\xff&#x27;</span><br></pre></td></tr></table></figure>
+<p>啟動服務</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service binfmt-support start</span><br></pre></td></tr></table></figure>
+<p><em>每次重開指令視窗都要先呼叫，否則會出現以下錯誤。</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prebuilts/misc/linux-x86/bison/bison: cannot execute binary file: Exec format error</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-開始編譯"><a href="#4-開始編譯" class="headerlink" title="4.開始編譯"></a>4.開始編譯</h2><p>使用m -jN指令來編譯，此處的N一般建議設置為cpu核心數的1-2倍，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/building#build-the-code">https://source.android.com/setup/build/building#build-the-code</a>	</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m -j8</span><br></pre></td></tr></table></figure>
+
+<p>在編譯期間，將防毒軟體關閉，可以增進檔案系統的效能。</p>
+<h2 id="5-錯誤處理"><a href="#5-錯誤處理" class="headerlink" title="5.錯誤處理"></a>5.錯誤處理</h2><h3 id="報錯-ftruncate-fd-out-GetSize-Invalid-argument"><a href="#報錯-ftruncate-fd-out-GetSize-Invalid-argument" class="headerlink" title="報錯: ftruncate(fd_out, GetSize()): Invalid argument"></a>報錯: ftruncate(fd_out, GetSize()): Invalid argument</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd build/tools/ijar</span><br></pre></td></tr></table></figure>
+<p>修改zip.cc，註解935行如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">OutputZipFile::Finish</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (fd_out &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    WriteCentralDirectory();</span><br><span class="line">    <span class="comment">// if (ftruncate(fd_out, GetSize()) &lt; 0) &#123;</span></span><br><span class="line">    <span class="comment">//   return error(&quot;ftruncate(fd_out, GetSize()): %s&quot;, strerror(errno));</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    <span class="keyword">if</span> (close(fd_out) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> error(<span class="string">&quot;close(fd_out): %s&quot;</span>, strerror(errno));</span><br><span class="line">    &#125;</span><br><span class="line">    fd_out = <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>保存並編譯產生ijar</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -o ijar classfile.cc zip.cc ijar.cc -lz</span><br></pre></td></tr></table></figure>
+<p>強制替換ijar</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -f ijar ../../../out/host/linux-x86/bin/ijar</span><br></pre></td></tr></table></figure>
+
+<h3 id="報錯-dex2oat-did-not-finish-after-2850-seconds"><a href="#報錯-dex2oat-did-not-finish-after-2850-seconds" class="headerlink" title="報錯: dex2oat did not finish after 2850 seconds"></a>報錯: dex2oat did not finish after 2850 seconds</h3><p>修改build&#x2F;core資料夾下的文件，$(DEX2OAT)後加上-j1參數</p>
+<p>dex_preopt_libart.mk</p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(hide)</span> ANDROID_LOG_TAGS=<span class="string">&quot;*:e&quot;</span> <span class="variable">$(DEX2OAT)</span> -j1 \</span><br><span class="line">	--runtime-arg -Xms<span class="variable">$(DEX2OAT_XMS)</span> --runtime-arg -Xmx<span class="variable">$(DEX2OAT_XMX)</span> \</span><br><span class="line">	--runtime-arg -classpath --runtime-arg <span class="variable">$(DEX2OAT_CLASSPATH)</span> </span><br></pre></td></tr></table></figure>
+
+<p>dex_preopt_libart_boot.mk</p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(hide)</span> ANDROID_LOG_TAGS=<span class="string">&quot;*:e&quot;</span> <span class="variable">$(DEX2OAT)</span> -j1 --runtime-arg -Xms<span class="variable">$(DEX2OAT_IMAGE_XMS)</span> \</span><br><span class="line">	--runtime-arg -Xmx<span class="variable">$(DEX2OAT_IMAGE_XMX)</span> \</span><br><span class="line">	--image-classes=<span class="variable">$(PRELOADED_CLASSES)</span> \</span><br></pre></td></tr></table></figure>
+
+<h3 id="報錯-SSL-error-when-connecting-to-the-Jack-server-Try-‘jack-diagnose’"><a href="#報錯-SSL-error-when-connecting-to-the-Jack-server-Try-‘jack-diagnose’" class="headerlink" title="報錯: SSL error when connecting to the Jack server. Try ‘jack-diagnose’"></a>報錯: SSL error when connecting to the Jack server. Try ‘jack-diagnose’</h3><p>修改&#x2F;etc&#x2F;java-8-openjdk&#x2F;security&#x2F;java.security，找到jdk.tls.disabledAlgorithms，取消TLSv1, TLSv1.1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA, \</span><br><span class="line">    DH keySize &lt; 1024, EC keySize &lt; 224, 3DES_EDE_CBC, anon, NULL, \</span><br><span class="line">    include jdk.disabled.namedCurves</span><br></pre></td></tr></table></figure>
+
+<p>重啟jack服務</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./prebuilts/sdk/tools/jack-admin kill-server</span><br><span class="line">./prebuilts/sdk/tools/jack-admin start-server</span><br></pre></td></tr></table></figure>
+
+<h3 id="報錯-GC-overhead-limit-exceeded-Try-increasing-heap-size-with-java-option-‘-Xmx‘"><a href="#報錯-GC-overhead-limit-exceeded-Try-increasing-heap-size-with-java-option-‘-Xmx‘" class="headerlink" title="報錯: GC overhead limit exceeded. Try increasing heap size with java option ‘-Xmx‘."></a>報錯: GC overhead limit exceeded. Try increasing heap size with java option ‘-Xmx<size>‘.</h3><p>運行jack-server編譯AOSP需要3G的記憶體配置，若電腦總記憶體小於16G，會產生該錯誤，可使用以下指令查看可配置的記憶體大小。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -XshowSettings 2&gt;&amp;1 | grep Heap</span><br></pre></td></tr></table></figure>
+<p>例如在總記憶體8G的電腦輸出結果為1.77G，參考<a target="_blank" rel="noopener" href="https://2net.co.uk/blog/jack-server.html">https://2net.co.uk/blog/jack-server.html</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo vim ~/.bash_profile</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">最後一行加上</span></span><br><span class="line">export JACK_SERVER_VM_ARGUMENTS=&quot;-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4g&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">儲存並離開後</span></span><br><span class="line">source ~/.bash_profile</span><br></pre></td></tr></table></figure>
+
+<p>重啟jack服務</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./prebuilts/sdk/tools/jack-admin kill-server</span><br><span class="line">./prebuilts/sdk/tools/jack-admin start-server</span><br></pre></td></tr></table></figure>
+
+<h1 id="運行模擬器"><a href="#運行模擬器" class="headerlink" title="運行模擬器"></a>運行模擬器</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emulator</span><br></pre></td></tr></table></figure>
+<p>因為wsl為指令模式，沒視窗可顯示，會出現下列錯誤。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SDL init failure, reason is: No available video device</span><br></pre></td></tr></table></figure>
+
+<h1 id="可選-重置AOSP異動"><a href="#可選-重置AOSP異動" class="headerlink" title="(可選) 重置AOSP異動"></a>(可選) 重置AOSP異動</h1><p>參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/5012163/how-to-discard-changes-using-repo">https://stackoverflow.com/questions/5012163/how-to-discard-changes-using-repo</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重置異動</span></span><br><span class="line">python3 ~/bin/repo forall -vc &quot;git reset --hard&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">檢查異動</span></span><br><span class="line">python3 ~/bin/repo status</span><br></pre></td></tr></table></figure>
+
+<p><strong>參考資料</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/tangjie134/article/details/102796330">Ubuntu18.04 (WSL) 编译RK3399 Android8.1源码</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6af0bb7c1e70">Android FrameWork学习（一）Android 7.0系统源码下载\编译</a></li>
+<li><a target="_blank" rel="noopener" href="https://c55jeremy-tech.blogspot.com/2019/04/aosppixel-2-romrom.html">完整指引如何編譯AOSP (Build Android P)，整合GMS及刷機 (Pixel 2)</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@chenwy0806/%E5%9C%A8-windows-10-%E4%B8%8A%E9%81%8B%E8%A1%8C-ubuntu-linux-%E5%AD%90%E7%B3%BB%E7%B5%B1%E4%B8%A6%E5%B0%87%E7%B3%BB%E7%B5%B1%E7%A7%BB%E5%8B%95%E8%87%B3%E5%85%B6%E4%BB%96%E7%A1%AC%E7%A2%9F-57e8faaa3e04">在 Windows 10 上運行 Ubuntu Linux 子系統並將系統移動至其他硬碟</a></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://usermark.github.io/blender-works/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -992,277 +1165,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2013/10/17/investment/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Mike Chen">
-      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mike的筆記">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2013/10/17/investment/" class="post-title-link" itemprop="url">投資理財</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-
-              <time title="創建時間：2013-10-17 06:28:00" itemprop="dateCreated datePublished" datetime="2013-10-17T06:28:00+08:00">2013-10-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2022-07-03 19:18:36" itemprop="dateModified" datetime="2022-07-03T19:18:36+08:00">2022-07-03</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-<h1 id="觀念"><a href="#觀念" class="headerlink" title="觀念"></a>觀念</h1><ul>
-<li><p>《一位投機者的告白》書中股票投資的「十律」與「十戒」：</p>
-<blockquote>
-<p>「十律」：<br><br>一、有主見，三思後再決定：是否應該買進？如果是，在哪裡？什麼行業？哪個國家？<br><br>二：要有足夠的資金，以免遭受壓力。<br><br>三、要有耐心，因為任何事情都不可預期，發展方向都和大家想像的不同。<br><br>四、如果相信自己的判斷，便必須堅定不移。<br><br>五、要靈活，並時刻考慮到想法中可能有錯誤。<br><br>六、如果看到出現新的局面，應該賣出。<br><br>七、不時查看購買的股票清單，並檢查現在還可買進哪些股票。<br><br>八、只有看到遠大的發展前景時，才可買進。<br><br>九、考慮所有風險，甚至是最不可能出現的風險，也就是說，要時刻想到有意想不到的因素。<br><br>十、即使自己是對的，也要保持謙遜。<br><br>「十戒」：<br><br>一、不要跟著建議跑，不要想能聽到秘密訊息。<br><br>二、不要相信賣主知道他們為什麼要賣，或買主知道自己為什麼要買，也就是說，不要相信他們比自己知道的多。<br><br>三、不要想把賠掉的再賺回來。<br><br>四、不要考慮過去的指數。<br><br>五、不要躺在有價證卷上睡大覺，不要因期望達到更佳的指數，而忘掉它們，也就是說，不要不做決定。<br><br>六、不要不斷觀察變化細微的指數，不要對任何風吹草動做出反應。<br><br>七、不要在剛剛賺錢或賠錢時作最後結論。<br><br>八、不要只想獲利就賣掉股票。<br><br>九、不要在情緒上受政治好惡的影響。<br><br>十、獲利時，不要過分自負。<br></p>
-</blockquote>
-</li>
-<li><p>72法則：72&#x2F;利率 &#x3D; 投資翻倍所需的年數。例如利率2%，需要36年，本金才能漲一倍。</p>
-</li>
-</ul>
-<h1 id="定存"><a href="#定存" class="headerlink" title="定存"></a>定存</h1><ul>
-<li>零存整付：是開戶時由存戶約定期限，至少為一年期，按月繳存入本金，其利息按月複利計算，比活存利息還要高，到期一次提取本息，不過提前解約利息會打折。</li>
-</ul>
-<h1 id="保險"><a href="#保險" class="headerlink" title="保險"></a>保險</h1><ul>
-<li><code>人生必備三大保險：意外險、醫療險、壽險。</code></li>
-<li>退休族應著重退休規劃及醫療保障。</li>
-<li>保險是重點在於分擔風險。</li>
-<li>有家庭責任的人，可透過壽險來分擔風險。</li>
-<li>預算有限時，以保障父母為優先。</li>
-<li>人生四大階段聰明保：<ol>
-<li>單身：重意外險、定期壽險</li>
-<li>結婚：提高壽險額度，並加強醫療</li>
-<li>生子：讓自己的保額增加</li>
-<li>退休：規劃年金、長期看護</li>
-</ol>
-</li>
-<li>預定利率：在收取保費之初就有一定的折扣，用來折扣的利率就是預定利率。因為該保險公司可以免費使用該保險金來投資獲利，照理應支付利息給保戶。同一險種，預定利率越高（折扣越高），保費就越低。</li>
-</ul>
-<h2 id="儲蓄型保單"><a href="#儲蓄型保單" class="headerlink" title="儲蓄型保單"></a>儲蓄型保單</h2><ul>
-<li><code>儲蓄險保本不保值</code>，要考慮到通膨的問題。</li>
-<li>假設每一年3%的物價成長率來算，現在的1000萬，20年之後經過3%的物價上漲，剩554萬元。</li>
-<li>儲蓄型保單 VS 定期壽險和定存：保戶35歲投保，固定投入34,294元，預期定存的平均報酬率2%，20年後：</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>儲蓄險</th>
-<th></th>
-<th>定期壽險</th>
-<th></th>
-<th>定存</th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>年繳保費</td>
-<td>還本金額</td>
-<td>年繳保費</td>
-<td>兩者差額</td>
-<td>投入本金</td>
-<td>累積金額</td>
-</tr>
-<tr>
-<td>34,294</td>
-<td>7,560</td>
-<td>840</td>
-<td>33,454</td>
-<td>33,454</td>
-<td>33,454</td>
-</tr>
-<tr>
-<td>34,294</td>
-<td>726,800</td>
-<td>840</td>
-<td>33,454</td>
-<td>33,454</td>
-<td><code>812,844</code></td>
-</tr>
-</tbody></table>
-<h2 id="保障型保單"><a href="#保障型保單" class="headerlink" title="保障型保單"></a>保障型保單</h2><ul>
-<li>意外事故致死，意外險才給付，要看死亡證明書。</li>
-<li><code>意外險的三個因素：非疾病、意外、突發。</code>心臟病致死不算。符合外來、直接、唯一才構成意外理賠條件。</li>
-<li>還本型意外險收益比定存更低；但定存要看有沒有能力自制，改保還本型意外險，沒保障也是強迫儲蓄。</li>
-<li>35歲男性，繳費20年：</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>終身還本意外險 20年保費</th>
-<th>一般意外險 定期35~75歲</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>保費</td>
-<td>約77萬</td>
-<td>約77萬</td>
-</tr>
-<tr>
-<td>保額</td>
-<td>100萬</td>
-<td>1200萬</td>
-</tr>
-<tr>
-<td>20年期滿領回</td>
-<td>785,400元</td>
-<td>0元</td>
-</tr>
-</tbody></table>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>終身還本意外險</th>
-<th>定期意外險</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>年繳保費</td>
-<td>38,500</td>
-<td>1,500</td>
-</tr>
-<tr>
-<td>保額</td>
-<td>100萬</td>
-<td>100萬</td>
-</tr>
-<tr>
-<td>20年滿期後</td>
-<td>還本金額 785,400元</td>
-<td>差額 37,000</td>
-</tr>
-</tbody></table>
-<p>差額定存20年，利率1.4%，共859,063元。</p>
-<ul>
-<li>意外險應選擇保費低保額大，當成香油錢。</li>
-<li>意外險主要保障殘廢與意外身故。</li>
-<li>醫療險要先選實支實付和日額給付。前者保障住院時的醫療花費，補健保不足之處；後者補充生病時的額外需求，當作是給自己的薪資補償。預算足夠時，可增加癌症險。</li>
-<li>投保壽險，全殘也可領回保險金。擔心全殘可以保意外險。</li>
-<li>大部分保單都附有海外緊急救援服務。</li>
-<li>保單利息抵不過通膨。</li>
-<li>定期壽險保費較終身壽險少。</li>
-<li>以附約形式投保可省保費，像是家人跟著保；但小孩附約在父母保單上，有期限限制。假設小孩22歲得癌症，只能賠到23歲，24歲便可能買不到保險。</li>
-<li>若在海外受傷，要第一時間回報保險公司。</li>
-</ul>
-<h3 id="汽機車強制險"><a href="#汽機車強制險" class="headerlink" title="汽機車強制險"></a>汽機車強制險</h3><ul>
-<li>汽機車加保強制責任險是保障意外發生時他人的損傷。</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="left">汽機車強制險</th>
-<th align="left">依據民國100年之規定</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">每一個人傷害醫療</td>
-<td align="left">最高20萬元</td>
-</tr>
-<tr>
-<td align="left">每一個人殘廢</td>
-<td align="left">最高160萬元</td>
-</tr>
-<tr>
-<td align="left">每一個人死亡</td>
-<td align="left">定額給付160萬元</td>
-</tr>
-</tbody></table>
-<ul>
-<li>任意險種類：</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="left">項目</th>
-<th align="left">保障內容</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">第三責任險</td>
-<td align="left">對方人身傷害、財產損失、精神賠償</td>
-</tr>
-<tr>
-<td align="left">車體損失險</td>
-<td align="left">雙方的車體有毀損</td>
-</tr>
-<tr>
-<td align="left">竊盜損失險</td>
-<td align="left">整台車因竊盜、搶奪產生的損失</td>
-</tr>
-</tbody></table>
-<ul>
-<li>加保第三責任險，麻煩事就讓保險公司去處理。</li>
-</ul>
-<h1 id="基金"><a href="#基金" class="headerlink" title="基金"></a>基金</h1><ul>
-<li>附加費用會吃掉基金獲利。假設用100萬投資基金20年，年報酬率10% - 手續費內扣1.5% - 通貨膨脹率2% &#x3D; 淨報酬率6.5%，少賺114萬元。</li>
-<li>佈局熱門基金：<ul>
-<li>盯緊會賺錢的基金經理人。</li>
-<li>市場過熱時要適時收手。</li>
-<li>過去僅供參考，未來變化無窮。</li>
-</ul>
-</li>
-</ul>
-<p><strong>參考資料</strong></p>
-<ol>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ga1al5s8ACU">【現在才知道】20120822買對保險這麼簡單!</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=IyRkdehgMCY">【現在才知道】20121005破解基金大騙局!</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Fp4ZMZ6RvZg">【現在才知道】20121019輕鬆看懂保單!</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=tXM9yelcoxY">【現在才知道】20121031你的保單買對了嗎?</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=zFMyRxLJDTQ">【現在才知道】20121114保險說一套賠一套?!</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=gzIyFBDf8M4">【現在才知道】20130514聰明買好險不漏財!!</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=ZGov3o19O5Y">【現在才知道】20130515抓住基金必勝指標!!</a></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一頁"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left" aria-label="上一頁"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right" aria-label="下一頁"></i></a>
   </nav>
 
 
@@ -1328,14 +1234,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-count">41</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
