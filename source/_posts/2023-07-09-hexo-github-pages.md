@@ -72,12 +72,6 @@ npm install
 hexo new [layout] <title>
 ```
 
-新增文章草稿
-```sh
-hexo new draft <title>
-```
-原理是將文章建在 source/_drafts 資料夾下，若要本地預覽使用 hexo server --draft
-
 清除靜態檔和快取
 ```sh
 hexo cl
@@ -219,6 +213,24 @@ hexo g -d
 ```
 
 完成後，便可在個人頁面 https://username.github.io 查看部署結果。
+
+# 新增文章草稿
+
+```sh
+hexo new draft <title>
+```
+原理是將文章建在 source/_drafts 資料夾下，若要本地預覽使用
+
+```sh
+hexo server --draft
+```
+
+將草稿發布為正式文章
+
+```sh
+hexo publish <filename>
+```
+發布後，會在文章內容和檔名加上日期。
 
 # 錯誤處理
 
