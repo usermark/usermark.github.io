@@ -158,6 +158,78 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2022/11/13/low-cost-host/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/11/13/low-cost-host/" class="post-title-link" itemprop="url">[Web] 低成本架站</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2022-11-13 04:36:00" itemprop="dateCreated datePublished" datetime="2022-11-13T04:36:00+08:00">2022-11-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2023-07-08 21:54:37" itemprop="dateModified" datetime="2023-07-08T21:54:37+08:00">2023-07-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>家裡的網路環境是使用小烏龜，再加上ASUS無線AP。想讓外面可以用固定網域連進來，費了一番功夫，特別記錄下來。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/11/13/low-cost-host/#more" rel="contents">
+                閱讀全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2022/11/10/nginx-gunicorn-flask/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -804,143 +876,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2022/02/15/ubuntu20-04-android7-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Mike Chen">
-      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mike的筆記">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/02/15/ubuntu20-04-android7-1/" class="post-title-link" itemprop="url">[Android] Ubuntu20.04編譯Android7.1</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-
-              <time title="創建時間：2022-02-15 22:26:00" itemprop="dateCreated datePublished" datetime="2022-02-15T22:26:00+08:00">2022-02-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2023-07-09 15:23:16" itemprop="dateModified" datetime="2023-07-09T15:23:16+08:00">2023-07-09</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <span id="more"></span>
-<h1 id="設置編譯環境"><a href="#設置編譯環境" class="headerlink" title="設置編譯環境"></a>設置編譯環境</h1><h2 id="1-安装JDK"><a href="#1-安装JDK" class="headerlink" title="1.安装JDK"></a>1.安装JDK</h2><p>輸入以下指令，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/older-versions#for-ubuntu-15-04">https://source.android.com/setup/build/older-versions#for-ubuntu-15-04</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install openjdk-8-jdk</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-安裝工具包"><a href="#2-安裝工具包" class="headerlink" title="2.安裝工具包"></a>2.安裝工具包</h2><p>輸入以下指令，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/initializing#installing-required-packages-ubuntu-1804">https://source.android.com/setup/build/initializing#installing-required-packages-ubuntu-1804</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git-core gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses5 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-安裝python2"><a href="#3-安裝python2" class="headerlink" title="3.安裝python2"></a>3.安裝python2</h2><p>Ubuntu20.04沒有python2，若直接編譯會出現該錯誤。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/env: &#x27;python&#x27;: No such file or directory</span><br></pre></td></tr></table></figure>
-<p>輸入以下指令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install python2 </span><br><span class="line">sudo ln -s /usr/bin/python2 /usr/bin/python</span><br></pre></td></tr></table></figure>
-
-<h1 id="下載AOSP"><a href="#下載AOSP" class="headerlink" title="下載AOSP"></a>下載AOSP</h1><h2 id="1-安裝Repo"><a href="#1-安裝Repo" class="headerlink" title="1.安裝Repo"></a>1.安裝Repo</h2><p>參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/develop#installing-repo">https://source.android.com/setup/develop#installing-repo</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/bin</span><br><span class="line">curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo</span><br><span class="line">chmod a+x ~/bin/repo</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-初始化Repo"><a href="#2-初始化Repo" class="headerlink" title="2.初始化Repo"></a>2.初始化Repo</h2><p>參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/downloading#initializing-a-repo-client">https://source.android.com/setup/build/downloading#initializing-a-repo-client</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">建立資料夾，名稱自定，這裡命名為android</span></span><br><span class="line">mkdir android</span><br><span class="line">cd android</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">設置git的使用者名稱和email</span></span><br><span class="line">git config --global user.name $your_name</span><br><span class="line">git config --global user.email $your_email</span><br></pre></td></tr></table></figure>
-
-<p>選定AOSP版本和分支，如下圖這裡選擇的是android-7.1.0_r7，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/start/build-numbers#source-code-tags-and-builds">https://source.android.com/setup/start/build-numbers#source-code-tags-and-builds</a><br><img src="/assets/android_version.png"><br>Repo要用python3運行，但編譯時還是需要用到python2，因此透過python3去呼叫repo較合適。</p>
-<p>sync同步到本地，過程需要一些時間。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 ~/bin/repo init -u https://android.googlesource.com/platform/manifest -b android-7.1.0_r7</span><br><span class="line">python3 ~/bin/repo sync</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-可選-清空輸出資料夾"><a href="#3-可選-清空輸出資料夾" class="headerlink" title="3.(可選) 清空輸出資料夾"></a>3.(可選) 清空輸出資料夾</h2><p>清空out目錄</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m clean</span><br></pre></td></tr></table></figure>
-
-<h1 id="編譯AOSP"><a href="#編譯AOSP" class="headerlink" title="編譯AOSP"></a>編譯AOSP</h1><h2 id="1-初始化相關指令"><a href="#1-初始化相關指令" class="headerlink" title="1.初始化相關指令"></a>1.初始化相關指令</h2><p><em>每次重開指令視窗都要先呼叫，否則會找不到指令m和emulator。</em></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source build/envsetup.sh</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-選擇編譯目標"><a href="#2-選擇編譯目標" class="headerlink" title="2.選擇編譯目標"></a>2.選擇編譯目標</h2><p>參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/building#choose-a-target">https://source.android.com/setup/build/building#choose-a-target</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lunch aosp_arm-eng</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-開始編譯"><a href="#3-開始編譯" class="headerlink" title="3.開始編譯"></a>3.開始編譯</h2><p>使用m -jN指令來編譯，此處的N一般建議設置為cpu核心數的1-2倍，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/building#build-the-code">https://source.android.com/setup/build/building#build-the-code</a>	</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m -j8</span><br></pre></td></tr></table></figure>
-
-<p>在編譯期間，將防毒軟體關閉，可以增進檔案系統的效能。</p>
-<h2 id="4-錯誤處理"><a href="#4-錯誤處理" class="headerlink" title="4.錯誤處理"></a>4.錯誤處理</h2><h3 id="報錯-FAILED-x2F-bin-x2F-bash-c-“prebuilts-x2F-misc-x2F-linux-x86-x2F-flex-x2F-flex-2-5-39-oout-x2F-host-x2F-linux-x86-x2F-obj-x2F-STATIC-LIBRARIES-x2F-libaidl-common-intermediates-x2F-aidl-language-l-cpp-system-x2F-tools-x2F-aidl-x2F-aidl-language-l-ll”"><a href="#報錯-FAILED-x2F-bin-x2F-bash-c-“prebuilts-x2F-misc-x2F-linux-x86-x2F-flex-x2F-flex-2-5-39-oout-x2F-host-x2F-linux-x86-x2F-obj-x2F-STATIC-LIBRARIES-x2F-libaidl-common-intermediates-x2F-aidl-language-l-cpp-system-x2F-tools-x2F-aidl-x2F-aidl-language-l-ll”" class="headerlink" title="報錯: FAILED: &#x2F;bin&#x2F;bash -c “prebuilts&#x2F;misc&#x2F;linux-x86&#x2F;flex&#x2F;flex-2.5.39 -oout&#x2F;host&#x2F;linux-x86&#x2F;obj&#x2F;STATIC_LIBRARIES&#x2F;libaidl-common_intermediates&#x2F;aidl_language_l.cpp system&#x2F;tools&#x2F;aidl&#x2F;aidl_language_l.ll”"></a>報錯: FAILED: &#x2F;bin&#x2F;bash -c “prebuilts&#x2F;misc&#x2F;linux-x86&#x2F;flex&#x2F;flex-2.5.39 -oout&#x2F;host&#x2F;linux-x86&#x2F;obj&#x2F;STATIC_LIBRARIES&#x2F;libaidl-common_intermediates&#x2F;aidl_language_l.cpp system&#x2F;tools&#x2F;aidl&#x2F;aidl_language_l.ll”</h3><p>編譯前執行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export LC_ALL=C</span><br></pre></td></tr></table></figure>
-
-<h3 id="報錯-SSL-error-when-connecting-to-the-Jack-server-Try-‘jack-diagnose’"><a href="#報錯-SSL-error-when-connecting-to-the-Jack-server-Try-‘jack-diagnose’" class="headerlink" title="報錯: SSL error when connecting to the Jack server. Try ‘jack-diagnose’"></a>報錯: SSL error when connecting to the Jack server. Try ‘jack-diagnose’</h3><p>修改&#x2F;etc&#x2F;java-8-openjdk&#x2F;security&#x2F;java.security，找到jdk.tls.disabledAlgorithms，取消TLSv1, TLSv1.1</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA, \</span><br><span class="line">    DH keySize &lt; 1024, EC keySize &lt; 224, 3DES_EDE_CBC, anon, NULL, \</span><br><span class="line">    include jdk.disabled.namedCurves</span><br></pre></td></tr></table></figure>
-
-<p>重啟jack服務</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./prebuilts/sdk/tools/jack-admin kill-server</span><br><span class="line">./prebuilts/sdk/tools/jack-admin start-server</span><br></pre></td></tr></table></figure>
-
-<h3 id="報錯-GC-overhead-limit-exceeded-Try-increasing-heap-size-with-java-option-‘-Xmx‘"><a href="#報錯-GC-overhead-limit-exceeded-Try-increasing-heap-size-with-java-option-‘-Xmx‘" class="headerlink" title="報錯: GC overhead limit exceeded. Try increasing heap size with java option ‘-Xmx‘."></a>報錯: GC overhead limit exceeded. Try increasing heap size with java option ‘-Xmx<size>‘.</h3><p>運行jack-server編譯AOSP需要3G的記憶體配置，若電腦總記憶體小於16G，會產生該錯誤，可使用以下指令查看可配置的記憶體大小。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -XshowSettings 2&gt;&amp;1 | grep Heap</span><br></pre></td></tr></table></figure>
-<p>例如在總記憶體8G的電腦輸出結果為1.77G，參考<a target="_blank" rel="noopener" href="https://2net.co.uk/blog/jack-server.html">https://2net.co.uk/blog/jack-server.html</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo vim ~/.bash_profile</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">最後一行加上</span></span><br><span class="line">export JACK_SERVER_VM_ARGUMENTS=&quot;-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4g&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">儲存並離開後</span></span><br><span class="line">source ~/.bash_profile</span><br></pre></td></tr></table></figure>
-
-<p>重啟jack服務</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./prebuilts/sdk/tools/jack-admin kill-server</span><br><span class="line">./prebuilts/sdk/tools/jack-admin start-server</span><br></pre></td></tr></table></figure>
-
-<h1 id="運行模擬器"><a href="#運行模擬器" class="headerlink" title="運行模擬器"></a>運行模擬器</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emulator</span><br></pre></td></tr></table></figure>
-<p>成功!</p>
-<h2 id="安裝KVM"><a href="#安裝KVM" class="headerlink" title="安裝KVM"></a>安裝KVM</h2><p>參考<a target="_blank" rel="noopener" href="https://developer.android.com/studio/run/emulator-acceleration#vm-linux-check-kvm">https://developer.android.com/studio/run/emulator-acceleration#vm-linux-check-kvm</a></p>
-<p>輸入以下指令查看CPU是否支持硬體虛擬化，如果輸出結果大於0表示支持；如果為0，則先去BIOS將功能打開，例如ASUS主機板選項為Intel 虛擬化技術。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安裝cpu-checker</span></span><br><span class="line">sudo apt-get install cpu-checker</span><br><span class="line">egrep -c &#x27;(vmx|svm)&#x27; /proc/cpuinfo</span><br></pre></td></tr></table></figure>
-<p>輸入以下指令查看KVM狀態</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo kvm-ok</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">成功</span></span><br><span class="line">INFO: /dev/kvm exists</span><br><span class="line">KVM acceleration can be used</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">失敗</span></span><br><span class="line">INFO: Your CPU does not support KVM extensions</span><br><span class="line">KVM acceleration can NOT be used</span><br></pre></td></tr></table></figure>
-<p>若結果為成功，接著輸入以下指令安裝KVM</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils</span><br></pre></td></tr></table></figure>
-
-<h1 id="可選-重置AOSP異動"><a href="#可選-重置AOSP異動" class="headerlink" title="(可選) 重置AOSP異動"></a>(可選) 重置AOSP異動</h1><p>參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/5012163/how-to-discard-changes-using-repo">https://stackoverflow.com/questions/5012163/how-to-discard-changes-using-repo</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重置異動</span></span><br><span class="line">python3 ~/bin/repo forall -vc &quot;git reset --hard&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">檢查異動</span></span><br><span class="line">python3 ~/bin/repo status</span><br></pre></td></tr></table></figure>
-
-<p><strong>參考資料</strong></p>
-<ol>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Master724/article/details/109388653">ubuntu 20.04 运行repo init 提示 &#x2F;usr&#x2F;bin&#x2F;env: ‘python’: No such file or directory 解决方案</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/c1a726adc4a1">Ubuntu18.04编译Android源码报[run_soong_ui] Error 1错误</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6af0bb7c1e70">Android FrameWork学习（一）Android 7.0系统源码下载\编译</a></li>
-<li><a target="_blank" rel="noopener" href="https://help.ubuntu.com/community/KVM/Installation">KVM&#x2F;Installation</a></li>
-<li><a target="_blank" rel="noopener" href="https://ubuntuqa.com/zh-tw/article/9834.html">如何在Ubuntu 18.04中安裝KVM和管理虛擬機</a></li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1010,7 +945,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">41</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
