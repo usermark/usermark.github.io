@@ -1,5 +1,5 @@
 ---
-title: [Eclipse] RCP實戰
+title: '[Eclipse] RCP實戰'
 date: 2024-05-09 13:10:29
 tags:
 - Eclipse
@@ -150,12 +150,6 @@ private List<IHyperlink> createHyperlink(IProject project, IPath basePath, Strin
                     return Collections.singletonList(new JavaElementHyperlink(region, element));
                 }
             } else if (region.getTagName().equals("my:button") && region.getAttrName().equals("action")) {
-                DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = builderFactory.newDocumentBuilder();
-                Document xmlDocument = builder.parse(project.getFile("your/xml/path").getContents());
-                XPath xPath = XPathFactory.newInstance().newXPath();
-                String expression = "your/expression";
-                Node controller = (Node) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODE);
                 // 自行實作
             }
         } catch (Exception e) {
@@ -171,7 +165,18 @@ private List<IHyperlink> createHyperlink(IProject project, IPath basePath, Strin
 <my:select src="com.usermark.tag.selectImp" />
 ```
 當游標停在src的value時，便可呈現超連結。
-那如果判斷過程中需要搭配xml配置的話，參考第11-16行。
+那如果判斷過程中需要搭配xml配置的話也辦得到。
+
+```java
+DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+DocumentBuilder builder = builderFactory.newDocumentBuilder();
+Document xmlDocument = builder.parse(project.getFile("your/xml/path").getContents());
+XPath xPath = XPathFactory.newInstance().newXPath();
+String expression = "your/expression";
+Node controller = (Node) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODE);
+```
+
+或是使用
 
 # 實作IHyperlink
 
