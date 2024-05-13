@@ -176,7 +176,19 @@ String expression = "your/expression";
 Node controller = (Node) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODE);
 ```
 
-或是使用
+或是使用IStructuredModel
+
+```java
+IStructuredModel model = StructuredModelManager.getModelManager().getModelForRead(project.getFile(structsXml));
+if (model instanceof IDOMModel) {
+    IDOMModel domModel = (IDOMModel) model;
+    Document xmlDocument = domModel.getDocument();
+    XPath xPath = XPathFactory.newInstance().newXPath();
+    String expression = "your/expression";
+    Node page = (Node) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODE);
+}
+model.releaseFromRead();
+```
 
 # 實作IHyperlink
 
