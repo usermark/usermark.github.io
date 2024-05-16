@@ -89,6 +89,8 @@ result_text.delete(1.0, END)
 result_text.insert(1.0, 'Hello World')
 
 data = result_text.get(1.0, END)[:-1]  # 取值時，要小心結尾換行
+selection = result_text.selection_get()  # 取得選取文字
+lines = selection.split('\n')
 ```
 
 ## Combobox
@@ -116,7 +118,7 @@ def sort_column(col, reverse):
 
 def reset():
     """清除Treeview內容"""
-    tv.delete(tv.get_children())
+    tv.delete(*tv.get_children())  # *一定要有，不然會出現 _tkinter.TclError: Cannot delete root item
 
 
 vbar = Scrollbar(window, orient='vertical')

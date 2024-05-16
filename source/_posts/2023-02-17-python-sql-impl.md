@@ -85,19 +85,28 @@ conn.close()
 ```python
 conn = ibm_db.connect('DATABASE=enterprise;HOSTNAME=ip;PORT=50000;PROTOCOL=TCPIP;UID=user;PWD=pwd', '', '')
 stmt = ibm_db.exec_immediate(conn, 'SELECT critter FROM zoo WHERE damages BETWEEN 0 AND 1000')
-result = ibm_db.fetch_assoc(stmt)
-for index, item in enumerate(result.keys()):
-    print(item)
+result = ibm_db.fetch_assoc(stmt)  # 只有第一筆
+while result != False:
+    for index, item in enumerate(result.keys()):
+        print(item)
+    result = ibm_db.fetch_assoc(stmt)  # 取下一筆
 ```
 
-# 分頁查詢
+## 取前幾筆
+
+*DB2*
+```sql
+SELECT * FROM zoo FETCH FIRST 1 ROWS ONLY
+```
+
+## 分頁查詢
 
 *DB2*
 ```sql
 SELECT * FROM (SELECT rownumber() OVER (ORDER BY critter) as ROWID, a.* FROM zoo a) WHERE ROWID BETWEEN 11 AND 20
 ```
 
-# 取得DB底下的所有Table
+## 取得DB底下的所有Table
 
 *SQLite*
 參考<https://stackoverflow.com/questions/305378/list-of-tables-db-schema-dump-etc-using-the-python-sqlite3-api>
@@ -106,6 +115,19 @@ conn = sqlite3.connect('database.db')
 curs = conn.cursor()
 curs.execute("SELECT name FROM sqlite_master WHERE type='table';")
 print(curs.fetchall())
+```
+
+## 取得今天的日期
+
+*DB2*
+```sql
+SELECT VARCHAR_FORMAT(CURRENT_DATE, 'YYYYMMDD') FROM SYSIBM.SYSDUMMY1
+```
+
+## 查詢純數字欄位
+
+```sql
+SELECT * FROM mytable WHERE mycolumn LIKE '%[0-9]%'
 ```
 
 # 轉換Table資料為dict
