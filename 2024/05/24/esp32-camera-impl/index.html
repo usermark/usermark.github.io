@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="使用官方提供的範例，不需要Linux環境，使用Windows就可以囉。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[ESP32] 安信可ESP32-CAM鏡頭實作">
+<meta property="og:url" content="https://usermark.github.io/2024/05/24/esp32-camera-impl/index.html">
+<meta property="og:site_name" content="Mike的筆記">
+<meta property="og:description" content="使用官方提供的範例，不需要Linux環境，使用Windows就可以囉。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://usermark.github.io/assets/idf.png">
+<meta property="og:image" content="https://usermark.github.io/assets/idf_fix.png">
+<meta property="og:image" content="https://usermark.github.io/assets/idf_2.png">
+<meta property="og:image" content="https://usermark.github.io/assets/idf_3.png">
+<meta property="og:image" content="https://usermark.github.io/assets/idf_4.png">
+<meta property="og:image" content="https://usermark.github.io/assets/com_search.png">
+<meta property="og:image" content="https://usermark.github.io/assets/bootloader_bin.png">
+<meta property="og:image" content="https://usermark.github.io/assets/idf_5.png">
+<meta property="og:image" content="https://usermark.github.io/assets/bootloader_bin_2.png">
+<meta property="og:image" content="https://usermark.github.io/assets/idf_6.png">
+<meta property="og:image" content="https://usermark.github.io/assets/cam_view.jpg">
+<meta property="article:published_time" content="2024-05-24T01:06:05.000Z">
+<meta property="article:modified_time" content="2024-05-26T08:52:14.819Z">
+<meta property="article:author" content="Mike Chen">
+<meta property="article:tag" content="IOT">
+<meta property="article:tag" content="ESP32">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://usermark.github.io/assets/idf.png">
+
+<link rel="canonical" href="https://usermark.github.io/2024/05/24/esp32-camera-impl/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[ESP32] 安信可ESP32-CAM鏡頭實作 | Mike的筆記</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mike的筆記</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2024/05/24/esp32-camera-impl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [ESP32] 安信可ESP32-CAM鏡頭實作
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2024-05-24 09:06:05" itemprop="dateCreated datePublished" datetime="2024-05-24T09:06:05+08:00">2024-05-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2024-05-26 16:52:14" itemprop="dateModified" datetime="2024-05-26T16:52:14+08:00">2024-05-26</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="閱讀次數" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">閱讀次數：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>使用官方提供的範例，不需要Linux環境，使用Windows就可以囉。</p>
+<span id="more"></span>
+<p>首先下載官方範例，含底下的submodule</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --recurse-submodules https://github.com/Ai-Thinker-Open/Ai-Thinker-Open_ESP32-CAMERA_LAN.git</span><br></pre></td></tr></table></figure>
+
+<p>下載的submodule還蠻多的，若遇到timeout，可執行下方指令繼續</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule update --recursive</span><br></pre></td></tr></table></figure>
+
+<h1 id="建立esp-idf編譯環境"><a href="#建立esp-idf編譯環境" class="headerlink" title="建立esp-idf編譯環境"></a>建立esp-idf編譯環境</h1><p>下載完後，底下有個esp-idf資料夾，進去後執行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">install.bat</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">All done! You can now run:</span><br><span class="line">   export.bat</span><br></pre></td></tr></table></figure>
+<p>等看到這個輸出結果，就可以執行export.bat</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Done! You can now compile ESP-IDF projects.</span><br><span class="line">Go to the project directory and run:</span><br><span class="line"></span><br><span class="line">  idf.py build</span><br></pre></td></tr></table></figure>
+
+<p>到這裡，esp-idf編譯環境已經建好囉！</p>
+<h1 id="編譯範例"><a href="#編譯範例" class="headerlink" title="編譯範例"></a>編譯範例</h1><p>cd切換到 examples\single_chip\camera_web_server 資料夾後執行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">idf.py menuconfig</span><br></pre></td></tr></table></figure>
+
+<p><img src="/assets/idf.png"></p>
+<p>阿怎麼會是亂碼呢？<br>因為Python不支援中文編碼，輸入下方指令切換成英文編碼模式即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chcp 437</span><br></pre></td></tr></table></figure>
+
+<p>Camera Web Server —&gt; Camera Pins —&gt; Select Camera Pinout —&gt; 選擇 ESP32-CAM by AI-Thinker<br><img src="/assets/idf_fix.png"></p>
+<p><img src="/assets/idf_2.png"></p>
+<p><img src="/assets/idf_3.png"></p>
+<p><img src="/assets/idf_4.png"></p>
+<p>設定好後，就可以開始編譯</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">idf.py build</span><br></pre></td></tr></table></figure>
+
+<h1 id="編譯錯誤處理"><a href="#編譯錯誤處理" class="headerlink" title="編譯錯誤處理"></a>編譯錯誤處理</h1><p>編譯過程中會有錯誤要處理</p>
+<h2 id="No-such-file-or-directory"><a href="#No-such-file-or-directory" class="headerlink" title="No such file or directory"></a>No such file or directory</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">../main/app_sd.c:15:10: fatal error: esp_vfs_fat.h: No such file or directory</span><br><span class="line"> #include &quot;esp_vfs_fat.h&quot;</span><br><span class="line">          ^~~~~~~~~~~~~~~</span><br><span class="line"></span><br><span class="line">../main/app_smart_wifi.c:16:10: fatal error: esp_wpa2.h: No such file or directory</span><br><span class="line"> #include &quot;esp_wpa2.h&quot;</span><br><span class="line">          ^~~~~~~~~~~~</span><br><span class="line">compilation terminated.</span><br><span class="line">[855/860] Building C object esp-idf/main/CMakeFiles/__idf_main.dir/app_httpd.c.obj</span><br><span class="line">ninja: build stopped: subcommand failed.</span><br><span class="line">ninja failed with exit code 1</span><br></pre></td></tr></table></figure>
+<p>因缺少依賴包，至專案底下修改 examples\single_chip\camera_web_server\main\CMakeLists.txt<br>於COMPONENT_REQUIRES新增fatfs, vfs, wpa_supplicant</p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">set(COMPONENT_SRCS <span class="string">&quot;app_main.c&quot;</span> <span class="string">&quot;app_camera.c&quot;</span> <span class="string">&quot;app_httpd.c&quot;</span> <span class="string">&quot;app_mdns.c&quot;</span> <span class="string">&quot;app_wifi.c&quot;</span> <span class="string">&quot;app_sd.c&quot;</span> <span class="string">&quot;app_uart.c&quot;</span><span class="string">&quot;app_smart_wifi.c&quot;</span>)</span><br><span class="line">set(COMPONENT_ADD_INCLUDEDIRS <span class="string">&quot;include&quot;</span>)</span><br><span class="line"></span><br><span class="line">set(COMPONENT_REQUIRES</span><br><span class="line">    esp32-camera</span><br><span class="line">    esp-face</span><br><span class="line">    nvs_flash</span><br><span class="line">    esp_http_server</span><br><span class="line">    fb_gfx</span><br><span class="line">    mdns</span><br><span class="line">    fatfs</span><br><span class="line">    vfs</span><br><span class="line">    wpa_supplicant</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">set(COMPONENT_EMBED_FILES</span><br><span class="line">        <span class="string">&quot;www/index_ov2640.html.gz&quot;</span></span><br><span class="line">        <span class="string">&quot;www/index_ov3660.html.gz&quot;</span></span><br><span class="line">        <span class="string">&quot;www/index_ov5640.html.gz&quot;</span></span><br><span class="line">        <span class="string">&quot;www/monitor.html.gz&quot;</span>)</span><br><span class="line"></span><br><span class="line">register_component()</span><br></pre></td></tr></table></figure>
+
+<h2 id="undefined-reference-to-96-app-board-main’"><a href="#undefined-reference-to-96-app-board-main’" class="headerlink" title="undefined reference to &#96;app_board_main’"></a>undefined reference to &#96;app_board_main’</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[18/19] Linking CXX executable camera_web_server.elf</span><br><span class="line">FAILED: camera_web_server.elf</span><br><span class="line">cmd.exe /C &quot;cd . &amp;&amp; C:\Users\XXX\.espressif\tools\xtensa-esp32-elf\esp-2019r2-8.2.0\xtensa-esp32-elf\bin\xtensa-esp32-elf-g++.exe  -mlongcalls -Wno-frame-address  -nostdlib @CMakeFiles\camera_web_server.elf.rsp  -o camera_web_server.elf  &amp;&amp; cd .&quot;</span><br><span class="line">c:/users/XXX/.espressif/tools/xtensa-esp32-elf/esp-2019r2-8.2.0/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/8.2.0/../../../../xtensa-esp32-elf/bin/ld.exe: esp-idf/main/libmain.a(app_main.c.obj):(.literal.app_main+0x8): undefined reference to `app_board_main&#x27;</span><br><span class="line">c:/users/XXX/.espressif/tools/xtensa-esp32-elf/esp-2019r2-8.2.0/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/8.2.0/../../../../xtensa-esp32-elf/bin/ld.exe: esp-idf/main/libmain.a(app_main.c.obj): in function `app_main&#x27;:</span><br><span class="line">d:\ai-thinker-open_esp32-camera_lan\examples\single_chip\camera_web_server\build/../main/app_main.c:32: undefined reference to `app_board_main&#x27;</span><br><span class="line">collect2.exe: error: ld returned 1 exit status</span><br><span class="line">ninja: build stopped: subcommand failed.</span><br><span class="line">ninja failed with exit code 1</span><br></pre></td></tr></table></figure>
+
+<p>修改 examples\single_chip\camera_web_server\main\CMakeLists.txt<br>於set(COMPONENT_SRCS 新增app_board.c</p>
+<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set(COMPONENT_SRCS <span class="string">&quot;app_main.c&quot;</span> <span class="string">&quot;app_camera.c&quot;</span> <span class="string">&quot;app_httpd.c&quot;</span> <span class="string">&quot;app_mdns.c&quot;</span> <span class="string">&quot;app_wifi.c&quot;</span> <span class="string">&quot;app_sd.c&quot;</span> <span class="string">&quot;app_uart.c&quot;</span><span class="string">&quot;app_smart_wifi.c&quot;</span> <span class="string">&quot;app_board.c&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="ccache-error-Failed-to-create-temporary-file"><a href="#ccache-error-Failed-to-create-temporary-file" class="headerlink" title="ccache: error: Failed to create temporary file"></a>ccache: error: Failed to create temporary file</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ccache: error: Failed to create temporary file for esp-idf/libsodium/CMakeFiles/__idf_libsodium.dir/libsodium/src/libsodium/crypto_box/curve25519xsalsa20poly1305/box_curve25519xsalsa20poly1305.c.obj: No such file or directory</span><br><span class="line">[676/861] Building C object esp-idf/libsodium/CMakeFiles/_...bsodium/crypto_auth/hmacsha512256/auth_hmacsha512256.c.obj</span><br><span class="line">ninja: build stopped: subcommand failed.</span><br><span class="line">ninja failed with exit code 1</span><br></pre></td></tr></table></figure>
+
+<p>若有clean或者重新設定menuconfig，就會出現上面的問題<br>參考 <a target="_blank" rel="noopener" href="https://blog.csdn.net/zhangjingxun12/article/details/117095349">关于esp-idf编译时ccache错误导致在libsodium库报poly1305.c.obj类文件找不到的问题</a>，關閉ccache</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">idf.py --no-ccache build</span><br></pre></td></tr></table></figure>
+<p>還是不行的話，直接刪除 C:\Users\XXX\AppData\Roaming\.ccache 資料夾。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Project build complete. To flash, run this command:</span><br><span class="line">C:\Users\XXX\.espressif\python_env\idf4.0_py3.7_env\Scripts\python.exe ..\..\..\esp-idf\components\esptool_py\esptool\esptool.py -p (PORT) -b 460800 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_size detect --flash_freq 80m 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\camera_web_server.bin</span><br><span class="line">or run &#x27;idf.py -p (PORT) flash&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>直到出現這幾行表示編譯成功，就可以開始接上ESP32-CAM做燒錄。</p>
+<h1 id="燒錄"><a href="#燒錄" class="headerlink" title="燒錄"></a>燒錄</h1><p>先至裝置管理員查看連接埠，設備對接口為COM6<br><img src="/assets/com_search.png"></p>
+<p>輸入指令做燒錄</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">idf.py -p COM6 flash</span><br></pre></td></tr></table></figure>
+
+<p>當初出現下方錯誤時</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Executing &quot;C:\Users\XXX\.espressif\python_env\idf4.0_py3.9_env\Scripts\python.exe D:\Ai-Thinker-Open_ESP32-CAMERA_LAN\esp-idf\components/esptool_py/esptool/esptool.py -p COM6 -b 460800 --before default_reset --after hard_reset write_flash @flash_project_args&quot;...</span><br><span class="line">esptool.py -p COM6 -b 460800 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_freq 40m --flash_size 4MB 0x8000 partition_table/partition-table.bin 0x1000 bootloader/bootloader.bin 0x10000 camera_web_server.bin</span><br><span class="line">usage: esptool write_flash [-h] [--erase-all] [--flash_freq &#123;keep,40m,26m,20m,80m&#125;]</span><br><span class="line">                           [--flash_mode &#123;keep,qio,qout,dio,dout&#125;] [--flash_size FLASH_SIZE]</span><br><span class="line">                           [--spi-connection SPI_CONNECTION] [--no-progress] [--verify] [--encrypt]</span><br><span class="line">                           [--ignore-flash-encryption-efuse-setting] [--compress | --no-compress]</span><br><span class="line">                           &lt;address&gt; &lt;filename&gt; [&lt;address&gt; &lt;filename&gt; ...]</span><br><span class="line">esptool write_flash: error: argument &lt;address&gt; &lt;filename&gt;: Detected overlap at address: 0x8000 for file: partition_table/partition-table.bin</span><br><span class="line">esptool.py failed with exit code 2</span><br></pre></td></tr></table></figure>
+
+<p>是因為bootloader.bin太大。<br>上述錯誤主要看這裡，bootloader.bin所能使用的空間為0x1000到0x8000，空間大小為28,672</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0x8000 partition_table/partition-table.bin </span><br><span class="line">0x1000 bootloader/bootloader.bin </span><br><span class="line">0x10000 camera_web_server.bin</span><br></pre></td></tr></table></figure>
+<p>但實際查看大小為29,296<br><img src="/assets/bootloader_bin.png"></p>
+<p>調整log層級即可，先重新執行idf.py menuconfig<br>Bootloader config —&gt; Bootloader log verbosity —&gt; 選擇 Error<br><img src="/assets/idf_5.png"></p>
+<p>重新編譯後，bootloader.bin大小剩下25,488<br><img src="/assets/bootloader_bin_2.png"></p>
+<p>再次執行idf.py -p COM6 flash，等出現這幾行表示燒錄成功。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Leaving...</span><br><span class="line">Hard resetting via RTS pin...</span><br><span class="line">Done</span><br></pre></td></tr></table></figure>
+
+<h1 id="測試"><a href="#測試" class="headerlink" title="測試"></a>測試</h1><p>輸入指令做監控</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">idf.py monitor</span><br></pre></td></tr></table></figure>
+
+<p>若發現log一直重複出現，並且有看到這行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Brownout detector was triggered</span><br></pre></td></tr></table></figure>
+<p>表示供電不足，參考 <a target="_blank" rel="noopener" href="https://www.nmking.io/index.php/2022/12/15/713/">解決ESP32 CAM Brownout detector 問題</a>，所以如果中間有接USB延長線的先拿掉。<br>另外我的解法是調整Flash SPI speed，先重新執行idf.py menuconfig<br>Serial flasher config —&gt; Flash SPI speed —&gt; 選擇 40 MHz<br><img src="/assets/idf_6.png"></p>
+<p>重新編譯和燒錄後，再次執行idf.py monitor</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">I (2921) camera wifi: wifi_init_softap finished.SSID:AiThinker password:12345678</span><br><span class="line">I (3081) phy: phy_version: 4180, cb3948e, Sep 12 2019, 16:39:13, 0, 2</span><br><span class="line">W (3081) phy_init: saving new calibration data because of checksum failure, mode(0)</span><br><span class="line">I (3141) wifi:mode : softAP (XX:XX:XX:XX:XX:XX)</span><br><span class="line">I (3141) wifi:Total power save buffer number: 8</span><br><span class="line">I (3141) wifi:Init max length of beacon: 752/752</span><br><span class="line">I (3141) wifi:Init max length of beacon: 752/752</span><br><span class="line">I (3151) wifi:Set ps type: 0</span><br><span class="line"></span><br><span class="line">I (3151) uart: queue free spaces: 20</span><br><span class="line">I (3151) camera_httpd: Starting web server on port: &#x27;80&#x27;</span><br><span class="line">I (3161) camera_httpd: Starting stream server on port: &#x27;81&#x27;</span><br><span class="line">I (3171) system_api: Base MAC address is not set, read default base MAC address from BLK0 of EFUSE</span><br><span class="line">I (3191) base MAC address: XX:XX:XX:XX:XX:XX</span><br><span class="line">I (3191) esp-cam Version:</span><br></pre></td></tr></table></figure>
+<p>等出現這幾行，就可以連上<a target="_blank" rel="noopener" href="http://192.168.4.1/">http://192.168.4.1</a><br><img src="/assets/cam_view.jpg"></p>
+<p>實測解析度為VGA(640x480)時，亮度較夠，且比較順。</p>
+<p><strong>參考資料</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://aithinker.blog.csdn.net/article/details/108000974?ydreferer=aHR0cHM6Ly9kb2NzLmFpLXRoaW5rZXIuY29tLw==">安信可 ESP32-CAM 摄像头开发 demo–局域网拍照、实时视频、人脸识别</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/sudaroot/article/details/105215080">ESP32 idf.py menuconfig 乱码</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/IOT/" rel="tag"># IOT</a>
+              <a href="/tags/ESP32/" rel="tag"># ESP32</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/05/09/eclipse-rcp-impl/" rel="prev" title="[Eclipse] RCP實戰">
+      <i class="fa fa-chevron-left"></i> [Eclipse] RCP實戰
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8Besp-idf%E7%B7%A8%E8%AD%AF%E7%92%B0%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">建立esp-idf編譯環境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B7%A8%E8%AD%AF%E7%AF%84%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">編譯範例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B7%A8%E8%AD%AF%E9%8C%AF%E8%AA%A4%E8%99%95%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">編譯錯誤處理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#No-such-file-or-directory"><span class="nav-number">3.1.</span> <span class="nav-text">No such file or directory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined-reference-to-96-app-board-main%E2%80%99"><span class="nav-number">3.2.</span> <span class="nav-text">undefined reference to &#96;app_board_main’</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ccache-error-Failed-to-create-temporary-file"><span class="nav-number">3.3.</span> <span class="nav-text">ccache: error: Failed to create temporary file</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%87%92%E9%8C%84"><span class="nav-number">4.</span> <span class="nav-text">燒錄</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6"><span class="nav-number">5.</span> <span class="nav-text">測試</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mike Chen</p>
+  <div class="site-description" itemprop="description">現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/usermark" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;usermark" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:trexcobras@gmail.com" title="E-Mail → mailto:trexcobras@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- sidebar -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="1915238009"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mike Chen</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="訪客總數">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="總瀏覽次數">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'fe34fe28201c28ecaca2',
+      clientSecret: '6b0f055d80dc258148f06400ce27502351d56921',
+      repo        : 'usermark.github.io',
+      owner       : 'usermark',
+      admin       : ['usermark'],
+      id          : '88afbb2cd1dc4999857174eb24fb1145',
+        language: 'zh-TW',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
