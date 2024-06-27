@@ -1,26 +1,31 @@
 ---
 layout: article
-title: '[Python] SQL應用'
+title: "[Python] SQL應用"
 date: 2023-02-17 07:24
 tags:
-- Python
-- SQL
-- SQLite
-- DB2
+  - Python
+  - SQL
+  - SQLite
+  - DB2
 ---
+
 紀錄開發上常遇到的問題，避免重複踩坑。
+
 <!--more-->
+
 # 連線資料庫
 
-*SQLite*
+_SQLite_
+
 ```python
 import sqlite3
 
 conn = sqlite3.connect('enterprise.db')
 ```
 
-*DB2*
-需安裝ibm-db套件
+_DB2_
+需安裝 ibm-db 套件
+
 ```sh
 pipenv install ibm-db
 ```
@@ -36,9 +41,10 @@ import ibm_db
 conn = ibm_db.connect('DATABASE=enterprise;HOSTNAME=ip;PORT=50000;PROTOCOL=TCPIP;UID=user;PWD=pwd', '', '')
 ```
 
-# 建立Table
+# 建立 Table
 
-若db檔案不存在，會自動建立。
+若 db 檔案不存在，會自動建立。
+
 ```python
 conn = sqlite3.connect('enterprise.db')
 curs = conn.cursor()
@@ -50,7 +56,7 @@ curs.close()
 conn.close()
 ```
 
-注意：要小心別用到關鍵字作為表格名稱，例如order, group，參考 <https://www.sqlite.org/lang_keywords.html>
+注意：要小心別用到關鍵字作為表格名稱，例如 order, group，參考 <https://www.sqlite.org/lang_keywords.html>
 
 # 插入資料
 
@@ -66,7 +72,8 @@ conn.close()
 
 # 查詢資料
 
-*SQLite*
+_SQLite_
+
 ```python
 conn = sqlite3.connect('enterprise.db')
 curs = conn.cursor()
@@ -77,11 +84,13 @@ conn.close()
 ```
 
 輸出結果
+
 ```
 [('duck',), ('bear',)]
 ```
 
-*DB2*
+_DB2_
+
 ```python
 conn = ibm_db.connect('DATABASE=enterprise;HOSTNAME=ip;PORT=50000;PROTOCOL=TCPIP;UID=user;PWD=pwd', '', '')
 stmt = ibm_db.exec_immediate(conn, 'SELECT critter FROM zoo WHERE damages BETWEEN 0 AND 1000')
@@ -94,22 +103,33 @@ while result != False:
 
 ## 取前幾筆
 
-*DB2*
+_DB2_
+
 ```sql
 SELECT * FROM zoo FETCH FIRST 1 ROWS ONLY
 ```
 
+## 取後幾筆
+
+_DB2_
+
+```sql
+SELECT * FROM zoo ORDER BY critter FETCH FIRST 1 ROWS ONLY
+```
+
 ## 分頁查詢
 
-*DB2*
+_DB2_
+
 ```sql
 SELECT * FROM (SELECT rownumber() OVER (ORDER BY critter) as ROWID, a.* FROM zoo a) WHERE ROWID BETWEEN 11 AND 20
 ```
 
-## 取得DB底下的所有Table
+## 取得 DB 底下的所有 Table
 
-*SQLite*
+_SQLite_
 參考<https://stackoverflow.com/questions/305378/list-of-tables-db-schema-dump-etc-using-the-python-sqlite3-api>
+
 ```python
 conn = sqlite3.connect('database.db')
 curs = conn.cursor()
@@ -119,9 +139,14 @@ print(curs.fetchall())
 
 ## 取得今天的日期
 
-*DB2*
+_DB2_
+
 ```sql
-SELECT VARCHAR_FORMAT(CURRENT_DATE, 'YYYYMMDD') FROM SYSIBM.SYSDUMMY1
+SELECT VARCHAR_FORMAT(CURRENT_DATE, 'YYYYMMDD') FROM SYSIBM.SYSDUMMY1;
+SELECT VARCHAR_FORMAT(CURRENT_DATE, 'YYYYMMDD') FROM mytable;
+--或是
+SELECT date(current timestamp) FROM SYSIBM.SYSDUMMY1;
+SELECT date(current timestamp) FROM mytable;
 ```
 
 ## 查詢純數字欄位
@@ -130,7 +155,7 @@ SELECT VARCHAR_FORMAT(CURRENT_DATE, 'YYYYMMDD') FROM SYSIBM.SYSDUMMY1
 SELECT * FROM mytable WHERE mycolumn LIKE '%[0-9]%'
 ```
 
-# 轉換Table資料為dict
+# 轉換 Table 資料為 dict
 
 ```python
 def dict_factory(cursor, row):
@@ -143,4 +168,25 @@ curs.execute("SELECT * FROM Product")
 result = [dict_factory(curs, item) for item in curs.fetchall()]
 curs.close()
 conn.close()
+```
+
+# 預存程序
+
+_DB2_
+傳回單一結果集，參考https://www.ibm.com/docs/zh-tw/db2/11.5?topic=procedures-returning-result-sets-from-sql
+
+```sql
+CREATE OR REPLACE PROCEDURE sp_read_emp(IN p_job VARCHAR(10))
+LANGUAGE SQL
+DYNAMIC RESULT SETS 1
+BEGIN
+  DECLARE c_emp CURSOR WITH RETURN FOR
+    SELECT salary, bonus, comm
+    FROM employee
+    WHERE job != p_job;
+
+  OPEN c_emp;
+END;
+
+CALL sp_read_emp('PRES');
 ```
