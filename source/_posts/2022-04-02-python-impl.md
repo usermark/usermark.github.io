@@ -1,16 +1,20 @@
 ---
 layout: article
-title: '[Python] 應用'
+title: "[Python] 應用"
 date: 2022-04-02 16:45
 tags:
-- Python
-- AES
+  - Python
+  - AES
 ---
-紀錄開發上常遇到的問題，避免重複踩坑。
-<!--more-->
-# 讀取yaml檔
 
-需安裝pyyaml套件
+紀錄開發上常遇到的問題，避免重複踩坑。
+
+<!--more-->
+
+# 讀取 yaml 檔
+
+需安裝 pyyaml 套件
+
 ```sh
 pipenv install pyyaml
 ```
@@ -22,7 +26,7 @@ with open('config.yml', encoding='UTF-8') as stream:
     configs = yaml.safe_load(stream)
 ```
 
-# 讀取zip檔內的文字檔內容
+# 讀取 zip 檔內的文字檔內容
 
 ```python
 import zipfile
@@ -32,9 +36,10 @@ with zipfile.ZipFile('path/to/zip_file', 'r') as zip_ref:
     print(''.join([lineb.decode('UTF-8') for lineb in linesb]))
 ```
 
-## 讀取加密zip檔內的文字檔內容
+## 讀取加密 zip 檔內的文字檔內容
 
-需安裝pyzipper套件
+需安裝 pyzipper 套件
+
 ```sh
 pipenv install pyzipper
 ```
@@ -51,9 +56,10 @@ with pyzipper.AESZipFile(output_path) as zip_ref:
         print('密碼錯誤', e)
 ```
 
-# 解壓縮rar檔
+# 解壓縮 rar 檔
 
-需安裝unrar套件，並新增環境變數 UNRAR_LIB_PATH = C:\Program Files (x86)\UnrarDLL\x64\UnRAR64.dll
+需安裝 unrar 套件，並新增環境變數 UNRAR_LIB_PATH = C:\Program Files (x86)\UnrarDLL\x64\UnRAR64.dll
+
 ```sh
 pipenv install unrar
 ```
@@ -90,9 +96,10 @@ yesterday = datetime.today() + timedelta(days=-1)
 print(yesterday.strftime('%Y%m%d'))
 ```
 
-# NAS連線並取檔
+# NAS 連線並取檔
 
-需安裝pysmb套件
+需安裝 pysmb 套件
+
 ```sh
 pipenv install pysmb
 ```
@@ -109,14 +116,16 @@ with open('path/to/output_file', 'wb') as output_file:
 conn.close()
 ```
 
-## 支援SMB2/3
+## 支援 SMB2/3
 
-需安裝smbprotocol套件
+需安裝 smbprotocol 套件
+
 ```sh
 pipenv install smbprotocol
 ```
 
 參考 https://github.com/jborean93/smbprotocol/blob/master/examples/high-level/file-management.py
+
 ```python
 from smbclient import register_session, open_file
 
@@ -127,16 +136,19 @@ with open('path/to/output_file', 'wb') as output_file:
         output_file.write(fd.read())
 ```
 
-# AES加解密
+# AES 加解密
 
-需安裝pycryptodome套件
+需安裝 pycryptodome 套件
+
 ```sh
 pipenv install pycryptodome
 ```
 
-通常拿到的key是用Hex表示的字串，要用bytes.fromhex(key)轉換成bytes。
+通常拿到的 key 是用 Hex 表示的字串，要用 bytes.fromhex(key)轉換成 bytes。
 
-加密後的結果為bytes，無法直接編碼成字串，所以中間會先轉成Base64。因此解密時，資料已經過Base64編碼，需Base64解碼後才丟進AES解密。
+加密後的結果為 bytes，無法直接編碼成字串，所以中間會先轉成 Base64。因此解密時，資料已經過 Base64 編碼，需 Base64 解碼後才丟進 AES 解密。
+
+![](/assets/AES.png)
 
 ```python
 import base64
@@ -174,14 +186,16 @@ if __name__ == '__main__':
 ```
 
 輸出結果
+
 ```
 LE1WdHzcoXb7ul3S9b5otQ==
 Hello world
 ```
 
-# Requests紀錄API請求和回應
+# Requests 紀錄 API 請求和回應
 
 參考<https://stackoverflow.com/questions/16337511/log-all-requests-from-the-python-requests-module>
+
 ```python
 import logging
 from http.client import HTTPConnection
@@ -208,9 +222,10 @@ def debug_requests_off():
     requests_log.propagate = False
 ```
 
-# requests_html出現SSLCertVerificationError
+# requests_html 出現 SSLCertVerificationError
 
-第一次執行會有SSLCertVerificationError問題
+第一次執行會有 SSLCertVerificationError 問題
+
 ```shell
 [W:pyppeteer.chromium_downloader] start chromium download.
 Download may take a few minutes.
@@ -218,12 +233,14 @@ Traceback (most recent call last):
   略...
 ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1056)
 ```
+
 修正如下，參考<https://github.com/miyakogi/pyppeteer/issues/219>
+
 ```shell
 pip install -U "urllib3<1.25"
 ```
 
-# 輸出yaml換行格式
+# 輸出 yaml 換行格式
 
 ```python
 def repr_str(dumper: yaml.SafeDumper, data):
@@ -235,9 +252,9 @@ yaml.add_representer(str, repr_str, Dumper=yaml.SafeDumper)
 print(yaml.safe_dump(foo))
 ```
 
-# os.popen()在Windows下出現 UnicodeDecodeError: 'cp950' codec can't decode byte
+# os.popen()在 Windows 下出現 UnicodeDecodeError: 'cp950' codec can't decode byte
 
-os.popen()是封裝subprocess.Popen()，並用io.TextIOWrapper轉換bytes輸出成str的結果，而Windows下的cmd指令預設為cp950，會造成解析錯誤。
+os.popen()是封裝 subprocess.Popen()，並用 io.TextIOWrapper 轉換 bytes 輸出成 str 的結果，而 Windows 下的 cmd 指令預設為 cp950，會造成解析錯誤。
 
 ```python
 proc = subprocess.Popen(cmd,
@@ -247,7 +264,7 @@ proc = subprocess.Popen(cmd,
 return _wrap_close(io.TextIOWrapper(proc.stdout), proc)
 ```
 
-所以針對Windows自行實作popen()，調整如下
+所以針對 Windows 自行實作 popen()，調整如下
 
 ```python
 def popen(command):
@@ -257,9 +274,10 @@ def popen(command):
     return io.TextIOWrapper(proc.stdout, encoding='UTF-8')
 ```
 
-# Flask保留json排序
+# Flask 保留 json 排序
 
 參考<https://stackoverflow.com/questions/54446080/how-to-keep-order-of-sorted-dictionary-passed-to-jsonify-function>
+
 ```python
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
