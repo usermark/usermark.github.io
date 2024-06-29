@@ -42,8 +42,9 @@ $ john --test=0
 
 # 測試
 
-手動製作 demo.txt，並且壓縮成 demo.zip，密碼為 passw0rd
+手動製作 demo.txt，並且壓縮成 demo.zip，加密方法為 AES-256，密碼為 passw0rd
 或是拿手邊其它已有加密的 zip 檔做測試。
+輸入下方指令取得 John 可以處理的格式
 
 ```bash
 $ ./zip2john /cygdrive/c/Users/XXX/Downloads/demo.zip
@@ -66,12 +67,15 @@ $zip2$*0*3*0*5fc1daf064540d695750f1a159f5d8e7*7c06*b*183a8481561fccfb41176c*b331
 > hashcat -m 13600 -a 0 hash.txt example.dict --show
 $zip2$*0*3*0*5fc1daf064540d695750f1a159f5d8e7*7c06*b*183a8481561fccfb41176c*b331ede7817195ecf59d*$/zip2$:passw0rd
 ```
+![](/assets/zip2.png)
 
 -m 指定雜湊方法的類型，可至<https://hashcat.net/wiki/doku.php?id=example_hashes>查看，使用$zip2$查到對應值為 13600
 -a 破解模式: 0 字典, 1 組合, 3 暴力
 -o 輸出檔案，也可以用 -\-show 直接顯示結果
 
 其輸出結果最後面便是密碼囉!
+![](/assets/hashcat.png)
+
 這是使用字典破解，當然若是密碼更複雜，就要改用暴力破解，假設知道密碼為長度 6 的英文組合
 
 ```bash
