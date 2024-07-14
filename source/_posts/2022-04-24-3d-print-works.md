@@ -126,3 +126,9 @@ tags:
 
 https://www.thingiverse.com/thing:6567011
 ![](/assets/baby_bottle_holder.png)
+
+## 奶瓶蓋
+
+將不用的奶瓶變成收納瓶。
+https://www.thingiverse.com/thing:6659162
+![](/assets/baby_bottle_cap.jpg)

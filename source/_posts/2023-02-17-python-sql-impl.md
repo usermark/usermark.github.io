@@ -101,30 +101,6 @@ while result != False:
     result = ibm_db.fetch_assoc(stmt)  # 取下一筆
 ```
 
-## 取前幾筆
-
-_DB2_
-
-```sql
-SELECT * FROM zoo FETCH FIRST 1 ROWS ONLY
-```
-
-## 取後幾筆
-
-_DB2_
-
-```sql
-SELECT * FROM zoo ORDER BY critter FETCH FIRST 1 ROWS ONLY
-```
-
-## 分頁查詢
-
-_DB2_
-
-```sql
-SELECT * FROM (SELECT rownumber() OVER (ORDER BY critter) as ROWID, a.* FROM zoo a) WHERE ROWID BETWEEN 11 AND 20
-```
-
 ## 取得 DB 底下的所有 Table
 
 _SQLite_
@@ -135,24 +111,6 @@ conn = sqlite3.connect('database.db')
 curs = conn.cursor()
 curs.execute("SELECT name FROM sqlite_master WHERE type='table';")
 print(curs.fetchall())
-```
-
-## 取得今天的日期
-
-_DB2_
-
-```sql
-SELECT VARCHAR_FORMAT(CURRENT_DATE, 'YYYYMMDD') FROM SYSIBM.SYSDUMMY1;
-SELECT VARCHAR_FORMAT(CURRENT_DATE, 'YYYYMMDD') FROM mytable;
---或是
-SELECT date(current timestamp) FROM SYSIBM.SYSDUMMY1;
-SELECT date(current timestamp) FROM mytable;
-```
-
-## 查詢純數字欄位
-
-```sql
-SELECT * FROM mytable WHERE mycolumn LIKE '%[0-9]%'
 ```
 
 # 轉換 Table 資料為 dict
@@ -168,25 +126,4 @@ curs.execute("SELECT * FROM Product")
 result = [dict_factory(curs, item) for item in curs.fetchall()]
 curs.close()
 conn.close()
-```
-
-# 預存程序
-
-_DB2_
-傳回單一結果集，參考https://www.ibm.com/docs/zh-tw/db2/11.5?topic=procedures-returning-result-sets-from-sql
-
-```sql
-CREATE OR REPLACE PROCEDURE sp_read_emp(IN p_job VARCHAR(10))
-LANGUAGE SQL
-DYNAMIC RESULT SETS 1
-BEGIN
-  DECLARE c_emp CURSOR WITH RETURN FOR
-    SELECT salary, bonus, comm
-    FROM employee
-    WHERE job != p_job;
-
-  OPEN c_emp;
-END;
-
-CALL sp_read_emp('PRES');
 ```
