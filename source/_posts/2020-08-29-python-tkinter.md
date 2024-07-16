@@ -1,14 +1,18 @@
 ---
 layout: article
-title: '[Python] Tkinter'
+title: "[Python] Tkinter"
 date: 2020-08-29 13:43
 tags:
-- Python
-- Tkinter
+  - Python
+  - Tkinter
 ---
-tkinter是python內建的GUI。
+
+tkinter 是 python 內建的 GUI。
+
 <!--more-->
+
 # Hello World
+
 ```python
 from tkinter import *
 from tkinter.ttk import *
@@ -27,16 +31,21 @@ if __name__ == "__main__":
 ```
 
 # 基本元件介紹
+
 ## Widget
+
 winfo_exists() 可檢查是否存在/顯示
-winfo_children() 回傳底下所有widget
+winfo_children() 回傳底下所有 widget
 
 ## Frame
+
 ```python
 Style().configure('red.TFrame', background='red')  # 自訂風格，字尾必為.TFrame，調整背景為紅色
 f = Frame(window, style='user.TFrame')
 ```
-清空Frame
+
+清空 Frame
+
 ```python
 def clear_frame(frame):
   """清空Frame"""
@@ -46,27 +55,35 @@ def clear_frame(frame):
 ```
 
 ## Label
-可透過['text']或config修改文字，config可修改UI屬性
+
+可透過['text']或 config 修改文字，config 可修改 UI 屬性
+
 ```python
 label = Label(window, text='Label')
 label['text'] = 'Hello'
 label.config(text='World')
 label.pack()
 ```
+
 ## Button
+
 點擊事件有兩種設定方式：
-1. 透過command，只能處理左鍵單擊
-2. 透過bind，event.widget可取得原物件
+
+1. 透過 command，只能處理左鍵單擊
+2. 透過 bind，event.widget 可取得原物件
 
 ```python
 btn = Button(window, text='Button', command=lambda: messagebox.showinfo(message='I am info'))
 btn.bind('<Button-3>', lambda event: messagebox.showerror(message='I am error'))
 btn.pack()
 ```
+
 ## Entry
+
 修改文字有兩種設定方式
-1. 透過textvarialbe
-2. 透過insert，END為tkinter常數，表示結尾
+
+1. 透過 textvarialbe
+2. 透過 insert，END 為 tkinter 常數，表示結尾
 
 ```python
 value = StringVar()
@@ -79,8 +96,10 @@ entry.delete(0, END)
 entry.insert(0, 'Test')
 entry.pack()
 ```
+
 ## ScrolledText
-沒有textvariable屬性，只能用insert()修改文字
+
+沒有 textvariable 屬性，只能用 insert()修改文字
 
 ```python
 result_text = ScrolledText(master)
@@ -94,7 +113,9 @@ lines = selection.split('\n')
 ```
 
 ## Combobox
+
 下拉式選單
+
 ```python
 cb = Combobox(window)
 cb['values'] = list(range(5))
@@ -104,7 +125,9 @@ cb.pack()
 ```
 
 ## TreeView
+
 可捲動的表格
+
 ```python
 def sort_column(col, reverse):
     """依此欄位排序"""
@@ -140,7 +163,8 @@ vbar.config(command=tv.yview)
 hbar.config(command=tv.xview)
 ```
 
-展開/收合TreeView
+展開/收合 TreeView
+
 ```python
 def tree_open(open):
     for child in tv.get_children():
@@ -148,6 +172,7 @@ def tree_open(open):
 ```
 
 欄位可選取
+
 ```python
 tv.bind('<Double-1>', _on_double_click)
 
@@ -156,7 +181,7 @@ def _on_double_click(event):
     rowid = tv.identify_row(event.y)
     box = tv.bbox(rowid, col)
     text = tv.item(rowid, 'values')[int(col[1:])-1]
-    
+
     edit_entry = Entry(tv, width=box[2])
     edit_entry.insert(0, text)
     edit_entry.select_range(0, END)
@@ -166,6 +191,7 @@ def _on_double_click(event):
 ```
 
 ## PanedWindow
+
 可調整的佈局元件
 
 ```python
@@ -180,7 +206,8 @@ pw.add(main)
 ```
 
 ## Toplevel
-使用彈窗顯示QR code
+
+使用彈窗顯示 QR code
 
 ![](/assets/qrcode.png)
 
@@ -197,17 +224,37 @@ label = Label(popup, image=photo)
 label.pack()
 ```
 
+## 自訂元件
+
+切記底下元素，例如\_label 的 master 要是 TextField 的 self，而不是 master。
+
+```python
+class TextField(Frame):
+   def __init__(self, master, label, text, **kw):
+    Widget.__init__(self, master, "ttk::frame", kw)
+    _label = Label(self, text=label)
+    _label.pack(side=LEFT)
+    entry = Entry(self, width=len(text))
+    entry.insert(END, text)
+    entry.pack(side=RIGHT)
+```
+
 # 佈局
+
 ## Pack
+
 ```python
 label.pack(anchor=W)  # 靠左呈現
 ```
 
 ## Grid
+
 ```python
 label.grid(row=0, column=0, sticky=W)  # 靠左呈現
 ```
+
 自動佈局，每三個項目為一列
+
 ```python
 def auto_grid(parent, widget):
     index = len(parent.winfo_children()) - 1
@@ -217,20 +264,22 @@ def auto_grid(parent, widget):
 ```
 
 # Bind
+
 - &lt;Button-1&gt; 左鍵點擊
-- &lt;Button-2&gt; windows和unix是中鍵點擊，mac是右鍵點擊，可用`platform.system() == 'Darwin'`判斷，Darwin為mac
+- &lt;Button-2&gt; windows 和 unix 是中鍵點擊，mac 是右鍵點擊，可用`platform.system() == 'Darwin'`判斷，Darwin 為 mac
 - &lt;Button-3&gt; 右鍵點擊
 - &lt;Double-1&gt; 左鍵連擊
 
 參考<http://tcl.tk/man/tcl8.7/TkCmd/bind.html>
 
-# lambda與閉包
+# lambda 與閉包
 
-閉包會把上一層的變數偷渡捕捉進來自己的function scope，Javascript便是用閉包來模擬class。
+閉包會把上一層的變數偷渡捕捉進來自己的 function scope，Javascript 便是用閉包來模擬 class。
 
 參考<https://medium.com/citycoddee/python進階技巧-4-lambda-function-與-closure-之謎-7a385a35e1d8>
 
-舉例來說，當用for迴圈實作多個元件與按鈕，下面的寫法submit()永遠只會取到最後被指派的元件。
+舉例來說，當用 for 迴圈實作多個元件與按鈕，下面的寫法 submit()永遠只會取到最後被指派的元件。
+
 ```python
 from tkinter import *
 from tkinter.ttk import *
@@ -251,12 +300,14 @@ for i in range(5):
 window.mainloop()
 ```
 
-解法一，調整lambda寫法。
+解法一，調整 lambda 寫法。
+
 ```python
 test = Button(window, text="Click me!", command=lambda e=input.get(): submit(e))
 ```
 
-解法二，將實作元件部分抽成function，使用閉包捕捉上一層的變數來用。
+解法二，將實作元件部分抽成 function，使用閉包捕捉上一層的變數來用。
+
 ```python
 from tkinter import *
 from tkinter.ttk import *

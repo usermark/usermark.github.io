@@ -2,7 +2,9 @@
 layout: article
 title: '[Android] 應用'
 date: 2022-03-19 17:00
-tags: Android
+tags:
+- Android
+- Java
 ---
 紀錄開發上常遇到的問題，避免重複踩坑。
 <!--more-->

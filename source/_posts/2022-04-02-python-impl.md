@@ -11,6 +11,15 @@ tags:
 
 <!--more-->
 
+# 各種進制轉換成 10 進制
+
+```python
+# 16轉10
+val = bytes.fromhex('00FF')
+print(int.from_bytes(val, byteorder='big'))  # 255
+print(int.from_bytes(val, byteorder='little'))  # 65280
+```
+
 # 讀取 yaml 檔
 
 需安裝 pyyaml 套件
@@ -94,6 +103,8 @@ today = time.strftime('%Y%m%d')
 print(today)
 yesterday = datetime.today() + timedelta(days=-1)
 print(yesterday.strftime('%Y%m%d'))
+someday = datetime.fromtimestamp(1721095603)
+print(someday.strftime('%Y%m%d'))
 ```
 
 # NAS 連線並取檔
@@ -272,6 +283,14 @@ def popen(command):
         return os.popen(command)
     proc = subprocess.Popen(command, stdout=subprocess.PIPE)
     return io.TextIOWrapper(proc.stdout, encoding='UTF-8')
+```
+
+如果要讀取的是 bytes 則用 io.BufferedReader
+
+```python
+proc = subprocess.Popen(command, stdout=subprocess.PIPE)
+stream = io.BufferedReader(proc.stdout)
+print(stream.read())
 ```
 
 # Flask 保留 json 排序
