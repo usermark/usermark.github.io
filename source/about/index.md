@@ -12,7 +12,7 @@ comments: false
 - Bootstrap：會套用並理解規則
 - jQuery：會基本用法，以及使用 ajax 傳送 json 資料
 - Unity3D、C#：處理與原生 Android 相關的插件用於遊戲開發，例如通知和推播
-- IoT：玩過樹梅派、Arduino、D1 mini、ESP32，[作品集](/iot-works)
+- IoT：玩過樹莓派、Arduino、D1 mini、ESP32，[作品集](/iot-works)
 - Git：團隊開發有用到，跑過 code review 加 merge，以及 Git flow
 - Blender：因興趣自學，[作品集](/blender-works)
 - 3D列印：[作品集](/3d-print-works)
