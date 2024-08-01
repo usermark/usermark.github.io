@@ -6,8 +6,9 @@ tags: Python
 ---
 以[財政部電子發票整合服務平台](https://www.einvoice.nat.gov.tw/)的登入做練習。利用Chrome的開發人員工具分析後，用python來實現登入行為。
 <!--more-->
-
+{% note warning %}
 僅供學習，切勿用於非法用途！
+{% endnote %}
 
 # 分析
 
