@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="單利所茲生的利息不會加入本金再循環計息，也就是說計息的本金從期初到期末都是一樣的。設期初本金為 PV，名目利率為 Rn，期間為 t 年： $$利息 &#x3D; PVRnt$$ $$期末終值 (FV) &#x3D; PV + 利息 &#x3D; PV + PVRnt &#x3D; PV*(1+Rn*t)$$ 複利付息期間：就是每間隔多久結算一次利息，以單利計算。也就是每過一個付息期間，借款者就必">
+  <meta name="description" content="單利所茲生的利息不會加入本金再循環計息，也就是說計息的本金從期初到期末都是一樣的。設期初本金為 PV，名目利率為 Rn，期間為 t 年： $$利息 &#x3D; PV\times Rn\times t$$ $$期末終值 (FV)  &#x3D; PV + 利息 &#x3D; PV + PV\times Rn\times t &#x3D; PV\times (1+Rn\times t)$$ 複利">
 <meta property="og:type" content="article">
 <meta property="og:title" content="經濟學">
 <meta property="og:url" content="https://usermark.github.io/2013/10/24/economics/index.html">
 <meta property="og:site_name" content="Mike的筆記">
-<meta property="og:description" content="單利所茲生的利息不會加入本金再循環計息，也就是說計息的本金從期初到期末都是一樣的。設期初本金為 PV，名目利率為 Rn，期間為 t 年： $$利息 &#x3D; PVRnt$$ $$期末終值 (FV) &#x3D; PV + 利息 &#x3D; PV + PVRnt &#x3D; PV*(1+Rn*t)$$ 複利付息期間：就是每間隔多久結算一次利息，以單利計算。也就是每過一個付息期間，借款者就必">
+<meta property="og:description" content="單利所茲生的利息不會加入本金再循環計息，也就是說計息的本金從期初到期末都是一樣的。設期初本金為 PV，名目利率為 Rn，期間為 t 年： $$利息 &#x3D; PV\times Rn\times t$$ $$期末終值 (FV)  &#x3D; PV + 利息 &#x3D; PV + PV\times Rn\times t &#x3D; PV\times (1+Rn\times t)$$ 複利">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2013-10-24T06:42:00.000Z">
-<meta property="article:modified_time" content="2023-07-08T12:44:57.706Z">
+<meta property="article:modified_time" content="2024-08-07T13:43:02.376Z">
 <meta property="article:author" content="Mike Chen">
 <meta name="twitter:card" content="summary">
 
@@ -191,7 +191,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2023-07-08 20:44:57" itemprop="dateModified" datetime="2023-07-08T20:44:57+08:00">2023-07-08</time>
+                <time title="修改時間：2024-08-07 21:43:02" itemprop="dateModified" datetime="2024-08-07T21:43:02+08:00">2024-08-07</time>
               </span>
 
           
@@ -213,11 +213,12 @@
 
       
         <span id="more"></span>
+
 <h1 id="單利"><a href="#單利" class="headerlink" title="單利"></a>單利</h1><p>所茲生的利息<code>不會加入本金再循環計息</code>，也就是說計息的本金從期初到期末都是一樣的。<br>設期初本金為 PV，名目利率為 Rn，期間為 t 年：</p>
-<p>$$利息 &#x3D; PV<em>Rn</em>t$$</p>
-<p>$$期末終值 (FV) &#x3D; PV + 利息 &#x3D; PV + PV<em>Rn</em>t &#x3D; PV*(1+Rn*t)$$</p>
+<p>$$利息 &#x3D; PV\times Rn\times t$$</p>
+<p>$$期末終值 (FV)  &#x3D; PV + 利息 &#x3D; PV + PV\times Rn\times t &#x3D; PV\times (1+Rn\times t)$$</p>
 <h1 id="複利"><a href="#複利" class="headerlink" title="複利"></a>複利</h1><p><strong>付息期間</strong>：就是每間隔多久結算一次利息，以單利計算。也就是每過一個付息期間，借款者就必須支付貸款者利息。這樣有時候也很麻煩，借款者支付利息非常頻繁，於是就有借款者希望不要每期都支付該筆利息，同意<code>將利息加入本金，做為下期的計息本金</code>。也就是將付息期間一到，便自動將「利息轉貸款」的意思，這就是複利的基本精神。<br>設期初本金為 PV，每期之利率為 rate，付息期間為 n 期：</p>
-<p>$$期末終值 (FV) &#x3D; PV*(1+rate)^n$$</p>
+<p>$$期末終值 (FV) &#x3D; PV\times (1+rate)^n$$</p>
 <table>
 <thead>
 <tr>
@@ -234,17 +235,17 @@
 <tr>
 <td>1</td>
 <td align="left">$$PV$$</td>
-<td align="left">$$PV*(1+rate)$$</td>
+<td align="left">$$PV\times (1+rate)$$</td>
 </tr>
 <tr>
 <td>2</td>
-<td align="left">$$PV*(1+rate)$$</td>
-<td align="left">$$PV*(1+rate)<em>(1+rate) &#x3D; PV</em>(1+rate)^2$$</td>
+<td align="left">$$PV\times (1+rate)$$</td>
+<td align="left">$$PV\times (1+rate)\times (1+rate) &#x3D; PV\times (1+rate)^2$$</td>
 </tr>
 <tr>
 <td>3</td>
-<td align="left">$$PV*(1+rate)^2$$</td>
-<td align="left">$$PV*(1+rate)^2*(1+rate) &#x3D; PV*(1+rate)^3$$</td>
+<td align="left">$$PV\times (1+rate)^2$$</td>
+<td align="left">$$PV\times (1+rate)^2\times (1+rate) &#x3D; PV\times (1+rate)^3$$</td>
 </tr>
 <tr>
 <td></td>
@@ -253,14 +254,14 @@
 </tr>
 <tr>
 <td>n</td>
-<td align="left">$$PV*(1+rate)^(n-1)$$</td>
-<td align="left">$$PV*(1+rate)^n$$</td>
+<td align="left">$$PV\times (1+rate)^{(n-1)}$$</td>
+<td align="left">$$PV\times (1+rate)^n$$</td>
 </tr>
 </tbody></table>
 <p>每期利率可以用<code>名目利率除上每年計息的次數</code>來換算，例如 Rn &#x2F; 2 就是半年利率；Rn &#x2F; 4 就是季利率；Rn &#x2F; 12 就是月利率。所以，每年計息次數以 m 表示，期數 n 就變成每年付息次數 m 乘上年數 t，也就是：</p>
 <p>$$rate &#x3D; Rn &#x2F; m$$</p>
-<p>$$n &#x3D; m*t$$</p>
-<p>$$期末終值 (FV) &#x3D; PV*(1+Rn&#x2F;m)^(m*t)$$</p>
+<p>$$n &#x3D; m\times t$$</p>
+<p>$$期末終值 (FV) &#x3D; PV\times (1+Rn&#x2F;m)^{(m\times t)}$$</p>
 
     </div>
 
