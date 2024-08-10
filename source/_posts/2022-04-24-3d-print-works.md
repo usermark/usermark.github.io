@@ -132,3 +132,8 @@ https://www.thingiverse.com/thing:6567011
 將不用的奶瓶變成收納瓶。
 https://www.thingiverse.com/thing:6659162
 ![](/assets/baby_bottle_cap.jpg)
+
+## IKEA洞洞板飲料架
+
+https://www.thingiverse.com/thing:6725181
+![](/assets/drink_holder.jpg)

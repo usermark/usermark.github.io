@@ -30,6 +30,8 @@ if __name__ == "__main__":
     Application()
 ```
 
+![](/assets/tkinter_hello_world.png)
+
 # 基本元件介紹
 
 ## Widget
@@ -230,14 +232,24 @@ label.pack()
 
 ```python
 class TextField(Frame):
-   def __init__(self, master, label, text, **kw):
-    Widget.__init__(self, master, "ttk::frame", kw)
-    _label = Label(self, text=label)
-    _label.pack(side=LEFT)
-    entry = Entry(self, width=len(text))
-    entry.insert(END, text)
-    entry.pack(side=RIGHT)
+    def __init__(self, master, label, text, **kw):
+        Widget.__init__(self, master, "ttk::frame", kw)
+        _label = Label(self, text=label)
+        _label.pack(side=LEFT)
+        entry = Entry(self, width=len(text))
+        entry.insert(END, text)
+        entry.pack(side=RIGHT)
+
+class Application:
+    def __init__(self):
+        window = Tk()
+        window.title('Hello World')
+        window.geometry('200x100')
+        TextField(window, 'Name:', 'Mike').pack()
+        window.mainloop()
 ```
+
+![](/assets/custom_frame.png)
 
 # 佈局
 
