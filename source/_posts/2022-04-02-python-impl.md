@@ -301,3 +301,19 @@ print(stream.read())
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 ```
+
+# 依指定長度切割陣列
+
+參考<https://www.altcademy.com/blog/how-to-split-a-list-in-python/>
+
+```python
+def split_list(lst, chunk_size):
+    return [lst[i:i + chunk_size] for i in range(0, len(lst), chunk_size)]
+
+numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+chunk_size = 3
+chunks = split_list(numbers, chunk_size)
+
+print("Chunks:", chunks)
+# Chunks: [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9]]
+```
