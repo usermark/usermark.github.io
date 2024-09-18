@@ -1,22 +1,32 @@
 ---
 layout: article
-title: '[Android] adb forward'
+title: "[Android] adb forward"
 date: 2021-06-04 17:34
 tags: Android
 ---
+
+了解 adb 背後原理和運用。
+
 <!--more-->
+
 # adb forward
-轉發PC端4000端口到手機的9999端口
+
+轉發 PC 端 4000 端口到手機的 9999 端口
+
 ```
 adb forward tcp:4000 tcp:9999
 ```
+
 查看是否轉發成功
+
 ```
 adb forward --list
 ```
 
 ## 範例
-Android建立server socket
+
+Android 建立 server socket
+
 ```java
 private static class SocketThread extends Thread {
     ServerSocket serverSocket;
@@ -57,7 +67,8 @@ private static class SocketThread extends Thread {
 }
 ```
 
-PC端用python建立client socket
+PC 端用 python 建立 client socket
+
 ```python
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((socket.gethostname(), 4000))
@@ -65,33 +76,42 @@ client.send(b'Hello')
 print(client.recv(1024))
 ```
 
-# adb通道
-adb server啟動以後，在本地的5037端口監聽。adb client通過本地的隨機端口與5037端口建立連接。
-在這個通道上，client向server發送的命令都遵循如下格式：
-1. 命令的長度(Length)，由四位的十六進製表示
-2. 實際的命令(Payload)，通過ASCII編碼
+# adb 通道
 
-譬如，查看adb當前的版本，client會發起如下命令：
+adb server 啟動以後，在本地的 5037 端口監聽。adb client 通過本地的隨機端口與 5037 端口建立連接。
+在這個通道上，client 向 server 發送的命令都遵循如下格式：
+
+1. 命令的長度(Length)，由四位的十六進製表示
+2. 實際的命令(Payload)，通過 ASCII 編碼
+
+譬如，查看 adb 當前的版本，client 會發起如下命令：
+
 ```
 000Chost:version
 ```
-000C表示”host:version”這條命令的長度為12個字節。命令中使用了host前綴，目的是為了區分其他類型的命令，host前綴的命令可以理解為只在client與server這個數據通道上存在。
 
-server收到client的請求後，返回的數據遵循如下格式：
+000C 表示”host:version”這條命令的長度為 12 個字節。命令中使用了 host 前綴，目的是為了區分其他類型的命令，host 前綴的命令可以理解為只在 client 與 server 這個數據通道上存在。
+
+server 收到 client 的請求後，返回的數據遵循如下格式：
+
 1. 如果成功，則返回四個字節的字符串”OKAY”
 2. 如果失敗，則返回四個字節的字符串”FAIL”和出錯原因
 3. 如果異常，則返回錯誤碼
 
-當Client收到Server返回的”OKAY”後，就可以發繼續發起其他操作命令了。
+當 Client 收到 Server 返回的”OKAY”後，就可以發繼續發起其他操作命令了。
 
-當與server建立第一個通道的連接後，需要向server發送transport命令，表示接下來，要與adbd進行數據傳輸。
+當與 server 建立第一個通道的連接後，需要向 server 發送 transport 命令，表示接下來，要與 adbd 進行數據傳輸。
+
 ```
 host:transport:<serial-number>
 ```
-當server返回“OKAY”後，client後續發送的數據，就直接傳輸到adbd了。
+
+當 server 返回“OKAY”後，client 後續發送的數據，就直接傳輸到 adbd 了。
 
 ## 範例
-Android建立server socket
+
+Android 建立 server socket
+
 ```java
 private static class SocketThread extends Thread {
     LocalServerSocket serverSocket;
@@ -135,7 +155,8 @@ private static class SocketThread extends Thread {
 }
 ```
 
-PC端用python建立client socket
+PC 端用 python 建立 client socket
+
 ```python
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # 當socket關閉後，本地端用於該socket的端口就可以立刻被重用

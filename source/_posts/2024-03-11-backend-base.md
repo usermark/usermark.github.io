@@ -1,15 +1,22 @@
 ---
-title: '後端基礎-專有名詞'
+title: "後端基礎-專有名詞"
 date: 2024-03-11 15:17:57
 tags:
 ---
+
 接觸後端開發後，發現基礎沒打好，根本是新的世界，一些專有名詞都不懂，查完後彙整於此。
+
 <!--more-->
+
 # TLS
 
 Netscape 開發了名為安全通訊端層（Secure Socket Layer，SSL）的上一代加密協議，TLS 由此演變而來。
 
 參考 [什麼是 TLS（傳輸層安全性）？](https://www.cloudflare.com/zh-tw/learning/ssl/transport-layer-security-tls/)
+
+# 自簽憑證 (Self-Signed Certificate)
+
+可以使用 [OpenSSL 建立自簽憑證](https://blog.miniasp.com/post/2019/02/25/Creating-Self-signed-Certificate-using-OpenSSL)，或是使用免費憑證。[Let’s encrypt](https://letsencrypt.org/zh-tw/)是一家推出免費 SSL 認證服務的數位憑證機構。
 
 # Cipher suite
 
@@ -34,7 +41,7 @@ Volume 是 Docker 最推薦存放 persisting data（ 數據 ）的機制，因�
 
 # Kubernetes (K8s)
 
- 是一項 Docker 容器編排工具。K8s 的前身是 Google 內部的 Borg 叢集管理系統，解決了過去管理者需各別管理不同主機內的容器，且為了確保所有容器服務正常，需設置對應的監控系統並手動重新部署有問題環境的困擾。
+是一項 Docker 容器編排工具。K8s 的前身是 Google 內部的 Borg 叢集管理系統，解決了過去管理者需各別管理不同主機內的容器，且為了確保所有容器服務正常，需設置對應的監控系統並手動重新部署有問題環境的困擾。
 參考 [Kubernetes 是什麼？Docker、K8s、GKE 架構與優勢比較](https://blog.cloud-ace.tw/application-modernization/devops/docker-k8s-gke-intro/)
 
 ## Google Kubernetes Engine（GKE）
@@ -45,8 +52,20 @@ Volume 是 Docker 最推薦存放 persisting data（ 數據 ）的機制，因�
 
 ## Google Cloud Run
 
-用於託管 Web 應用程式，包含網站或REST API 後端。
-缺點：只能開放單一port。
+用於託管 Web 應用程式，包含網站或 REST API 後端。
+缺點：只能開放單一 port。
 
 參考 [什麼是 Cloud Run？Cloud Run 與 Cloud Functions 有哪些差別？關於 Cloud Run 的四大常見疑問解惑](https://www.microfusion.cloud/news/cloud-run-overview/)
 實作參考 [【GCP】將 FastAPI 佈署上 Cloud Run](https://nijialin.com/2023/03/19/gcp-why-need-cloudrun-as-serverless/)
+
+# Mbps 與 MB/s 是不一樣的
+
+- 1Mbps = 0.125MB/s
+- 8Mbps = 1MB/s
+
+例如無線路由器的規格通常會寫 802.11n：最高 300 Mbps，表示每秒傳輸 37.5MB。
+參考 <https://3day.tw/什麼是mbps什麼是mb-s/>
+
+# 虛擬非軍事區 (Virtual DMZ)
+
+讓您得以將一部電腦公開顯露在網際網路上，使所有上傳的封包全數轉向您指定的電腦。
