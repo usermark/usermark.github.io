@@ -8,7 +8,7 @@ tags:
   - WSL
 ---
 
-手把手 AOSP 編譯入門
+手把手 AOSP 編譯入門，使用 Windows 環境操作。
 
 <!--more-->
 
