@@ -19,6 +19,8 @@ tags:
 
 燒錄完成後，插入 SD 卡並啟動樹莓派，先不要外接硬碟，稍後依指示再接上。
 另外網路部分我是接實體網路線，與個人電腦在同一網段。
+![](/assets/home_net_pi.png)
+
 等待一段時間便可用瀏覽器打開 https://nextcloudpi.local
 第一次會看到 Activation 的畫面，記住兩組帳密後，按下 Activate 開啟初始化設定。
 畫面轉到後台管理 https://nextcloudpi.local:4443 後，使用 ncp 第一組帳密登入。
@@ -32,9 +34,9 @@ tags:
 登入後，習慣會先建立群組和使用者 (或家庭成員)，與 ncp 管理者權限做區分。
 會看到一些系統內建的檔案，但都還沒有個人的照片和檔案。
 
-# SMB
+# Samba
 
-回到後台管理 4443 開啟 nc-samba。目的是透過個人電腦先將 Google Photo 和 Line 相簿備份回 NextCloud。
+回到後台管理 4443 開啟 samba。目的是透過個人電腦先將 Google Photo 和 Line 相簿備份回 NextCloud。
 
 # 備份 Google Photo 至 NextCloud
 
@@ -59,10 +61,9 @@ rclone lsd remote:album
 rclone copy /path/to/images remote:media/by-year
 ```
 
-等全部下載完，就可以透過 SMB 備份進 NextCloud。這時進去 https://nextcloudpi.local 還不會看到剛才上傳的照片和影片，要先在後台管理 4443 執行 nc-scan。
-這樣 NextCloud 就有 Google Photo 所有照片資料囉！
+等全部下載完，就可以透過 Samba 備份進 NextCloud。這時進去 https://nextcloudpi.local 還不會看到剛才上傳的照片和影片，要先在後台管理 4443 執行 nc-scan ，會將新的照片和影片加入資料庫，這樣 NextCloud 就有 Google Photo 所有照片資料囉！
 
-# 修正 NextCloud 影片沒有預覽圖(縮圖)的問題
+# 修正影片沒有預覽圖(縮圖)的問題
 
 上傳的影片預設是沒有預覽圖的，要一個個點開才會知道很不方便
 參考 <https://shengyu7697.github.io/nextcloud/>，解法如下。
@@ -86,7 +87,26 @@ sudo nano /var/www/html/nextcloud/config/config.php
 ],
 ```
 
-# 外部存取 NextCloud
+# 修正 HEIC 沒有預覽圖(縮圖)的問題
+
+在 config.php 新增設定
+sudo nano /var/www/html/nextcloud/config/config.php
+
+```php
+'preview_imaginary_url' => 'http://127.0.0.1:8088',
+'enable_previews' => true,
+'enabledPreviewProviders' => [
+    'OC\Preview\HEIC',
+    'OC\Preview\PNG',
+    'OC\Preview\JPEG',
+    'OC\Preview\GIF',
+],
+```
+
+# NextCloud 公開對外
+
+於 [FreeDNS](https://freedns.afraid.org/) 申請域名來用，在後台管理 4443 設定 freeDNS 即可。
+接著執行 letsencrypt 申請 SSL 憑證，才不會一直看到安全性警告。
 
 # 手機 APP 自動上傳備份照片
 
@@ -95,9 +115,7 @@ sudo nano /var/www/html/nextcloud/config/config.php
 
 # 異地備份
 
-首先打開目的設備的 ssh
-
-nc-rsync
+在後台管理 4443 執行 nc-backup 後，將備份檔透過 sftp 傳送至目的設備。
 
 **參考資料**
 
