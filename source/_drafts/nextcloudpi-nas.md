@@ -24,19 +24,29 @@ tags:
 等待一段時間便可用瀏覽器打開 https://nextcloudpi.local
 第一次會看到 Activation 的畫面，記住兩組帳密後，按下 Activate 開啟初始化設定。
 畫面轉到後台管理 https://nextcloudpi.local:4443 後，使用 ncp 第一組帳密登入。
+![](/assets/ncp_wizard.png)
+
 依照初始化精靈的指示做設定，在詢問是否會使用外接硬碟來儲存資料時，我選 Yes。
+![](/assets/ncp_wizard_usb.png)
+
 這時才接上外接硬碟，並做格式化，注意資料會被刪除。因為一般外接硬碟都是 NTFS 檔案格式，並不支援 Linux 所需的權限控管，要格式化成 Btrfs 才行。
 另外，前面啟動不先接上是因為 NextCloud 預設會自動掛載外接硬碟至 /media/USBdrive，這時就無法格式化。
+初始化精靈完成後，可檢查下 data disk usage 的硬碟空間是否為 1TB。
+![](/assets/ncp_system_info.png)
+
 初步架設到這邊就都完成了，可以連進 https://nextcloudpi.local 使用 ncp 第二組帳密登入體驗囉!
 
 # 建立使用者
 
 登入後，習慣會先建立群組和使用者 (或家庭成員)，與 ncp 管理者權限做區分。
-會看到一些系統內建的檔案，但都還沒有個人的照片和檔案。
+![](/assets/ncp_user.png)
+
+在檔案頁籤會看到一些系統內建的檔案，但都還沒有個人的照片和檔案。
 
 # Samba
 
 回到後台管理 4443 開啟 samba。目的是透過個人電腦先將 Google Photo 和 Line 相簿備份回 NextCloud。
+![](/assets/ncp_samba.png)
 
 # 備份 Google Photo 至 NextCloud
 
@@ -62,6 +72,7 @@ rclone copy /path/to/images remote:media/by-year
 ```
 
 等全部下載完，就可以透過 Samba 備份進 NextCloud。這時進去 https://nextcloudpi.local 還不會看到剛才上傳的照片和影片，要先在後台管理 4443 執行 nc-scan ，會將新的照片和影片加入資料庫，這樣 NextCloud 就有 Google Photo 所有照片資料囉！
+![](/assets/ncp_scan.png)
 
 # 修正影片沒有預覽圖(縮圖)的問題
 
@@ -75,7 +86,7 @@ sudo apt-get install ffmpeg
 ```
 
 在 config.php 新增設定
-sudo nano /var/www/html/nextcloud/config/config.php
+sudo nano /var/www/nextcloud/config/config.php
 
 ```php
 'enable_previews' => true,
@@ -89,13 +100,24 @@ sudo nano /var/www/html/nextcloud/config/config.php
 
 # 修正 HEIC 沒有預覽圖(縮圖)的問題
 
+輸入指令確認 imagick 模組是否存在
+```sh
+php -m | grep -i imagick
+```
+
+沒有的話就安裝並重啟 apache2
+```sh
+sudo apt-get install php-imagick
+sudp service apache2 reload
+```
+
 在 config.php 新增設定
-sudo nano /var/www/html/nextcloud/config/config.php
+sudo nano /var/www/nextcloud/config/config.php
 
 ```php
-'preview_imaginary_url' => 'http://127.0.0.1:8088',
 'enable_previews' => true,
 'enabledPreviewProviders' => [
+    'OC\Preview\Movie',
     'OC\Preview\HEIC',
     'OC\Preview\PNG',
     'OC\Preview\JPEG',
@@ -105,8 +127,13 @@ sudo nano /var/www/html/nextcloud/config/config.php
 
 # NextCloud 公開對外
 
+![](/assets/freedns.png)
+
 於 [FreeDNS](https://freedns.afraid.org/) 申請域名來用，在後台管理 4443 設定 freeDNS 即可。
-接著執行 letsencrypt 申請 SSL 憑證，才不會一直看到安全性警告。
+![](/assets/ncp_freedns.png)
+
+接著執行 letsencrypt 申請 SSL 憑證，才不會一直看到安全性警告。這裡 80 和 443 port 必須對外才會成功驗證，若是透過 wifi 路由上網的，要去設定 port forwarding 端口轉發。
+![](/assets/ncp_ssl.png)
 
 # 手機 APP 自動上傳備份照片
 
@@ -116,6 +143,34 @@ sudo nano /var/www/html/nextcloud/config/config.php
 # 異地備份
 
 在後台管理 4443 執行 nc-backup 後，將備份檔透過 sftp 傳送至目的設備。
+
+{% note warning %}
+切記備份檔不可以放主硬碟，(內有 ncdata 資料夾的)，因為備份過程該硬碟會變成唯讀狀態，這時就無法再寫入備份檔。
+{% endnote %}
+
+```sh
+Running nc-backup
+Installing template 'ncp-metrics.cfg.sh'...
+check free space...
+Maintenance mode enabled
+backup database...
+backup files...
+tar: /media/myCloudDrive/ncp-backups/nextcloud-bkp_20240921_1726902238.tar: Cannot write: Read-only file system
+tar: Error is not recoverable: exiting now
+error generating backup
+{"reqId":"lp43MaIygxNeP3vd4WWI","level":2,"time":"2024-09-21T07:06:01+00:00","remoteAddr":"","user":"--","app":"no app in context","method":"","url":"--","message":"Temporary directory /media/myCloudDrive/ncdata/data/tmp is not present or writable","userAgent":"--","version":"29.0.4.1","data":[]}
+{"reqId":"lp43MaIygxNeP3vd4WWI","level":3,"time":"2024-09-21T07:06:01+00:00","remoteAddr":"","user":"--","app":"PHP","method":"","url":"--","message":"fopen(/media/myCloudDrive/ncdata/data/data_dir_writability_test_66ee70595461e.tmp): Failed to open stream: Read-only file system at /var/www/nextcloud/lib/private/legacy/OC_Util.php#572","userAgent":"--","version":"29.0.4.1","data":{"app":"PHP"}}
+Your data directory is not writable.
+Permissions can usually be fixed by giving the web server write access to the root directory. See https://docs.nextcloud.com/server/29/go.php?to=admin-dir_permissions.
+```
+
+```sh
+sudo -v ; curl https://rclone.org/install.sh | sudo bash
+sudo apt-get install fuse3
+sudo mkdir /media/backupDrive
+sudo chmod 777 /media/backupDrive
+rclone mount --umask=0 --daemon rsync: /media/backupDrive
+```
 
 **參考資料**
 
