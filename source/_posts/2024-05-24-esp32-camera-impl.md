@@ -207,7 +207,7 @@ Done
 
 輸入指令做監控
 ```bash
-idf.py monitor
+idf.py monitor -p COM6
 ```
 
 若發現log一直重複出現，並且有看到這行
