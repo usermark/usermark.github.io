@@ -5,7 +5,7 @@ comments: false
 ---
 
 <img src="/assets/mike.png" width="200px" align="right"/>
-我是 Mike，高雄人，熟悉 Android 和 Python 開發，有九年以上程式開發經驗。喜歡學習新事物和閱讀，偶爾會動手做些小東西，嘗試將所學紀錄於此，一半是自己看，一半是分享給各位。
+我是 Mike，高雄人，熟悉 Android 和 Python 開發。喜歡學習新事物和閱讀，偶爾會動手做些小東西，嘗試將所學紀錄於此，一半是自己看，一半是分享給各位。
 
 - Android、Java：是最熟悉的
 - Python：自學，有寫些小工具加強工作效率，用過 Flask、Tkinter
@@ -16,4 +16,3 @@ comments: false
 - Git：團隊開發有用到，跑過 code review 加 merge，以及 Git flow
 - Blender：因興趣自學，[作品集](/blender-works)
 - 3D列印：[作品集](/3d-print-works)
-- Flash：只有第一份工作有用到
