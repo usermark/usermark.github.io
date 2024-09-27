@@ -158,6 +158,78 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2022/04/02/python-impl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/04/02/python-impl/" class="post-title-link" itemprop="url">[Python] 應用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2022-04-02 16:45:00" itemprop="dateCreated datePublished" datetime="2022-04-02T16:45:00+08:00">2022-04-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2024-09-18 19:24:17" itemprop="dateModified" datetime="2024-09-18T19:24:17+08:00">2024-09-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>紀錄開發上常遇到的問題，避免重複踩坑。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/04/02/python-impl/#more" rel="contents">
+                閱讀全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
     <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2022/03/30/python-login/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -551,7 +623,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2023-07-09 15:23:16" itemprop="dateModified" datetime="2023-07-09T15:23:16+08:00">2023-07-09</time>
+                <time title="修改時間：2024-09-18 19:24:17" itemprop="dateModified" datetime="2024-09-18T19:24:17+08:00">2024-09-18</time>
               </span>
 
           
@@ -565,80 +637,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <span id="more"></span>
-<h1 id="設置編譯環境"><a href="#設置編譯環境" class="headerlink" title="設置編譯環境"></a>設置編譯環境</h1><h2 id="1-安装JDK"><a href="#1-安装JDK" class="headerlink" title="1.安装JDK"></a>1.安装JDK</h2><p>輸入以下指令，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/older-versions#for-ubuntu-15-04">https://source.android.com/setup/build/older-versions#for-ubuntu-15-04</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install openjdk-8-jdk</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-安裝工具包"><a href="#2-安裝工具包" class="headerlink" title="2.安裝工具包"></a>2.安裝工具包</h2><p>輸入以下指令，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/initializing#installing-required-packages-ubuntu-1804">https://source.android.com/setup/build/initializing#installing-required-packages-ubuntu-1804</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git-core gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses5 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-安裝python2"><a href="#3-安裝python2" class="headerlink" title="3.安裝python2"></a>3.安裝python2</h2><p>Ubuntu20.04沒有python2，若直接編譯會出現該錯誤。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/env: &#x27;python&#x27;: No such file or directory</span><br></pre></td></tr></table></figure>
-<p>輸入以下指令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install python2 </span><br><span class="line">sudo ln -s /usr/bin/python2 /usr/bin/python</span><br></pre></td></tr></table></figure>
-
-<h1 id="下載AOSP"><a href="#下載AOSP" class="headerlink" title="下載AOSP"></a>下載AOSP</h1><h2 id="1-安裝Repo"><a href="#1-安裝Repo" class="headerlink" title="1.安裝Repo"></a>1.安裝Repo</h2><p>參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/develop#installing-repo">https://source.android.com/setup/develop#installing-repo</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/bin</span><br><span class="line">curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo</span><br><span class="line">chmod a+x ~/bin/repo</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-初始化Repo"><a href="#2-初始化Repo" class="headerlink" title="2.初始化Repo"></a>2.初始化Repo</h2><p>參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/downloading#initializing-a-repo-client">https://source.android.com/setup/build/downloading#initializing-a-repo-client</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">建立資料夾，名稱自定，這裡命名為android</span></span><br><span class="line">mkdir android</span><br><span class="line">cd android</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">設置git的使用者名稱和email</span></span><br><span class="line">git config --global user.name $your_name</span><br><span class="line">git config --global user.email $your_email</span><br></pre></td></tr></table></figure>
-
-<p>選定AOSP版本和分支，如下圖這裡選擇的是android-7.1.0_r7，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/start/build-numbers#source-code-tags-and-builds">https://source.android.com/setup/start/build-numbers#source-code-tags-and-builds</a><br><img src="/assets/android_version.png"><br>Repo要用python3運行，但編譯時還是需要用到python2，因此透過python3去呼叫repo較合適。</p>
-<p>sync同步到本地，過程需要一些時間。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 ~/bin/repo init -u https://android.googlesource.com/platform/manifest -b android-7.1.0_r7</span><br><span class="line">python3 ~/bin/repo sync</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-可選-清空輸出資料夾"><a href="#3-可選-清空輸出資料夾" class="headerlink" title="3.(可選) 清空輸出資料夾"></a>3.(可選) 清空輸出資料夾</h2><p>清空out目錄</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m clean</span><br></pre></td></tr></table></figure>
-
-<h1 id="編譯AOSP"><a href="#編譯AOSP" class="headerlink" title="編譯AOSP"></a>編譯AOSP</h1><h2 id="1-初始化相關指令"><a href="#1-初始化相關指令" class="headerlink" title="1.初始化相關指令"></a>1.初始化相關指令</h2><p><em>每次重開指令視窗都要先呼叫，否則會找不到指令m和emulator。</em></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source build/envsetup.sh</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-選擇編譯目標"><a href="#2-選擇編譯目標" class="headerlink" title="2.選擇編譯目標"></a>2.選擇編譯目標</h2><p>參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/building#choose-a-target">https://source.android.com/setup/build/building#choose-a-target</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lunch aosp_arm-eng</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-開始編譯"><a href="#3-開始編譯" class="headerlink" title="3.開始編譯"></a>3.開始編譯</h2><p>使用m -jN指令來編譯，此處的N一般建議設置為cpu核心數的1-2倍，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/building#build-the-code">https://source.android.com/setup/build/building#build-the-code</a>	</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m -j8</span><br></pre></td></tr></table></figure>
-
-<p>在編譯期間，將防毒軟體關閉，可以增進檔案系統的效能。</p>
-<h2 id="4-錯誤處理"><a href="#4-錯誤處理" class="headerlink" title="4.錯誤處理"></a>4.錯誤處理</h2><h3 id="報錯-FAILED-x2F-bin-x2F-bash-c-“prebuilts-x2F-misc-x2F-linux-x86-x2F-flex-x2F-flex-2-5-39-oout-x2F-host-x2F-linux-x86-x2F-obj-x2F-STATIC-LIBRARIES-x2F-libaidl-common-intermediates-x2F-aidl-language-l-cpp-system-x2F-tools-x2F-aidl-x2F-aidl-language-l-ll”"><a href="#報錯-FAILED-x2F-bin-x2F-bash-c-“prebuilts-x2F-misc-x2F-linux-x86-x2F-flex-x2F-flex-2-5-39-oout-x2F-host-x2F-linux-x86-x2F-obj-x2F-STATIC-LIBRARIES-x2F-libaidl-common-intermediates-x2F-aidl-language-l-cpp-system-x2F-tools-x2F-aidl-x2F-aidl-language-l-ll”" class="headerlink" title="報錯: FAILED: &#x2F;bin&#x2F;bash -c “prebuilts&#x2F;misc&#x2F;linux-x86&#x2F;flex&#x2F;flex-2.5.39 -oout&#x2F;host&#x2F;linux-x86&#x2F;obj&#x2F;STATIC_LIBRARIES&#x2F;libaidl-common_intermediates&#x2F;aidl_language_l.cpp system&#x2F;tools&#x2F;aidl&#x2F;aidl_language_l.ll”"></a>報錯: FAILED: &#x2F;bin&#x2F;bash -c “prebuilts&#x2F;misc&#x2F;linux-x86&#x2F;flex&#x2F;flex-2.5.39 -oout&#x2F;host&#x2F;linux-x86&#x2F;obj&#x2F;STATIC_LIBRARIES&#x2F;libaidl-common_intermediates&#x2F;aidl_language_l.cpp system&#x2F;tools&#x2F;aidl&#x2F;aidl_language_l.ll”</h3><p>編譯前執行</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export LC_ALL=C</span><br></pre></td></tr></table></figure>
-
-<h3 id="報錯-SSL-error-when-connecting-to-the-Jack-server-Try-‘jack-diagnose’"><a href="#報錯-SSL-error-when-connecting-to-the-Jack-server-Try-‘jack-diagnose’" class="headerlink" title="報錯: SSL error when connecting to the Jack server. Try ‘jack-diagnose’"></a>報錯: SSL error when connecting to the Jack server. Try ‘jack-diagnose’</h3><p>修改&#x2F;etc&#x2F;java-8-openjdk&#x2F;security&#x2F;java.security，找到jdk.tls.disabledAlgorithms，取消TLSv1, TLSv1.1</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA, \</span><br><span class="line">    DH keySize &lt; 1024, EC keySize &lt; 224, 3DES_EDE_CBC, anon, NULL, \</span><br><span class="line">    include jdk.disabled.namedCurves</span><br></pre></td></tr></table></figure>
-
-<p>重啟jack服務</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./prebuilts/sdk/tools/jack-admin kill-server</span><br><span class="line">./prebuilts/sdk/tools/jack-admin start-server</span><br></pre></td></tr></table></figure>
-
-<h3 id="報錯-GC-overhead-limit-exceeded-Try-increasing-heap-size-with-java-option-‘-Xmx‘"><a href="#報錯-GC-overhead-limit-exceeded-Try-increasing-heap-size-with-java-option-‘-Xmx‘" class="headerlink" title="報錯: GC overhead limit exceeded. Try increasing heap size with java option ‘-Xmx‘."></a>報錯: GC overhead limit exceeded. Try increasing heap size with java option ‘-Xmx<size>‘.</h3><p>運行jack-server編譯AOSP需要3G的記憶體配置，若電腦總記憶體小於16G，會產生該錯誤，可使用以下指令查看可配置的記憶體大小。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -XshowSettings 2&gt;&amp;1 | grep Heap</span><br></pre></td></tr></table></figure>
-<p>例如在總記憶體8G的電腦輸出結果為1.77G，參考<a target="_blank" rel="noopener" href="https://2net.co.uk/blog/jack-server.html">https://2net.co.uk/blog/jack-server.html</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo vim ~/.bash_profile</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">最後一行加上</span></span><br><span class="line">export JACK_SERVER_VM_ARGUMENTS=&quot;-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4g&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">儲存並離開後</span></span><br><span class="line">source ~/.bash_profile</span><br></pre></td></tr></table></figure>
-
-<p>重啟jack服務</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./prebuilts/sdk/tools/jack-admin kill-server</span><br><span class="line">./prebuilts/sdk/tools/jack-admin start-server</span><br></pre></td></tr></table></figure>
-
-<h1 id="運行模擬器"><a href="#運行模擬器" class="headerlink" title="運行模擬器"></a>運行模擬器</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emulator</span><br></pre></td></tr></table></figure>
-<p>成功!</p>
-<h2 id="安裝KVM"><a href="#安裝KVM" class="headerlink" title="安裝KVM"></a>安裝KVM</h2><p>參考<a target="_blank" rel="noopener" href="https://developer.android.com/studio/run/emulator-acceleration#vm-linux-check-kvm">https://developer.android.com/studio/run/emulator-acceleration#vm-linux-check-kvm</a></p>
-<p>輸入以下指令查看CPU是否支持硬體虛擬化，如果輸出結果大於0表示支持；如果為0，則先去BIOS將功能打開，例如ASUS主機板選項為Intel 虛擬化技術。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安裝cpu-checker</span></span><br><span class="line">sudo apt-get install cpu-checker</span><br><span class="line">egrep -c &#x27;(vmx|svm)&#x27; /proc/cpuinfo</span><br></pre></td></tr></table></figure>
-<p>輸入以下指令查看KVM狀態</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo kvm-ok</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">成功</span></span><br><span class="line">INFO: /dev/kvm exists</span><br><span class="line">KVM acceleration can be used</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">失敗</span></span><br><span class="line">INFO: Your CPU does not support KVM extensions</span><br><span class="line">KVM acceleration can NOT be used</span><br></pre></td></tr></table></figure>
-<p>若結果為成功，接著輸入以下指令安裝KVM</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils</span><br></pre></td></tr></table></figure>
-
-<h1 id="可選-重置AOSP異動"><a href="#可選-重置AOSP異動" class="headerlink" title="(可選) 重置AOSP異動"></a>(可選) 重置AOSP異動</h1><p>參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/5012163/how-to-discard-changes-using-repo">https://stackoverflow.com/questions/5012163/how-to-discard-changes-using-repo</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重置異動</span></span><br><span class="line">python3 ~/bin/repo forall -vc &quot;git reset --hard&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">檢查異動</span></span><br><span class="line">python3 ~/bin/repo status</span><br></pre></td></tr></table></figure>
-
-<p><strong>參考資料</strong></p>
-<ol>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Master724/article/details/109388653">ubuntu 20.04 运行repo init 提示 &#x2F;usr&#x2F;bin&#x2F;env: ‘python’: No such file or directory 解决方案</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/c1a726adc4a1">Ubuntu18.04编译Android源码报[run_soong_ui] Error 1错误</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6af0bb7c1e70">Android FrameWork学习（一）Android 7.0系统源码下载\编译</a></li>
-<li><a target="_blank" rel="noopener" href="https://help.ubuntu.com/community/KVM/Installation">KVM&#x2F;Installation</a></li>
-<li><a target="_blank" rel="noopener" href="https://ubuntuqa.com/zh-tw/article/9834.html">如何在Ubuntu 18.04中安裝KVM和管理虛擬機</a></li>
-</ol>
-
+          <p>手把手 AOSP 編譯入門</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/02/15/ubuntu20-04-android7-1/#more" rel="contents">
+                閱讀全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -688,7 +695,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2023-07-09 15:23:12" itemprop="dateModified" datetime="2023-07-09T15:23:12+08:00">2023-07-09</time>
+                <time title="修改時間：2024-09-19 21:42:58" itemprop="dateModified" datetime="2024-09-19T21:42:58+08:00">2024-09-19</time>
               </span>
 
           
@@ -702,116 +709,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <span id="more"></span>
-<h1 id="可選-移動Ubuntu至其他硬碟"><a href="#可選-移動Ubuntu至其他硬碟" class="headerlink" title="(可選) 移動Ubuntu至其他硬碟"></a>(可選) 移動Ubuntu至其他硬碟</h1><p>Linux子系統預設安裝在主硬碟裡，編譯AOSP需要至少200G的空間，可能會發生主硬碟空間不足的問題，如果不會可跳過此步驟。</p>
-<h2 id="1-安裝choco"><a href="#1-安裝choco" class="headerlink" title="1.安裝choco"></a>1.安裝choco</h2><p>使用PowerShell輸入以下指令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString(‘https://chocolatey.org/install.ps1&#x27;)</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-安裝LxRunOffline"><a href="#2-安裝LxRunOffline" class="headerlink" title="2.安裝LxRunOffline"></a>2.安裝LxRunOffline</h2><p>使用PowerShell輸入以下指令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">choco install lxrunoffline</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-在另一個硬碟建資料夾並設置權限"><a href="#3-在另一個硬碟建資料夾並設置權限" class="headerlink" title="3.在另一個硬碟建資料夾並設置權限"></a>3.在另一個硬碟建資料夾並設置權限</h2><p>在D槽建立wsl資料夾，接著使用PowerShell輸入以下指令，來查看你的使用者名稱，例如我的輸出為usermark-pc\mike。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whoami</span><br></pre></td></tr></table></figure>
-
-<p>使用以下指令來開啟D:\wsl資料夾權限</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">icacls D:\wsl /grant &quot;usermark-pc\mike:(OI)(CI)(F)&quot;</span><br></pre></td></tr></table></figure>
-
-<h2 id="4-使用LxRunOffline來移動Linux子系統"><a href="#4-使用LxRunOffline來移動Linux子系統" class="headerlink" title="4.使用LxRunOffline來移動Linux子系統"></a>4.使用LxRunOffline來移動Linux子系統</h2><p>使用PowerShell輸入以下指令，來查看Linux子系統的名稱，例如我的輸出為Ubuntu。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl -l</span><br></pre></td></tr></table></figure>
-
-<p>使用以下指令移動</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lxrunoffline move -n Ubuntu -d D:\wsl\installed\Ubuntu</span><br></pre></td></tr></table></figure>
-
-<p>移動過程需要一些時間，完成後可用以下指令確認，輸出訊息會是d:\wsl\installed\Ubuntu</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lxrunoffline get-dir -n Ubuntu</span><br></pre></td></tr></table></figure>
-
-<h1 id="設置編譯環境"><a href="#設置編譯環境" class="headerlink" title="設置編譯環境"></a>設置編譯環境</h1><h2 id="1-安装JDK"><a href="#1-安装JDK" class="headerlink" title="1.安装JDK"></a>1.安装JDK</h2><p>使用bash輸入以下指令，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/older-versions#for-ubuntu-15-04">https://source.android.com/setup/build/older-versions#for-ubuntu-15-04</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install openjdk-8-jdk</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-安裝工具包"><a href="#2-安裝工具包" class="headerlink" title="2.安裝工具包"></a>2.安裝工具包</h2><p>使用bash輸入以下指令，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/initializing#installing-required-packages-ubuntu-1804">https://source.android.com/setup/build/initializing#installing-required-packages-ubuntu-1804</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install git-core gnupg flex bison build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 libncurses5 lib32ncurses5-dev x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-開啟大小寫敏感"><a href="#3-開啟大小寫敏感" class="headerlink" title="3.開啟大小寫敏感"></a>3.開啟大小寫敏感</h2><p>使用PowerShell輸入以下指令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fsutil.exe file setCaseSensitiveInfo D:\wsl enable</span><br></pre></td></tr></table></figure>
-
-<h1 id="下載AOSP"><a href="#下載AOSP" class="headerlink" title="下載AOSP"></a>下載AOSP</h1><h2 id="1-安裝Repo"><a href="#1-安裝Repo" class="headerlink" title="1.安裝Repo"></a>1.安裝Repo</h2><p>參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/develop#installing-repo">https://source.android.com/setup/develop#installing-repo</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir ~/bin</span><br><span class="line">curl https://storage.googleapis.com/git-repo-downloads/repo &gt; ~/bin/repo</span><br><span class="line">chmod a+x ~/bin/repo</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-初始化Repo"><a href="#2-初始化Repo" class="headerlink" title="2.初始化Repo"></a>2.初始化Repo</h2><p>參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/downloading#initializing-a-repo-client">https://source.android.com/setup/build/downloading#initializing-a-repo-client</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">建立資料夾，名稱自定，這裡命名為android</span></span><br><span class="line">mkdir android</span><br><span class="line">cd android</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">設置git的使用者名稱和email</span></span><br><span class="line">git config --global user.name $your_name</span><br><span class="line">git config --global user.email $your_email</span><br></pre></td></tr></table></figure>
-
-<p>選定AOSP版本和分支，如下圖這裡選擇的是android-7.1.0_r7，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/start/build-numbers#source-code-tags-and-builds">https://source.android.com/setup/start/build-numbers#source-code-tags-and-builds</a><br><img src="/assets/android_version.png"><br>Repo要用python3運行，但系統預設為python2，有解法是採用以下方案，將python指令指向python3指令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ln -s /usr/bin/python3 /usr/bin/python</span><br></pre></td></tr></table></figure>
-<p>repo sync時可以，但編譯時還是需要用到python2，就會出現該錯誤</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SyntaxError: Missing parentheses in call to &#x27;print&#x27;.</span><br></pre></td></tr></table></figure>
-<p>因此透過python3去呼叫repo較合適，系統預設則不去動。</p>
-<p>sync同步到本地，過程需要一些時間。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 ~/bin/repo init -u https://android.googlesource.com/platform/manifest -b android-7.1.0_r7</span><br><span class="line">python3 ~/bin/repo sync</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-可選-清空輸出資料夾"><a href="#3-可選-清空輸出資料夾" class="headerlink" title="3.(可選) 清空輸出資料夾"></a>3.(可選) 清空輸出資料夾</h2><p>清空out目錄</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m clean</span><br></pre></td></tr></table></figure>
-
-<h1 id="編譯AOSP"><a href="#編譯AOSP" class="headerlink" title="編譯AOSP"></a>編譯AOSP</h1><h2 id="1-初始化相關指令"><a href="#1-初始化相關指令" class="headerlink" title="1.初始化相關指令"></a>1.初始化相關指令</h2><p><em>每次重開指令視窗都要先呼叫，否則會找不到指令m和emulator。</em></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source build/envsetup.sh</span><br></pre></td></tr></table></figure>
-
-<h2 id="2-選擇編譯目標"><a href="#2-選擇編譯目標" class="headerlink" title="2.選擇編譯目標"></a>2.選擇編譯目標</h2><p>參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/building#choose-a-target">https://source.android.com/setup/build/building#choose-a-target</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lunch aosp_arm-eng</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-讓bash支持32位元運行"><a href="#3-讓bash支持32位元運行" class="headerlink" title="3.讓bash支持32位元運行"></a>3.讓bash支持32位元運行</h2><p>安裝qemu並設置binfmt</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install qemu-user-static</span><br><span class="line">sudo update-binfmts --install i386 /usr/bin/qemu-i386-static --magic &#x27;\x7fELF\x01\x01\x01\x03\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00\x03\x00\x01\x00\x00\x00&#x27; --mask &#x27;\xff\xff\xff\xff\xff\xff\xff\xfc\xff\xff\xff\xff\xff\xff\xff\xff\xf8\xff\xff\xff\xff\xff\xff\xff&#x27;</span><br></pre></td></tr></table></figure>
-<p>啟動服務</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service binfmt-support start</span><br></pre></td></tr></table></figure>
-<p><em>每次重開指令視窗都要先呼叫，否則會出現以下錯誤。</em></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prebuilts/misc/linux-x86/bison/bison: cannot execute binary file: Exec format error</span><br></pre></td></tr></table></figure>
-
-<h2 id="4-開始編譯"><a href="#4-開始編譯" class="headerlink" title="4.開始編譯"></a>4.開始編譯</h2><p>使用m -jN指令來編譯，此處的N一般建議設置為cpu核心數的1-2倍，參考<a target="_blank" rel="noopener" href="https://source.android.com/setup/build/building#build-the-code">https://source.android.com/setup/build/building#build-the-code</a>	</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m -j8</span><br></pre></td></tr></table></figure>
-
-<p>在編譯期間，將防毒軟體關閉，可以增進檔案系統的效能。</p>
-<h2 id="5-錯誤處理"><a href="#5-錯誤處理" class="headerlink" title="5.錯誤處理"></a>5.錯誤處理</h2><h3 id="報錯-ftruncate-fd-out-GetSize-Invalid-argument"><a href="#報錯-ftruncate-fd-out-GetSize-Invalid-argument" class="headerlink" title="報錯: ftruncate(fd_out, GetSize()): Invalid argument"></a>報錯: ftruncate(fd_out, GetSize()): Invalid argument</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd build/tools/ijar</span><br></pre></td></tr></table></figure>
-<p>修改zip.cc，註解935行如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">OutputZipFile::Finish</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (fd_out &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    WriteCentralDirectory();</span><br><span class="line">    <span class="comment">// if (ftruncate(fd_out, GetSize()) &lt; 0) &#123;</span></span><br><span class="line">    <span class="comment">//   return error(&quot;ftruncate(fd_out, GetSize()): %s&quot;, strerror(errno));</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    <span class="keyword">if</span> (close(fd_out) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> error(<span class="string">&quot;close(fd_out): %s&quot;</span>, strerror(errno));</span><br><span class="line">    &#125;</span><br><span class="line">    fd_out = <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>保存並編譯產生ijar</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -o ijar classfile.cc zip.cc ijar.cc -lz</span><br></pre></td></tr></table></figure>
-<p>強制替換ijar</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp -f ijar ../../../out/host/linux-x86/bin/ijar</span><br></pre></td></tr></table></figure>
-
-<h3 id="報錯-dex2oat-did-not-finish-after-2850-seconds"><a href="#報錯-dex2oat-did-not-finish-after-2850-seconds" class="headerlink" title="報錯: dex2oat did not finish after 2850 seconds"></a>報錯: dex2oat did not finish after 2850 seconds</h3><p>修改build&#x2F;core資料夾下的文件，$(DEX2OAT)後加上-j1參數</p>
-<p>dex_preopt_libart.mk</p>
-<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(hide)</span> ANDROID_LOG_TAGS=<span class="string">&quot;*:e&quot;</span> <span class="variable">$(DEX2OAT)</span> -j1 \</span><br><span class="line">	--runtime-arg -Xms<span class="variable">$(DEX2OAT_XMS)</span> --runtime-arg -Xmx<span class="variable">$(DEX2OAT_XMX)</span> \</span><br><span class="line">	--runtime-arg -classpath --runtime-arg <span class="variable">$(DEX2OAT_CLASSPATH)</span> </span><br></pre></td></tr></table></figure>
-
-<p>dex_preopt_libart_boot.mk</p>
-<figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$(hide)</span> ANDROID_LOG_TAGS=<span class="string">&quot;*:e&quot;</span> <span class="variable">$(DEX2OAT)</span> -j1 --runtime-arg -Xms<span class="variable">$(DEX2OAT_IMAGE_XMS)</span> \</span><br><span class="line">	--runtime-arg -Xmx<span class="variable">$(DEX2OAT_IMAGE_XMX)</span> \</span><br><span class="line">	--image-classes=<span class="variable">$(PRELOADED_CLASSES)</span> \</span><br></pre></td></tr></table></figure>
-
-<h3 id="報錯-SSL-error-when-connecting-to-the-Jack-server-Try-‘jack-diagnose’"><a href="#報錯-SSL-error-when-connecting-to-the-Jack-server-Try-‘jack-diagnose’" class="headerlink" title="報錯: SSL error when connecting to the Jack server. Try ‘jack-diagnose’"></a>報錯: SSL error when connecting to the Jack server. Try ‘jack-diagnose’</h3><p>修改&#x2F;etc&#x2F;java-8-openjdk&#x2F;security&#x2F;java.security，找到jdk.tls.disabledAlgorithms，取消TLSv1, TLSv1.1</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jdk.tls.disabledAlgorithms=SSLv3, RC4, DES, MD5withRSA, \</span><br><span class="line">    DH keySize &lt; 1024, EC keySize &lt; 224, 3DES_EDE_CBC, anon, NULL, \</span><br><span class="line">    include jdk.disabled.namedCurves</span><br></pre></td></tr></table></figure>
-
-<p>重啟jack服務</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./prebuilts/sdk/tools/jack-admin kill-server</span><br><span class="line">./prebuilts/sdk/tools/jack-admin start-server</span><br></pre></td></tr></table></figure>
-
-<h3 id="報錯-GC-overhead-limit-exceeded-Try-increasing-heap-size-with-java-option-‘-Xmx‘"><a href="#報錯-GC-overhead-limit-exceeded-Try-increasing-heap-size-with-java-option-‘-Xmx‘" class="headerlink" title="報錯: GC overhead limit exceeded. Try increasing heap size with java option ‘-Xmx‘."></a>報錯: GC overhead limit exceeded. Try increasing heap size with java option ‘-Xmx<size>‘.</h3><p>運行jack-server編譯AOSP需要3G的記憶體配置，若電腦總記憶體小於16G，會產生該錯誤，可使用以下指令查看可配置的記憶體大小。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -XshowSettings 2&gt;&amp;1 | grep Heap</span><br></pre></td></tr></table></figure>
-<p>例如在總記憶體8G的電腦輸出結果為1.77G，參考<a target="_blank" rel="noopener" href="https://2net.co.uk/blog/jack-server.html">https://2net.co.uk/blog/jack-server.html</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo vim ~/.bash_profile</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">最後一行加上</span></span><br><span class="line">export JACK_SERVER_VM_ARGUMENTS=&quot;-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4g&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">儲存並離開後</span></span><br><span class="line">source ~/.bash_profile</span><br></pre></td></tr></table></figure>
-
-<p>重啟jack服務</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./prebuilts/sdk/tools/jack-admin kill-server</span><br><span class="line">./prebuilts/sdk/tools/jack-admin start-server</span><br></pre></td></tr></table></figure>
-
-<h1 id="運行模擬器"><a href="#運行模擬器" class="headerlink" title="運行模擬器"></a>運行模擬器</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emulator</span><br></pre></td></tr></table></figure>
-<p>因為wsl為指令模式，沒視窗可顯示，會出現下列錯誤。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SDL init failure, reason is: No available video device</span><br></pre></td></tr></table></figure>
-
-<h1 id="可選-重置AOSP異動"><a href="#可選-重置AOSP異動" class="headerlink" title="(可選) 重置AOSP異動"></a>(可選) 重置AOSP異動</h1><p>參考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/5012163/how-to-discard-changes-using-repo">https://stackoverflow.com/questions/5012163/how-to-discard-changes-using-repo</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重置異動</span></span><br><span class="line">python3 ~/bin/repo forall -vc &quot;git reset --hard&quot;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">檢查異動</span></span><br><span class="line">python3 ~/bin/repo status</span><br></pre></td></tr></table></figure>
-
-<p><strong>參考資料</strong></p>
-<ol>
-<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/tangjie134/article/details/102796330">Ubuntu18.04 (WSL) 编译RK3399 Android8.1源码</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6af0bb7c1e70">Android FrameWork学习（一）Android 7.0系统源码下载\编译</a></li>
-<li><a target="_blank" rel="noopener" href="https://c55jeremy-tech.blogspot.com/2019/04/aosppixel-2-romrom.html">完整指引如何編譯AOSP (Build Android P)，整合GMS及刷機 (Pixel 2)</a></li>
-<li><a target="_blank" rel="noopener" href="https://medium.com/@chenwy0806/%E5%9C%A8-windows-10-%E4%B8%8A%E9%81%8B%E8%A1%8C-ubuntu-linux-%E5%AD%90%E7%B3%BB%E7%B5%B1%E4%B8%A6%E5%B0%87%E7%B3%BB%E7%B5%B1%E7%A7%BB%E5%8B%95%E8%87%B3%E5%85%B6%E4%BB%96%E7%A1%AC%E7%A2%9F-57e8faaa3e04">在 Windows 10 上運行 Ubuntu Linux 子系統並將系統移動至其他硬碟</a></li>
-</ol>
-
+          <p>手把手 AOSP 編譯入門，使用 Windows 環境操作。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/02/05/ubuntu18-04-wsl-android7-1/#more" rel="contents">
+                閱讀全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1024,7 +930,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2022-07-03 19:23:59" itemprop="dateModified" datetime="2022-07-03T19:23:59+08:00">2022-07-03</time>
+                <time title="修改時間：2024-09-18 19:24:17" itemprop="dateModified" datetime="2024-09-18T19:24:17+08:00">2024-09-18</time>
               </span>
 
           
@@ -1038,111 +944,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <span id="more"></span>
-<h1 id="adb-forward"><a href="#adb-forward" class="headerlink" title="adb forward"></a>adb forward</h1><p>轉發PC端4000端口到手機的9999端口</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb forward tcp:4000 tcp:9999</span><br></pre></td></tr></table></figure>
-<p>查看是否轉發成功</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb forward --list</span><br></pre></td></tr></table></figure>
-
-<h2 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h2><p>Android建立server socket</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">SocketThread</span> <span class="keyword">extends</span> <span class="title class_">Thread</span> &#123;</span><br><span class="line">    ServerSocket serverSocket;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">byte</span>[] buffer = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>];</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            serverSocket = <span class="keyword">new</span> <span class="title class_">ServerSocket</span>(<span class="number">9999</span>);</span><br><span class="line">            Log.d(<span class="string">&quot;Mike&quot;</span>, <span class="string">&quot;socket open&quot;</span>);</span><br><span class="line">            <span class="type">Socket</span> <span class="variable">clientSocket</span> <span class="operator">=</span> serverSocket.accept(); <span class="comment">// 此處會阻塞等待</span></span><br><span class="line">            Log.d(<span class="string">&quot;Mike&quot;</span>, <span class="string">&quot;socket accept&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="type">InputStream</span> <span class="variable">is</span> <span class="operator">=</span> clientSocket.getInputStream();</span><br><span class="line">            <span class="type">OutputStream</span> <span class="variable">os</span> <span class="operator">=</span> clientSocket.getOutputStream();</span><br><span class="line">            <span class="keyword">while</span> (!isInterrupted()) &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> is.read(buffer);</span><br><span class="line">                <span class="keyword">if</span> (len &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    os.write((<span class="string">&quot;echo &quot;</span> + <span class="keyword">new</span> <span class="title class_">String</span>(buffer, <span class="number">0</span>, len)).getBytes());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        Log.d(<span class="string">&quot;Mike&quot;</span>, <span class="string">&quot;socket end&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (serverSocket != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                interrupt();</span><br><span class="line">                serverSocket.close();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>PC端用python建立client socket</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">client.connect((socket.gethostname(), <span class="number">4000</span>))</span><br><span class="line">client.send(<span class="string">b&#x27;Hello&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(client.recv(<span class="number">1024</span>))</span><br></pre></td></tr></table></figure>
-
-<h1 id="adb通道"><a href="#adb通道" class="headerlink" title="adb通道"></a>adb通道</h1><p>adb server啟動以後，在本地的5037端口監聽。adb client通過本地的隨機端口與5037端口建立連接。<br>在這個通道上，client向server發送的命令都遵循如下格式：</p>
-<ol>
-<li>命令的長度(Length)，由四位的十六進製表示</li>
-<li>實際的命令(Payload)，通過ASCII編碼</li>
-</ol>
-<p>譬如，查看adb當前的版本，client會發起如下命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">000Chost:version</span><br></pre></td></tr></table></figure>
-<p>000C表示”host:version”這條命令的長度為12個字節。命令中使用了host前綴，目的是為了區分其他類型的命令，host前綴的命令可以理解為只在client與server這個數據通道上存在。</p>
-<p>server收到client的請求後，返回的數據遵循如下格式：</p>
-<ol>
-<li>如果成功，則返回四個字節的字符串”OKAY”</li>
-<li>如果失敗，則返回四個字節的字符串”FAIL”和出錯原因</li>
-<li>如果異常，則返回錯誤碼</li>
-</ol>
-<p>當Client收到Server返回的”OKAY”後，就可以發繼續發起其他操作命令了。</p>
-<p>當與server建立第一個通道的連接後，需要向server發送transport命令，表示接下來，要與adbd進行數據傳輸。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">host:transport:&lt;serial-number&gt;</span><br></pre></td></tr></table></figure>
-<p>當server返回“OKAY”後，client後續發送的數據，就直接傳輸到adbd了。</p>
-<h2 id="範例-1"><a href="#範例-1" class="headerlink" title="範例"></a>範例</h2><p>Android建立server socket</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">SocketThread</span> <span class="keyword">extends</span> <span class="title class_">Thread</span> &#123;</span><br><span class="line">    LocalServerSocket serverSocket;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">byte</span>[] buffer = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>];</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            serverSocket = <span class="keyword">new</span> <span class="title class_">LocalServerSocket</span>(<span class="string">&quot;test&quot;</span>);</span><br><span class="line">            Log.d(<span class="string">&quot;Mike&quot;</span>, <span class="string">&quot;socket open&quot;</span>);</span><br><span class="line">            <span class="type">LocalSocket</span> <span class="variable">clientSocket</span> <span class="operator">=</span> serverSocket.accept(); <span class="comment">// 此處會阻塞等待</span></span><br><span class="line">            Log.d(<span class="string">&quot;Mike&quot;</span>, <span class="string">&quot;socket accept&quot;</span>);</span><br><span class="line"></span><br><span class="line">            <span class="type">InputStream</span> <span class="variable">is</span> <span class="operator">=</span> clientSocket.getInputStream();</span><br><span class="line">            <span class="type">OutputStream</span> <span class="variable">os</span> <span class="operator">=</span> clientSocket.getOutputStream();</span><br><span class="line">            <span class="keyword">while</span> (!isInterrupted()) &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> is.read(buffer);</span><br><span class="line">                <span class="keyword">if</span> (len &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                    os.write((<span class="string">&quot;echo &quot;</span> + <span class="keyword">new</span> <span class="title class_">String</span>(buffer, <span class="number">0</span>, len)).getBytes());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        Log.d(<span class="string">&quot;Mike&quot;</span>, <span class="string">&quot;socket end&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (serverSocket != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                interrupt();</span><br><span class="line">                <span class="comment">// 與ServerSocket不同，close不會中斷accept，需用假的連上來跳過</span></span><br><span class="line">                <span class="type">LocalSocket</span> <span class="variable">mockSocket</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LocalSocket</span>();</span><br><span class="line">                mockSocket.connect(serverSocket.getLocalSocketAddress());</span><br><span class="line">                serverSocket.close();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>PC端用python建立client socket</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line"><span class="comment"># 當socket關閉後，本地端用於該socket的端口就可以立刻被重用</span></span><br><span class="line">client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)</span><br><span class="line">client.connect((socket.gethostname(), <span class="number">5037</span>))</span><br><span class="line"></span><br><span class="line">transport = <span class="string">&#x27;host:transport:192.168.2.131:5555&#x27;</span></span><br><span class="line">client.send(<span class="built_in">bytes</span>(<span class="string">&#x27;%0.4X&#x27;</span> % <span class="built_in">len</span>(transport) + transport, <span class="string">&#x27;ascii&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(client.recv(<span class="number">4</span>))</span><br><span class="line">client.send(<span class="string">b&#x27;0012localabstract:test&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(client.recv(<span class="number">4</span>))</span><br><span class="line">client.send(<span class="string">b&#x27;Hello&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(client.recv(<span class="number">1024</span>))</span><br></pre></td></tr></table></figure>
-
-<p>參考<a target="_blank" rel="noopener" href="https://duanqz.github.io/2015-05-21-Intro-adb">https://duanqz.github.io/2015-05-21-Intro-adb</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
-    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2020/08/29/python-tkinter/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Mike Chen">
-      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mike的筆記">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/08/29/python-tkinter/" class="post-title-link" itemprop="url">[Python] Tkinter</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">發表於</span>
-
-              <time title="創建時間：2020-08-29 13:43:00" itemprop="dateCreated datePublished" datetime="2020-08-29T13:43:00+08:00">2020-08-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2024-08-10 07:41:37" itemprop="dateModified" datetime="2024-08-10T07:41:37+08:00">2024-08-10</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>tkinter 是 python 內建的 GUI。</p>
+          <p>了解 adb 背後原理和運用。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/08/29/python-tkinter/#more" rel="contents">
+              <a class="btn" href="/2021/06/04/android-adb-forward/#more" rel="contents">
                 閱讀全文 &raquo;
               </a>
             </div>
@@ -1231,14 +1036,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-count">36</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>

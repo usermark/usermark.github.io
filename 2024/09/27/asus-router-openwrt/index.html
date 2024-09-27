@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="想加強家裡的 WiFi 安全性，改用 WPA3 加密協議，發現 WiFi安全 | 你還在用WPA2嗎？如何免費爲路由器升級WPA3加密協議 這篇文章介紹，竟然可以不用花錢就升級，立馬翻出家裡許久未使用的 ASUS 路由器升級一番。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[OpenWrt] ASUS RT-N12+ B1 路由器刷機">
+<meta property="og:url" content="https://usermark.github.io/2024/09/27/asus-router-openwrt/index.html">
+<meta property="og:site_name" content="Mike的筆記">
+<meta property="og:description" content="想加強家裡的 WiFi 安全性，改用 WPA3 加密協議，發現 WiFi安全 | 你還在用WPA2嗎？如何免費爲路由器升級WPA3加密協議 這篇文章介紹，竟然可以不用花錢就升級，立馬翻出家裡許久未使用的 ASUS 路由器升級一番。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://usermark.github.io/assets/asus_router.jpg">
+<meta property="og:image" content="https://usermark.github.io/assets/asus_router2.jpg">
+<meta property="og:image" content="https://usermark.github.io/assets/asus_router3.jpg">
+<meta property="og:image" content="https://usermark.github.io/assets/asus_router_ttl.jpg">
+<meta property="og:image" content="https://usermark.github.io/assets/asus_router_ttl2.jpg">
+<meta property="og:image" content="https://usermark.github.io/assets/putty_serial.png">
+<meta property="og:image" content="https://usermark.github.io/assets/home_net_lan.png">
+<meta property="og:image" content="https://usermark.github.io/assets/pc_lan.png">
+<meta property="og:image" content="https://usermark.github.io/assets/tftp32.png">
+<meta property="og:image" content="https://usermark.github.io/assets/openwrt_login.png">
+<meta property="article:published_time" content="2024-09-27T14:59:45.000Z">
+<meta property="article:modified_time" content="2024-09-27T15:00:00.416Z">
+<meta property="article:author" content="Mike Chen">
+<meta property="article:tag" content="OpenWrt">
+<meta property="article:tag" content="WPA3">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://usermark.github.io/assets/asus_router.jpg">
+
+<link rel="canonical" href="https://usermark.github.io/2024/09/27/asus-router-openwrt/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[OpenWrt] ASUS RT-N12+ B1 路由器刷機 | Mike的筆記</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mike的筆記</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2024/09/27/asus-router-openwrt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [OpenWrt] ASUS RT-N12+ B1 路由器刷機
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2024-09-27 22:59:45 / 修改時間：23:00:00" itemprop="dateCreated datePublished" datetime="2024-09-27T22:59:45+08:00">2024-09-27</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="閱讀次數" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">閱讀次數：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>想加強家裡的 WiFi 安全性，改用 WPA3 加密協議，發現 <a target="_blank" rel="noopener" href="https://upsangel.com/security/how-to-free-upgrade-to-wpa3/">WiFi安全 | 你還在用WPA2嗎？如何免費爲路由器升級WPA3加密協議</a> 這篇文章介紹，竟然可以不用花錢就升級，立馬翻出家裡許久未使用的 ASUS 路由器升級一番。</p>
+<span id="more"></span>
+
+<p>查看 <a target="_blank" rel="noopener" href="https://openwrt.org/toh/start">OpenWrt 支援列表</a>，手邊的 ASUS RT-N12+ B1 正好有符合條件。</p>
+<p><img src="/assets/asus_router.jpg"></p>
+<h1 id="拆解"><a href="#拆解" class="headerlink" title="拆解"></a>拆解</h1><p>從靠近燈號的地方撬開<br><img src="/assets/asus_router2.jpg"></p>
+<p>找到 TTL 接腳 (紅框中)，從左往右分別是 VCC, RX ,TX, GND<br><img src="/assets/asus_router3.jpg"></p>
+<h1 id="接上-USB-轉-TTL-的晶片"><a href="#接上-USB-轉-TTL-的晶片" class="headerlink" title="接上 USB 轉 TTL 的晶片"></a>接上 USB 轉 TTL 的晶片</h1><p><img src="/assets/asus_router_ttl.jpg"></p>
+<p>焊接技術沒有很好，用針灸的方式一根根焊在上面，再接上 USB 轉 TTL 的晶片，我用的是 CP2102。VCC 不用接，GND 接主板的 GND，RXD 接主板的 TX，TXD 接主板的 RX。<br><img src="/assets/asus_router_ttl2.jpg"></p>
+<p>接上電腦後，打開 Putty 建立連線，再打開路由器，就可以看到 uboot 的啟動資訊囉。<br>波特率多少視設備而定，若出現的是亂碼表示不對，這邊是用 57600。<br><img src="/assets/putty_serial.png"></p>
+<p>完整的啟動資訊像這樣</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">U-Boot 1.1.8 (Dec  7 2017 - 13:23:42)</span><br><span class="line"></span><br><span class="line">ASUS PRODUCT bootloader version: 1.0.0.3</span><br><span class="line">Board: Ralink APSoC DRAM:  32 MB</span><br><span class="line">ASUS ASUS PRODUCT gpio init : reset pin</span><br><span class="line">flash manufacture <span class="built_in">id</span>: ef, device <span class="built_in">id</span> 40 17</span><br><span class="line">find flash: W25Q64BV</span><br><span class="line">raspi_read: from:40035 len:1</span><br><span class="line">raspi_read: from:40036 len:1</span><br><span class="line">raspi_read: from:30000 len:1000</span><br><span class="line">Maximum malloc length: 1024 KBytes</span><br><span class="line">mem_malloc_start/brk/end: 0x81eb3000/81eb5000/81fb4000</span><br><span class="line">*** Warning - bad CRC, using default environment</span><br><span class="line"></span><br><span class="line">============================================</span><br><span class="line">Ralink UBoot Version: 4.3.0.0</span><br><span class="line">--------------------------------------------</span><br><span class="line">ASIC 7628_MP (Port5&lt;-&gt;None)</span><br><span class="line">DRAM component: 256 Mbits DDR, width 16</span><br><span class="line">DRAM bus: 16 bit</span><br><span class="line">Total memory: 32 MBytes</span><br><span class="line">Flash component: SPI Flash</span><br><span class="line">Date:Dec  7 2017  Time:13:23:42</span><br><span class="line">============================================</span><br><span class="line">icache: sets:512, ways:4, linesz:32 ,total:65536</span><br><span class="line">dcache: sets:256, ways:4, linesz:32 ,total:32768</span><br><span class="line">RESET MT7628 PHY!!!!!!</span><br><span class="line">Please choose the operation:</span><br><span class="line">   0: Load System code <span class="keyword">then</span> write to Flash via Serial.</span><br><span class="line">   1: Load System code to SDRAM via TFTP.</span><br><span class="line">   2: Load System code <span class="keyword">then</span> write to Flash via TFTP.</span><br><span class="line">   3: Boot System code via Flash (default).</span><br><span class="line">   4: Entr boot <span class="built_in">command</span> line interface.</span><br><span class="line">   7: Load Boot Loader code <span class="keyword">then</span> write to Flash via Serial.</span><br><span class="line">   9: Load Boot Loader code <span class="keyword">then</span> write to Flash via TFTP.                    0</span><br><span class="line"></span><br><span class="line">3: System Boot System code via Flash.</span><br><span class="line">raspi_read: from:4018a len:4</span><br><span class="line"></span><br><span class="line">ASUS PRODUCT bootloader version: 1.0.0.3</span><br><span class="line">raspi_read: from:40004 len:6</span><br><span class="line">MAC Address: XX:XX:XX:XX:XX:XX</span><br><span class="line">raspi_read: from:40004 len:6</span><br><span class="line"></span><br><span class="line"><span class="comment">## Checking 1st firmware at bc050000 ...</span></span><br><span class="line">raspi_read: from:50000 len:40</span><br><span class="line">   Image Name:</span><br><span class="line">   Image Type:   MIPS Linux Kernel Image (lzma compressed)</span><br><span class="line">   Data Size:    7628444 Bytes =  7.3 MB</span><br><span class="line">   Load Address: 80000000</span><br><span class="line">   Entry Point:  8000c150</span><br><span class="line">raspi_read: from:50040 len:74669c</span><br><span class="line">   Verifying Checksum ... OK</span><br><span class="line">   Uncompressing Kernel Image ... OK</span><br><span class="line"><span class="comment">## Giving linux ramsize: 33554432 (32 MB)</span></span><br><span class="line"></span><br><span class="line">Starting kernel ...</span><br></pre></td></tr></table></figure>
+
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>因為以前有用過這台路由器，其 IP 為 192.168.3.1。建議網路配置簡單些，只讓路由器的 LAN 孔接電腦，WAN 孔不接。<br><img src="/assets/home_net_lan.png"></p>
+<p>電腦的 IP 改為 192.168.3.2。<br><img src="/assets/pc_lan.png"></p>
+<p>重啟路由器，並選擇 4: System Enter Boot Command Line Interface.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">4: System Enter Boot Command Line Interface.</span><br><span class="line"></span><br><span class="line">U-Boot 1.1.8 (Dec  7 2017 - 13:23:42)</span><br><span class="line">MT7628 <span class="comment"># printenv</span></span><br><span class="line">bootcmd=tftp</span><br><span class="line">bootdelay=2</span><br><span class="line">baudrate=57600</span><br><span class="line">ethaddr=<span class="string">&quot;00:AA:BB:CC:DD:10&quot;</span></span><br><span class="line">ipaddr=192.168.1.1</span><br><span class="line">serverip=192.168.1.75</span><br><span class="line">stdin=serial</span><br><span class="line">stdout=serial</span><br><span class="line">stderr=serial</span><br></pre></td></tr></table></figure>
+
+<p>輸入 printenv 查看當前環境配置，輸入下方指令做修改</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setenv ipaddr 192.168.3.1</span><br><span class="line">setenv serverip 192.168.3.2</span><br><span class="line">saveenv</span><br></pre></td></tr></table></figure>
+
+<h1 id="燒錄"><a href="#燒錄" class="headerlink" title="燒錄"></a>燒錄</h1><p>打開 Tftpd32，並設定 Current Directory 為 bin 檔所在目錄。<br><img src="/assets/tftp32.png"></p>
+<p>重啟路由器，並選擇 2: Load System code then write to Flash via TFTP.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2: System Load System code <span class="keyword">then</span> write to Flash via TFTP.</span><br><span class="line"> Warning!! Erase Linux <span class="keyword">in</span> Flash <span class="keyword">then</span> burn new one. Are you sure?(Y/N)</span><br><span class="line">Please Input new ones /or Ctrl-C to discard</span><br><span class="line">   Input device IP (192.168.3.1) ==:192.168.3.1</span><br><span class="line">   Input server IP (192.168.3.2) ==:192.168.3.2</span><br><span class="line">   Input Linux Kernel filename () ==:openwrt-22.03.7-ramips-mt76x8-asus_rt-n11p-b1-squashfs-sysupgrade.bin</span><br></pre></td></tr></table></figure>
+
+<p>按下 Enter 鍵後，等待檔案上傳並執行，直到看到下面 OpenWrt 的啟動資訊表示刷機成功囉！</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">BusyBox v1.35.0 (2024-07-15 22:25:54 UTC) built-in shell (ash)</span><br><span class="line"></span><br><span class="line">  _______                     ________        __</span><br><span class="line"> |       |.-----.-----.-----.|  |  |  |.----.|  |_</span><br><span class="line"> |   -   ||  _  |  -__|     ||  |  |  ||   _||   _|</span><br><span class="line"> |_______||   __|_____|__|__||________||__|  |____|</span><br><span class="line">          |__| W I R E L E S S   F R E E D O M</span><br><span class="line"> -----------------------------------------------------</span><br><span class="line"> OpenWrt 22.03.7, r20341-591b7e93d3</span><br><span class="line"> -----------------------------------------------------</span><br><span class="line">=== WARNING! =====================================</span><br><span class="line">There is no root password defined on this device!</span><br><span class="line">Use the <span class="string">&quot;passwd&quot;</span> <span class="built_in">command</span> to <span class="built_in">set</span> up a new password</span><br><span class="line"><span class="keyword">in</span> order to prevent unauthorized SSH logins.</span><br><span class="line">--------------------------------------------------</span><br><span class="line">root@(none):/<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<p>OpenWrt 的初始 IP 為 192.168.1.1，所以要修改電腦的 IP 為 192.168.1.2。<br>便可用瀏覽器查看 <a target="_blank" rel="noopener" href="http://192.168.1.1/">http://192.168.1.1</a></p>
+<p><img src="/assets/openwrt_login.png"></p>
+<p>預設是沒有密碼的，直接登入即可，所以第一件事是先去改密碼。</p>
+<p><strong>參考資料</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://x14006.pixnet.net/blog/post/231291799">[分享] ASUS RT-AC51U 無線路由器 拆解</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.spirithy.com/2016/09/18/netgear4300-ttl-flash/">网件(NETGEAR)wndr4300 TTL线刷救砖记</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.elelab.net/use-tftpd32-ttl-write-u-boot.html">使用TFTP和TTL在U-BOOT烧写路由内核 刷机 救砖 基于IPQ4019</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.openwrt.pro/post-239.html">XiaomiRouter自学之路(08-U-boot启动数值具体说明)</a></li>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000011763301">OpenWrt：通过tftp下载程序</a></li>
+<li><a target="_blank" rel="noopener" href="https://ypw.io/WRTnode%202R%20%E6%95%91%E7%A0%96%E6%95%99%E7%A8%8B/">WRTnode 2R 救砖教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.jks.coffee/flashing-openwrt-firmware-asus-rt-ac58u-router/">刷 OpenWRT 韌體刷機記錄 – 華碩 ASUS RT-AC58U 路由器</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/OpenWrt/" rel="tag"># OpenWrt</a>
+              <a href="/tags/WPA3/" rel="tag"># WPA3</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/07/27/rasppi-webcam-impl/" rel="prev" title="[Raspberry Pi] WebCam實作">
+      <i class="fa fa-chevron-left"></i> [Raspberry Pi] WebCam實作
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%86%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">拆解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%A5%E4%B8%8A-USB-%E8%BD%89-TTL-%E7%9A%84%E6%99%B6%E7%89%87"><span class="nav-number">2.</span> <span class="nav-text">接上 USB 轉 TTL 的晶片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%87%92%E9%8C%84"><span class="nav-number">4.</span> <span class="nav-text">燒錄</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mike Chen</p>
+  <div class="site-description" itemprop="description">現居高雄，熟悉 Android 和 Python 開發，有九年以上程式開發經驗，喜歡學習新事物和閱讀。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/usermark" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;usermark" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:trexcobras@gmail.com" title="E-Mail → mailto:trexcobras@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- sidebar -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="1915238009"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mike Chen</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="訪客總數">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="總瀏覽次數">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'fe34fe28201c28ecaca2',
+      clientSecret: '6b0f055d80dc258148f06400ce27502351d56921',
+      repo        : 'usermark.github.io',
+      owner       : 'usermark',
+      admin       : ['usermark'],
+      id          : 'c7d904d0803a2ea7aec8fae3ce503c6a',
+        language: 'zh-TW',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

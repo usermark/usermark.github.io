@@ -32,6 +32,7 @@
 <meta property="og:image" content="https://usermark.github.io/assets/idf_2.png">
 <meta property="og:image" content="https://usermark.github.io/assets/idf_3.png">
 <meta property="og:image" content="https://usermark.github.io/assets/idf_4.png">
+<meta property="og:image" content="https://usermark.github.io/assets/esp32cam.jpg">
 <meta property="og:image" content="https://usermark.github.io/assets/com_search.png">
 <meta property="og:image" content="https://usermark.github.io/assets/bootloader_bin.png">
 <meta property="og:image" content="https://usermark.github.io/assets/idf_5.png">
@@ -39,7 +40,7 @@
 <meta property="og:image" content="https://usermark.github.io/assets/idf_6.png">
 <meta property="og:image" content="https://usermark.github.io/assets/cam_view.jpg">
 <meta property="article:published_time" content="2024-05-24T01:06:05.000Z">
-<meta property="article:modified_time" content="2024-05-26T08:52:14.819Z">
+<meta property="article:modified_time" content="2024-09-26T13:00:55.067Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="IOT">
 <meta property="article:tag" content="ESP32">
@@ -205,7 +206,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2024-05-26 16:52:14" itemprop="dateModified" datetime="2024-05-26T16:52:14+08:00">2024-05-26</time>
+                <time title="修改時間：2024-09-26 21:00:55" itemprop="dateModified" datetime="2024-09-26T21:00:55+08:00">2024-09-26</time>
               </span>
 
           
@@ -274,7 +275,8 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Project build complete. To flash, run this command:</span><br><span class="line">C:\Users\XXX\.espressif\python_env\idf4.0_py3.7_env\Scripts\python.exe ..\..\..\esp-idf\components\esptool_py\esptool\esptool.py -p (PORT) -b 460800 --before default_reset --after hard_reset write_flash --flash_mode dio --flash_size detect --flash_freq 80m 0x1000 build\bootloader\bootloader.bin 0x8000 build\partition_table\partition-table.bin 0x10000 build\camera_web_server.bin</span><br><span class="line">or run &#x27;idf.py -p (PORT) flash&#x27;</span><br></pre></td></tr></table></figure>
 
 <p>直到出現這幾行表示編譯成功，就可以開始接上ESP32-CAM做燒錄。</p>
-<h1 id="燒錄"><a href="#燒錄" class="headerlink" title="燒錄"></a>燒錄</h1><p>先至裝置管理員查看連接埠，設備對接口為COM6<br><img src="/assets/com_search.png"></p>
+<h1 id="燒錄"><a href="#燒錄" class="headerlink" title="燒錄"></a>燒錄</h1><p><img src="/assets/esp32cam.jpg"></p>
+<p>先至裝置管理員查看連接埠，設備對接口為COM6<br><img src="/assets/com_search.png"></p>
 <p>輸入指令做燒錄</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">idf.py -p COM6 flash</span><br></pre></td></tr></table></figure>
 
@@ -290,7 +292,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Leaving...</span><br><span class="line">Hard resetting via RTS pin...</span><br><span class="line">Done</span><br></pre></td></tr></table></figure>
 
 <h1 id="測試"><a href="#測試" class="headerlink" title="測試"></a>測試</h1><p>輸入指令做監控</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">idf.py monitor</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">idf.py monitor -p COM6</span><br></pre></td></tr></table></figure>
 
 <p>若發現log一直重複出現，並且有看到這行</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Brownout detector was triggered</span><br></pre></td></tr></table></figure>
@@ -403,14 +405,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-count">36</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>

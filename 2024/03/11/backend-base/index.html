@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://usermark.github.io/assets/VM_vs_Containers.png">
 <meta property="article:published_time" content="2024-03-11T07:17:57.000Z">
-<meta property="article:modified_time" content="2024-04-05T02:12:09.886Z">
+<meta property="article:modified_time" content="2024-09-18T11:24:17.270Z">
 <meta property="article:author" content="Mike Chen">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://usermark.github.io/assets/VM_vs_Containers.png">
@@ -193,7 +193,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2024-04-05 10:12:09" itemprop="dateModified" datetime="2024-04-05T10:12:09+08:00">2024-04-05</time>
+                <time title="修改時間：2024-09-18 19:24:17" itemprop="dateModified" datetime="2024-09-18T19:24:17+08:00">2024-09-18</time>
               </span>
 
           
@@ -216,18 +216,26 @@
       
         <p>接觸後端開發後，發現基礎沒打好，根本是新的世界，一些專有名詞都不懂，查完後彙整於此。</p>
 <span id="more"></span>
+
 <h1 id="TLS"><a href="#TLS" class="headerlink" title="TLS"></a>TLS</h1><p>Netscape 開發了名為安全通訊端層（Secure Socket Layer，SSL）的上一代加密協議，TLS 由此演變而來。</p>
 <p>參考 <a target="_blank" rel="noopener" href="https://www.cloudflare.com/zh-tw/learning/ssl/transport-layer-security-tls/">什麼是 TLS（傳輸層安全性）？</a></p>
+<h1 id="自簽憑證-Self-Signed-Certificate"><a href="#自簽憑證-Self-Signed-Certificate" class="headerlink" title="自簽憑證 (Self-Signed Certificate)"></a>自簽憑證 (Self-Signed Certificate)</h1><p>可以使用 <a target="_blank" rel="noopener" href="https://blog.miniasp.com/post/2019/02/25/Creating-Self-signed-Certificate-using-OpenSSL">OpenSSL 建立自簽憑證</a>，或是使用免費憑證。<a target="_blank" rel="noopener" href="https://letsencrypt.org/zh-tw/">Let’s encrypt</a>是一家推出免費 SSL 認證服務的數位憑證機構。</p>
 <h1 id="Cipher-suite"><a href="#Cipher-suite" class="headerlink" title="Cipher suite"></a>Cipher suite</h1><p>使用在 TLS 時的演算法集合名稱。</p>
 <p>參考 <a target="_blank" rel="noopener" href="https://rickhw.github.io/2021/08/20/ComputerScience/HTTPS-TLS/">簡介 HTTPS &#x2F; TLS 安全通訊協議</a></p>
 <h1 id="GPG"><a href="#GPG" class="headerlink" title="GPG"></a>GPG</h1><p>GPG (The GNU Privacy Guard，又稱 GnuPG)，是一套實作 OpenPGP 標準規開源軟體。Github 也支援 GPG 金鑰。</p>
 <p>參考 <a target="_blank" rel="noopener" href="https://blog.darkthread.net/blog/gpg-gen-key-n-encrypt/">GPG 筆記 - 產生 ECC 金鑰及加解密檔案</a></p>
 <h1 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h1><p>Docker 容器透過封裝應用程式與其相依性配置形成輕量的映像，且可直接運行在宿主機（host machine）上，減少對宿主機負荷的同時提供更多容器服務使用。而輕量化帶來的好處除了上述所提，它也讓 Docker 容器提供一致性的發布環境，使開發團隊可輕易地攜帶與轉換運行環境，提高協同作業的便利性。<br>從這張圖得知，Container 並沒有 OS，容量自然就小，而且啟動速度快。<br><img src="/assets/VM_vs_Containers.png"><br>Volume 是 Docker 最推薦存放 persisting data（ 數據 ）的機制，因為他不會增加 container 的容量。</p>
 <p>參考 <a target="_blank" rel="noopener" href="https://github.com/twtrubiks/docker-tutorial">Docker 基本教學 - 從無到有 Docker-Beginners-Guide</a></p>
-<h1 id="Kubernetes-K8s"><a href="#Kubernetes-K8s" class="headerlink" title="Kubernetes (K8s)"></a>Kubernetes (K8s)</h1><p> 是一項 Docker 容器編排工具。K8s 的前身是 Google 內部的 Borg 叢集管理系統，解決了過去管理者需各別管理不同主機內的容器，且為了確保所有容器服務正常，需設置對應的監控系統並手動重新部署有問題環境的困擾。<br>參考 <a target="_blank" rel="noopener" href="https://blog.cloud-ace.tw/application-modernization/devops/docker-k8s-gke-intro/">Kubernetes 是什麼？Docker、K8s、GKE 架構與優勢比較</a></p>
+<h1 id="Kubernetes-K8s"><a href="#Kubernetes-K8s" class="headerlink" title="Kubernetes (K8s)"></a>Kubernetes (K8s)</h1><p>是一項 Docker 容器編排工具。K8s 的前身是 Google 內部的 Borg 叢集管理系統，解決了過去管理者需各別管理不同主機內的容器，且為了確保所有容器服務正常，需設置對應的監控系統並手動重新部署有問題環境的困擾。<br>參考 <a target="_blank" rel="noopener" href="https://blog.cloud-ace.tw/application-modernization/devops/docker-k8s-gke-intro/">Kubernetes 是什麼？Docker、K8s、GKE 架構與優勢比較</a></p>
 <h2 id="Google-Kubernetes-Engine（GKE）"><a href="#Google-Kubernetes-Engine（GKE）" class="headerlink" title="Google Kubernetes Engine（GKE）"></a>Google Kubernetes Engine（GKE）</h2><h1 id="Serverless-無伺服器-服務"><a href="#Serverless-無伺服器-服務" class="headerlink" title="Serverless (無伺服器)服務"></a>Serverless (無伺服器)服務</h1><p>使用 Severless 佈署，開發者可以完全不必考慮基礎架構的維護和擴展，只需專注於撰寫應用程式。</p>
-<h2 id="Google-Cloud-Run"><a href="#Google-Cloud-Run" class="headerlink" title="Google Cloud Run"></a>Google Cloud Run</h2><p>用於託管 Web 應用程式，包含網站或REST API 後端。<br>缺點：只能開放單一port。</p>
+<h2 id="Google-Cloud-Run"><a href="#Google-Cloud-Run" class="headerlink" title="Google Cloud Run"></a>Google Cloud Run</h2><p>用於託管 Web 應用程式，包含網站或 REST API 後端。<br>缺點：只能開放單一 port。</p>
 <p>參考 <a target="_blank" rel="noopener" href="https://www.microfusion.cloud/news/cloud-run-overview/">什麼是 Cloud Run？Cloud Run 與 Cloud Functions 有哪些差別？關於 Cloud Run 的四大常見疑問解惑</a><br>實作參考 <a target="_blank" rel="noopener" href="https://nijialin.com/2023/03/19/gcp-why-need-cloudrun-as-serverless/">【GCP】將 FastAPI 佈署上 Cloud Run</a></p>
+<h1 id="Mbps-與-MB-x2F-s-是不一樣的"><a href="#Mbps-與-MB-x2F-s-是不一樣的" class="headerlink" title="Mbps 與 MB&#x2F;s 是不一樣的"></a>Mbps 與 MB&#x2F;s 是不一樣的</h1><ul>
+<li>1Mbps &#x3D; 0.125MB&#x2F;s</li>
+<li>8Mbps &#x3D; 1MB&#x2F;s</li>
+</ul>
+<p>例如無線路由器的規格通常會寫 802.11n：最高 300 Mbps，表示每秒傳輸 37.5MB。<br>參考 <a target="_blank" rel="noopener" href="https://3day.tw/%E4%BB%80%E9%BA%BC%E6%98%AFmbps%E4%BB%80%E9%BA%BC%E6%98%AFmb-s/">https://3day.tw/什麼是mbps什麼是mb-s/</a></p>
+<h1 id="虛擬非軍事區-Virtual-DMZ"><a href="#虛擬非軍事區-Virtual-DMZ" class="headerlink" title="虛擬非軍事區 (Virtual DMZ)"></a>虛擬非軍事區 (Virtual DMZ)</h1><p>讓您得以將一部電腦公開顯露在網際網路上，使所有上傳的封包全數轉向您指定的電腦。</p>
 
     </div>
 
@@ -309,7 +317,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TLS"><span class="nav-number">1.</span> <span class="nav-text">TLS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cipher-suite"><span class="nav-number">2.</span> <span class="nav-text">Cipher suite</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPG"><span class="nav-number">3.</span> <span class="nav-text">GPG</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">4.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes-K8s"><span class="nav-number">5.</span> <span class="nav-text">Kubernetes (K8s)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Kubernetes-Engine%EF%BC%88GKE%EF%BC%89"><span class="nav-number">5.1.</span> <span class="nav-text">Google Kubernetes Engine（GKE）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Serverless-%E7%84%A1%E4%BC%BA%E6%9C%8D%E5%99%A8-%E6%9C%8D%E5%8B%99"><span class="nav-number">6.</span> <span class="nav-text">Serverless (無伺服器)服務</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Cloud-Run"><span class="nav-number">6.1.</span> <span class="nav-text">Google Cloud Run</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TLS"><span class="nav-number">1.</span> <span class="nav-text">TLS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E7%B0%BD%E6%86%91%E8%AD%89-Self-Signed-Certificate"><span class="nav-number">2.</span> <span class="nav-text">自簽憑證 (Self-Signed Certificate)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cipher-suite"><span class="nav-number">3.</span> <span class="nav-text">Cipher suite</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GPG"><span class="nav-number">4.</span> <span class="nav-text">GPG</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker"><span class="nav-number">5.</span> <span class="nav-text">Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes-K8s"><span class="nav-number">6.</span> <span class="nav-text">Kubernetes (K8s)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Kubernetes-Engine%EF%BC%88GKE%EF%BC%89"><span class="nav-number">6.1.</span> <span class="nav-text">Google Kubernetes Engine（GKE）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Serverless-%E7%84%A1%E4%BC%BA%E6%9C%8D%E5%99%A8-%E6%9C%8D%E5%8B%99"><span class="nav-number">7.</span> <span class="nav-text">Serverless (無伺服器)服務</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Cloud-Run"><span class="nav-number">7.1.</span> <span class="nav-text">Google Cloud Run</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mbps-%E8%88%87-MB-x2F-s-%E6%98%AF%E4%B8%8D%E4%B8%80%E6%A8%A3%E7%9A%84"><span class="nav-number">8.</span> <span class="nav-text">Mbps 與 MB&#x2F;s 是不一樣的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%99%9B%E6%93%AC%E9%9D%9E%E8%BB%8D%E4%BA%8B%E5%8D%80-Virtual-DMZ"><span class="nav-number">9.</span> <span class="nav-text">虛擬非軍事區 (Virtual DMZ)</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -323,14 +331,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-count">36</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>

@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="因習慣透過pipenv指立建立Flask，例如 1pipenv run python mock_server.py 要正確地執行，花費些時間研究，因此特別記錄下來。">
+  <meta name="description" content="因習慣透過 pipenv 指立建立 Flask，例如 1pipenv run python mock_server.py  要正確地執行，花費些時間研究，因此特別記錄下來。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[Python] Windows下管理Flask服務">
 <meta property="og:url" content="https://usermark.github.io/2023/05/26/manage-flask-service/index.html">
 <meta property="og:site_name" content="Mike的筆記">
-<meta property="og:description" content="因習慣透過pipenv指立建立Flask，例如 1pipenv run python mock_server.py 要正確地執行，花費些時間研究，因此特別記錄下來。">
+<meta property="og:description" content="因習慣透過 pipenv 指立建立 Flask，例如 1pipenv run python mock_server.py  要正確地執行，花費些時間研究，因此特別記錄下來。">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2023-05-26T15:21:00.000Z">
-<meta property="article:modified_time" content="2023-07-08T13:55:46.160Z">
+<meta property="article:modified_time" content="2024-09-18T11:24:17.262Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="Flask">
@@ -193,7 +193,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2023-07-08 21:55:46" itemprop="dateModified" datetime="2023-07-08T21:55:46+08:00">2023-07-08</time>
+                <time title="修改時間：2024-09-18 19:24:17" itemprop="dateModified" datetime="2024-09-18T19:24:17+08:00">2024-09-18</time>
               </span>
 
           
@@ -214,28 +214,33 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>因習慣透過pipenv指立建立Flask，例如</p>
+        <p>因習慣透過 pipenv 指立建立 Flask，例如</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv run python mock_server.py</span><br></pre></td></tr></table></figure>
+
 <p>要正確地執行，花費些時間研究，因此特別記錄下來。</p>
 <span id="more"></span>
 
-<h1 id="關閉所有Python服務"><a href="#關閉所有Python服務" class="headerlink" title="關閉所有Python服務"></a>關閉所有Python服務</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line">setlocal EnableDelayedExpansion</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> /f <span class="string">&quot;tokens=2&quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;tasklist /fi &quot;imagename eq python.exe&quot; /nh&#x27;</span>) <span class="keyword">do</span> (</span><br><span class="line">    <span class="built_in">set</span> pid=%%~a</span><br><span class="line">    <span class="built_in">set</span> <span class="string">&quot;cmd=&quot;</span></span><br><span class="line">    <span class="keyword">for</span> /f <span class="string">&quot;tokens=2,*&quot;</span> %%b <span class="keyword">in</span> (<span class="string">&#x27;wmic process where &quot;ProcessId=!pid!&quot; get commandline /format:list ^| find &quot;=&quot;&#x27;</span>) <span class="keyword">do</span> (</span><br><span class="line">        <span class="built_in">set</span> cmd=%%~b</span><br><span class="line">    )</span><br><span class="line">    <span class="built_in">echo</span> !pid! !cmd!</span><br><span class="line">    taskkill /f /pid !pid!</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h1 id="關閉所有-Python-服務"><a href="#關閉所有-Python-服務" class="headerlink" title="關閉所有 Python 服務"></a>關閉所有 Python 服務</h1><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line">setlocal EnableDelayedExpansion</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> /f <span class="string">&quot;tokens=2&quot;</span> %%a <span class="keyword">in</span> (<span class="string">&#x27;tasklist /fi &quot;imagename eq python.exe&quot; /nh&#x27;</span>) <span class="keyword">do</span> (</span><br><span class="line">    <span class="built_in">set</span> pid=%%~a</span><br><span class="line">    <span class="built_in">set</span> <span class="string">&quot;cmd=&quot;</span></span><br><span class="line">    <span class="keyword">for</span> /f <span class="string">&quot;tokens=2,*&quot;</span> %%b <span class="keyword">in</span> (<span class="string">&#x27;wmic process where &quot;ProcessId=!pid!&quot; get commandline /format:list ^| find &quot;=&quot;&#x27;</span>) <span class="keyword">do</span> (</span><br><span class="line">        <span class="built_in">set</span> cmd=%%~b</span><br><span class="line">    )</span><br><span class="line">    <span class="built_in">echo</span> !pid! !cmd!</span><br><span class="line">    taskkill /f /pid !pid!</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 
-<h1 id="使用nssm註冊服務"><a href="#使用nssm註冊服務" class="headerlink" title="使用nssm註冊服務"></a>使用nssm註冊服務</h1><p>首先，要知道pipenv產生的虛擬環境在哪</p>
+<h1 id="使用-nssm-註冊服務"><a href="#使用-nssm-註冊服務" class="headerlink" title="使用 nssm 註冊服務"></a>使用 nssm 註冊服務</h1><p>首先，要知道 pipenv 產生的虛擬環境在哪</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipenv --venv</span><br></pre></td></tr></table></figure>
 
 <p>假設輸出結果如下</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\mike\.virtualenvs\mock_server-ASS21Y9K</span><br></pre></td></tr></table></figure>
 
 <p>參考<a target="_blank" rel="noopener" href="https://www.mssqltips.com/sqlservertip/7325/how-to-run-a-python-script-windows-service-nssm/">https://www.mssqltips.com/sqlservertip/7325/how-to-run-a-python-script-windows-service-nssm/</a></p>
-<p>先下載<a target="_blank" rel="noopener" href="https://nssm.cc/download">nssm</a>，解壓縮後，需用系統管理員權限開啟cmd，並切換到目錄底下</p>
+<p>先下載<a target="_blank" rel="noopener" href="https://nssm.cc/download">nssm</a>，解壓縮後，需用系統管理員權限開啟 cmd，並切換到目錄底下</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> C:\nssm-2.24\win64</span><br></pre></td></tr></table></figure>
 
-<p>接著執行nssm來建立服務</p>
+<p>接著執行 nssm 來建立服務</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nssm install <span class="string">&quot;MockServer&quot;</span> <span class="string">&quot;C:\Users\mike\.virtualenvs\mock_server-ASS21Y9K\Scripts\python.exe&quot;</span> <span class="string">&quot;mock_server.py&quot;</span></span><br><span class="line">nssm <span class="built_in">set</span> <span class="string">&quot;MockServer&quot;</span> AppDirectory <span class="string">&quot;C:\nginx\html\mock_server&quot;</span></span><br><span class="line">nssm <span class="built_in">set</span> <span class="string">&quot;MockServer&quot;</span> AppStdout <span class="string">&quot;C:\nginx\html\mock_server\out_file.txt&quot;</span></span><br><span class="line">nssm <span class="built_in">set</span> <span class="string">&quot;MockServer&quot;</span> AppStderr <span class="string">&quot;C:\nginx\html\mock_server\error_file.txt&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>啟動或停止服務</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nssm start <span class="string">&quot;MockServer&quot;</span></span><br><span class="line">nssm stop <span class="string">&quot;MockServer&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="透過-API-關閉-Flask-服務"><a href="#透過-API-關閉-Flask-服務" class="headerlink" title="透過 API 關閉 Flask 服務"></a>透過 API 關閉 Flask 服務</h1><p>試過上述兩個方法，還是這個方法最簡單乾淨，只要留意好權限控管，避免被惡意呼叫關閉即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/shutdown&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">shutdown</span>():</span><br><span class="line">    os._exit(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
     </div>
 
     
@@ -320,7 +325,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%9C%E9%96%89%E6%89%80%E6%9C%89Python%E6%9C%8D%E5%8B%99"><span class="nav-number">1.</span> <span class="nav-text">關閉所有Python服務</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8nssm%E8%A8%BB%E5%86%8A%E6%9C%8D%E5%8B%99"><span class="nav-number">2.</span> <span class="nav-text">使用nssm註冊服務</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%9C%E9%96%89%E6%89%80%E6%9C%89-Python-%E6%9C%8D%E5%8B%99"><span class="nav-number">1.</span> <span class="nav-text">關閉所有 Python 服務</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-nssm-%E8%A8%BB%E5%86%8A%E6%9C%8D%E5%8B%99"><span class="nav-number">2.</span> <span class="nav-text">使用 nssm 註冊服務</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%8F%E9%81%8E-API-%E9%97%9C%E9%96%89-Flask-%E6%9C%8D%E5%8B%99"><span class="nav-number">3.</span> <span class="nav-text">透過 API 關閉 Flask 服務</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -334,14 +339,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-count">36</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
