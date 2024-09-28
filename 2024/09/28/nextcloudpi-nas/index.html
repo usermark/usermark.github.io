@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="想擁有自己的 NAS 雲端硬碟，資料不想放別人家被看光光，卻又不想花大錢，雖說 QNAP TS-133 也才 4 千塊。但自己打造樂趣無窮，決定先使用樹莓派和 1TB 外接 USB 硬碟體驗下陽春版的私有雲。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Raspberry Pi] 用NextCloudPi自建NAS雲端硬碟">
+<meta property="og:url" content="https://usermark.github.io/2024/09/28/nextcloudpi-nas/index.html">
+<meta property="og:site_name" content="Mike的筆記">
+<meta property="og:description" content="想擁有自己的 NAS 雲端硬碟，資料不想放別人家被看光光，卻又不想花大錢，雖說 QNAP TS-133 也才 4 千塊。但自己打造樂趣無窮，決定先使用樹莓派和 1TB 外接 USB 硬碟體驗下陽春版的私有雲。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://usermark.github.io/assets/rpi_imager.png">
+<meta property="og:image" content="https://usermark.github.io/assets/home_net_pi.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ncp_wizard.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ncp_wizard_usb.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ncp_system_info.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ncp_user.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ncp_samba.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ncp_scan.png">
+<meta property="og:image" content="https://usermark.github.io/assets/freedns.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ncp_freedns.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ncp_ssl.png">
+<meta property="article:published_time" content="2024-09-28T15:38:01.000Z">
+<meta property="article:modified_time" content="2024-09-28T15:38:39.959Z">
+<meta property="article:author" content="Mike Chen">
+<meta property="article:tag" content="Raspberry Pi">
+<meta property="article:tag" content="NextCloudPi">
+<meta property="article:tag" content="NAS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://usermark.github.io/assets/rpi_imager.png">
+
+<link rel="canonical" href="https://usermark.github.io/2024/09/28/nextcloudpi-nas/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[Raspberry Pi] 用NextCloudPi自建NAS雲端硬碟 | Mike的筆記</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mike的筆記</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2024/09/28/nextcloudpi-nas/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [Raspberry Pi] 用NextCloudPi自建NAS雲端硬碟
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2024-09-28 23:38:01 / 修改時間：23:38:39" itemprop="dateCreated datePublished" datetime="2024-09-28T23:38:01+08:00">2024-09-28</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="閱讀次數" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">閱讀次數：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>想擁有自己的 NAS 雲端硬碟，資料不想放別人家被看光光，卻又不想花大錢，雖說 QNAP TS-133 也才 4 千塊。<br>但自己打造樂趣無窮，決定先使用樹莓派和 1TB 外接 USB 硬碟體驗下陽春版的私有雲。</p>
+<span id="more"></span>
+
+<h1 id="NextCloudPi"><a href="#NextCloudPi" class="headerlink" title="NextCloudPi"></a>NextCloudPi</h1><p>至 <a target="_blank" rel="noopener" href="https://github.com/nextcloud/nextcloudpi/releases">https://github.com/nextcloud/nextcloudpi/releases</a> 下載最新的映像檔，我使用的是 Pi4。<br>使用樹莓派官方提供的 Raspberry Pi Imager 做燒錄。<br><img src="/assets/rpi_imager.png"></p>
+<p>燒錄完成後，插入 SD 卡並啟動樹莓派，先不要外接硬碟，稍後依指示再接上。<br>另外網路部分我是接實體網路線，與個人電腦在同一網段。<br><img src="/assets/home_net_pi.png"></p>
+<p>等待一段時間便可用瀏覽器打開 <a target="_blank" rel="noopener" href="https://nextcloudpi.local/">https://nextcloudpi.local</a><br>第一次會看到 Activation 的畫面，記住兩組帳密後，按下 Activate 開啟初始化設定。<br>畫面轉到後台管理 <a target="_blank" rel="noopener" href="https://nextcloudpi.local:4443/">https://nextcloudpi.local:4443</a> 後，使用 ncp 第一組帳密登入。<br><img src="/assets/ncp_wizard.png"></p>
+<p>依照初始化精靈的指示做設定，在詢問是否會使用外接硬碟來儲存資料時，我選 Yes。<br><img src="/assets/ncp_wizard_usb.png"></p>
+<p>這時才接上外接硬碟，並做格式化，注意資料會被刪除。因為一般外接硬碟都是 NTFS 檔案格式，並不支援 Linux 所需的權限控管，要格式化成 Btrfs 才行。<br>另外，前面啟動不先接上是因為 NextCloud 預設會自動掛載外接硬碟至 &#x2F;media&#x2F;USBdrive，這時就無法格式化。<br>初始化精靈完成後，可檢查下 data disk usage 的硬碟空間是否為 1TB。<br><img src="/assets/ncp_system_info.png"></p>
+<p>初步架設到這邊就都完成了，可以連進 <a target="_blank" rel="noopener" href="https://nextcloudpi.local/">https://nextcloudpi.local</a> 使用 ncp 第二組帳密登入體驗囉!</p>
+<h1 id="建立使用者"><a href="#建立使用者" class="headerlink" title="建立使用者"></a>建立使用者</h1><p>登入後，習慣會先建立群組和使用者 (或家庭成員)，與 ncp 管理者權限做區分。<br><img src="/assets/ncp_user.png"></p>
+<p>在檔案頁籤會看到一些系統內建的檔案，但都還沒有個人的照片和檔案。</p>
+<h1 id="Samba"><a href="#Samba" class="headerlink" title="Samba"></a>Samba</h1><p>回到後台管理 4443 開啟 samba。目的是透過個人電腦先將 Google Photo 和 Line 相簿備份回 NextCloud。<br><img src="/assets/ncp_samba.png"></p>
+<h1 id="備份-Google-Photo-至-NextCloud"><a href="#備份-Google-Photo-至-NextCloud" class="headerlink" title="備份 Google Photo 至 NextCloud"></a>備份 Google Photo 至 NextCloud</h1><p>下載 <a target="_blank" rel="noopener" href="https://rclone.org/downloads/">rclone</a>，並申請一組自己 Google 帳號的 OAuth Clinet ID 來使用 rclone。</p>
+<p>輸入下列指令進行一系列設定，包含 client_id 和 client_secret</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rclone config</span><br></pre></td></tr></table></figure>
+
+<p>設定好後輸入指令查看所有相簿，其中 remote 是前面設定的 name</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rclone lsd remote:album</span><br></pre></td></tr></table></figure>
+
+<p>這裡要特別注意的是同張照片會因不同分類，而重複存在不同目錄，所以不要全部都抓，參考 <a target="_blank" rel="noopener" href="https://rclone.org/googlephotos/">https://rclone.org/googlephotos/</a> 的說明。<br>這邊採用的是按年分類，並複製照片和影片至指定目錄。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rclone copy /path/to/images remote:media/by-year</span><br></pre></td></tr></table></figure>
+
+<p>等全部下載完，就可以透過 Samba 備份進 NextCloud。這時進去 <a target="_blank" rel="noopener" href="https://nextcloudpi.local/">https://nextcloudpi.local</a> 還不會看到剛才上傳的照片和影片，要先在後台管理 4443 執行 nc-scan ，會將新的照片和影片加入資料庫，這樣 NextCloud 就有 Google Photo 所有照片資料囉！<br><img src="/assets/ncp_scan.png"></p>
+<h1 id="修正影片沒有預覽圖-縮圖-的問題"><a href="#修正影片沒有預覽圖-縮圖-的問題" class="headerlink" title="修正影片沒有預覽圖(縮圖)的問題"></a>修正影片沒有預覽圖(縮圖)的問題</h1><p>上傳的影片預設是沒有預覽圖的，要一個個點開才會知道很不方便<br>參考 <a target="_blank" rel="noopener" href="https://shengyu7697.github.io/nextcloud/">https://shengyu7697.github.io/nextcloud/</a>，解法如下。</p>
+<p>輸入指令安裝</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install ffmpeg</span><br></pre></td></tr></table></figure>
+
+<p>在 config.php 新增設定<br>sudo nano &#x2F;var&#x2F;www&#x2F;nextcloud&#x2F;config&#x2F;config.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;enable_previews&#x27;</span> =&gt; <span class="literal">true</span>,</span><br><span class="line"><span class="string">&#x27;enabledPreviewProviders&#x27;</span> =&gt; [</span><br><span class="line">    <span class="string">&#x27;OC\Preview\Movie&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;OC\Preview\PNG&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;OC\Preview\JPEG&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;OC\Preview\GIF&#x27;</span>,</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+
+<h1 id="修正-HEIC-沒有預覽圖-縮圖-的問題"><a href="#修正-HEIC-沒有預覽圖-縮圖-的問題" class="headerlink" title="修正 HEIC 沒有預覽圖(縮圖)的問題"></a>修正 HEIC 沒有預覽圖(縮圖)的問題</h1><p>輸入指令確認 imagick 模組是否存在</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -m | grep -i imagick</span><br></pre></td></tr></table></figure>
+
+<p>沒有的話就安裝並重啟 apache2</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install php-imagick</span><br><span class="line">sudp service apache2 reload</span><br></pre></td></tr></table></figure>
+
+<p>在 config.php 新增設定<br>sudo nano &#x2F;var&#x2F;www&#x2F;nextcloud&#x2F;config&#x2F;config.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;enable_previews&#x27;</span> =&gt; <span class="literal">true</span>,</span><br><span class="line"><span class="string">&#x27;enabledPreviewProviders&#x27;</span> =&gt; [</span><br><span class="line">    <span class="string">&#x27;OC\Preview\Movie&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;OC\Preview\HEIC&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;OC\Preview\PNG&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;OC\Preview\JPEG&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;OC\Preview\GIF&#x27;</span>,</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+
+<h1 id="NextCloud-公開對外"><a href="#NextCloud-公開對外" class="headerlink" title="NextCloud 公開對外"></a>NextCloud 公開對外</h1><p><img src="/assets/freedns.png"></p>
+<p>於 <a target="_blank" rel="noopener" href="https://freedns.afraid.org/">FreeDNS</a> 申請域名來用，在後台管理 4443 設定 freeDNS 即可。<br><img src="/assets/ncp_freedns.png"></p>
+<p>接著執行 letsencrypt 申請 SSL 憑證，才不會一直看到安全性警告。這裡 80 和 443 port 必須對外才會成功驗證，若是透過 wifi 路由上網的，要去設定 port forwarding 端口轉發。<br><img src="/assets/ncp_ssl.png"></p>
+<h1 id="手機-APP-自動上傳備份照片"><a href="#手機-APP-自動上傳備份照片" class="headerlink" title="手機 APP 自動上傳備份照片"></a>手機 APP 自動上傳備份照片</h1><p>安裝 iOS&#x2F;Android 的 APP 程式，來連接 Nextcloud。成功登入後，可至更多 &gt; 設定 &gt; 自動上傳，將自動上傳照片&#x2F;影片功能打開。預設只會上傳後續新增的照片，可視情況決定是否打開上傳整個相機膠捲。<br>因為我平時都用 Google Photo 備份，前面已將資料遷移回來，所以也就不需要上傳舊的資料。</p>
+<h1 id="備份"><a href="#備份" class="headerlink" title="備份"></a>備份</h1><p>在後台管理 4443 執行 nc-backup ，便可產生備份檔。</p>
+<div class="note warning">
+            <p>切記備份檔路徑不可以選擇底下有 ncdata 資料夾的，因為備份過程該目錄會變成唯讀狀態。</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Running nc-backup</span><br><span class="line">Installing template <span class="string">&#x27;ncp-metrics.cfg.sh&#x27;</span>...</span><br><span class="line">check free space...</span><br><span class="line">Maintenance mode enabled</span><br><span class="line">backup database...</span><br><span class="line">backup files...</span><br><span class="line">tar: /media/myCloudDrive/ncp-backups/nextcloud-bkp_20240921_1726902238.tar: Cannot write: Read-only file system</span><br><span class="line">tar: Error is not recoverable: exiting now</span><br><span class="line">error generating backup</span><br><span class="line">&#123;<span class="string">&quot;reqId&quot;</span>:<span class="string">&quot;lp43MaIygxNeP3vd4WWI&quot;</span>,<span class="string">&quot;level&quot;</span>:2,<span class="string">&quot;time&quot;</span>:<span class="string">&quot;2024-09-21T07:06:01+00:00&quot;</span>,<span class="string">&quot;remoteAddr&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;user&quot;</span>:<span class="string">&quot;--&quot;</span>,<span class="string">&quot;app&quot;</span>:<span class="string">&quot;no app in context&quot;</span>,<span class="string">&quot;method&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;url&quot;</span>:<span class="string">&quot;--&quot;</span>,<span class="string">&quot;message&quot;</span>:<span class="string">&quot;Temporary directory /media/myCloudDrive/ncdata/data/tmp is not present or writable&quot;</span>,<span class="string">&quot;userAgent&quot;</span>:<span class="string">&quot;--&quot;</span>,<span class="string">&quot;version&quot;</span>:<span class="string">&quot;29.0.4.1&quot;</span>,<span class="string">&quot;data&quot;</span>:[]&#125;</span><br><span class="line">&#123;<span class="string">&quot;reqId&quot;</span>:<span class="string">&quot;lp43MaIygxNeP3vd4WWI&quot;</span>,<span class="string">&quot;level&quot;</span>:3,<span class="string">&quot;time&quot;</span>:<span class="string">&quot;2024-09-21T07:06:01+00:00&quot;</span>,<span class="string">&quot;remoteAddr&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;user&quot;</span>:<span class="string">&quot;--&quot;</span>,<span class="string">&quot;app&quot;</span>:<span class="string">&quot;PHP&quot;</span>,<span class="string">&quot;method&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;url&quot;</span>:<span class="string">&quot;--&quot;</span>,<span class="string">&quot;message&quot;</span>:<span class="string">&quot;fopen(/media/myCloudDrive/ncdata/data/data_dir_writability_test_66ee70595461e.tmp): Failed to open stream: Read-only file system at /var/www/nextcloud/lib/private/legacy/OC_Util.php#572&quot;</span>,<span class="string">&quot;userAgent&quot;</span>:<span class="string">&quot;--&quot;</span>,<span class="string">&quot;version&quot;</span>:<span class="string">&quot;29.0.4.1&quot;</span>,<span class="string">&quot;data&quot;</span>:&#123;<span class="string">&quot;app&quot;</span>:<span class="string">&quot;PHP&quot;</span>&#125;&#125;</span><br><span class="line">Your data directory is not writable.</span><br><span class="line">Permissions can usually be fixed by giving the web server write access to the root directory. See https://docs.nextcloud.com/server/29/go.php?to=admin-dir_permissions.</span><br></pre></td></tr></table></figure>
+          </div>
+
+<p><strong>參考資料</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://vocus.cc/article/63a3f27cfd897800011b0a0a">[教學] 自己雲端自己管！ | 以 NextCloud 與 Raspberry Pi 自建 NAS 雲端硬碟</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.ichiayi.com/tech/rclone">使用 rclone 同步 Google Drive 檔案</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Raspberry-Pi/" rel="tag"># Raspberry Pi</a>
+              <a href="/tags/NextCloudPi/" rel="tag"># NextCloudPi</a>
+              <a href="/tags/NAS/" rel="tag"># NAS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/09/27/asus-router-openwrt/" rel="prev" title="[OpenWrt] ASUS RT-N12+ B1 路由器刷機">
+      <i class="fa fa-chevron-left"></i> [OpenWrt] ASUS RT-N12+ B1 路由器刷機
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NextCloudPi"><span class="nav-number">1.</span> <span class="nav-text">NextCloudPi</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E4%BD%BF%E7%94%A8%E8%80%85"><span class="nav-number">2.</span> <span class="nav-text">建立使用者</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Samba"><span class="nav-number">3.</span> <span class="nav-text">Samba</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%82%99%E4%BB%BD-Google-Photo-%E8%87%B3-NextCloud"><span class="nav-number">4.</span> <span class="nav-text">備份 Google Photo 至 NextCloud</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%AD%A3%E5%BD%B1%E7%89%87%E6%B2%92%E6%9C%89%E9%A0%90%E8%A6%BD%E5%9C%96-%E7%B8%AE%E5%9C%96-%E7%9A%84%E5%95%8F%E9%A1%8C"><span class="nav-number">5.</span> <span class="nav-text">修正影片沒有預覽圖(縮圖)的問題</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%AD%A3-HEIC-%E6%B2%92%E6%9C%89%E9%A0%90%E8%A6%BD%E5%9C%96-%E7%B8%AE%E5%9C%96-%E7%9A%84%E5%95%8F%E9%A1%8C"><span class="nav-number">6.</span> <span class="nav-text">修正 HEIC 沒有預覽圖(縮圖)的問題</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NextCloud-%E5%85%AC%E9%96%8B%E5%B0%8D%E5%A4%96"><span class="nav-number">7.</span> <span class="nav-text">NextCloud 公開對外</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%8B%E6%A9%9F-APP-%E8%87%AA%E5%8B%95%E4%B8%8A%E5%82%B3%E5%82%99%E4%BB%BD%E7%85%A7%E7%89%87"><span class="nav-number">8.</span> <span class="nav-text">手機 APP 自動上傳備份照片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%82%99%E4%BB%BD"><span class="nav-number">9.</span> <span class="nav-text">備份</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mike Chen</p>
+  <div class="site-description" itemprop="description">現居高雄，熟悉 Android 和 Python 開發，喜歡學習新事物和閱讀。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/usermark" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;usermark" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:trexcobras@gmail.com" title="E-Mail → mailto:trexcobras@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- sidebar -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="1915238009"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mike Chen</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="訪客總數">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="總瀏覽次數">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'fe34fe28201c28ecaca2',
+      clientSecret: '6b0f055d80dc258148f06400ce27502351d56921',
+      repo        : 'usermark.github.io',
+      owner       : 'usermark',
+      admin       : ['usermark'],
+      id          : 'a554f59a1a2baeb6bf4a77c736a10fe5',
+        language: 'zh-TW',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
