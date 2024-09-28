@@ -4,6 +4,7 @@ tags:
   - Raspberry Pi
   - NextCloudPi
   - NAS
+date: 2024-09-28 23:38:01
 ---
 
 想擁有自己的 NAS 雲端硬碟，資料不想放別人家被看光光，卻又不想花大錢，雖說 QNAP TS-133 也才 4 千塊。
@@ -140,13 +141,12 @@ sudo nano /var/www/nextcloud/config/config.php
 安裝 iOS/Android 的 APP 程式，來連接 Nextcloud。成功登入後，可至更多 > 設定 > 自動上傳，將自動上傳照片/影片功能打開。預設只會上傳後續新增的照片，可視情況決定是否打開上傳整個相機膠捲。
 因為我平時都用 Google Photo 備份，前面已將資料遷移回來，所以也就不需要上傳舊的資料。
 
-# 異地備份
+# 備份
 
-在後台管理 4443 執行 nc-backup 後，將備份檔透過 sftp 傳送至目的設備。
+在後台管理 4443 執行 nc-backup ，便可產生備份檔。
 
 {% note warning %}
-切記備份檔不可以放主硬碟，(內有 ncdata 資料夾的)，因為備份過程該硬碟會變成唯讀狀態，這時就無法再寫入備份檔。
-{% endnote %}
+切記備份檔路徑不可以選擇底下有 ncdata 資料夾的，因為備份過程該目錄會變成唯讀狀態。
 
 ```sh
 Running nc-backup
@@ -163,14 +163,7 @@ error generating backup
 Your data directory is not writable.
 Permissions can usually be fixed by giving the web server write access to the root directory. See https://docs.nextcloud.com/server/29/go.php?to=admin-dir_permissions.
 ```
-
-```sh
-sudo -v ; curl https://rclone.org/install.sh | sudo bash
-sudo apt-get install fuse3
-sudo mkdir /media/backupDrive
-sudo chmod 777 /media/backupDrive
-rclone mount --umask=0 --daemon rsync: /media/backupDrive
-```
+{% endnote %}
 
 **參考資料**
 
