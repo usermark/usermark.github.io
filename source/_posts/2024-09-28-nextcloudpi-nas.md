@@ -69,7 +69,7 @@ rclone lsd remote:album
 這邊採用的是按年分類，並複製照片和影片至指定目錄。
 
 ```sh
-rclone copy /path/to/images remote:media/by-year
+rclone copy remote:media/by-year /path/to/images -P
 ```
 
 等全部下載完，就可以透過 Samba 備份進 NextCloud。這時進去 https://nextcloudpi.local 還不會看到剛才上傳的照片和影片，要先在後台管理 4443 執行 nc-scan ，會將新的照片和影片加入資料庫，這樣 NextCloud 就有 Google Photo 所有照片資料囉！
@@ -164,6 +164,40 @@ Your data directory is not writable.
 Permissions can usually be fixed by giving the web server write access to the root directory. See https://docs.nextcloud.com/server/29/go.php?to=admin-dir_permissions.
 ```
 {% endnote %}
+
+# 異地備份
+
+目的備份電腦為 windows 所以無法使用 rsync，rsync 只能在 linux 之間使用，不得不提到強大的 rclone。
+先在目的備份電腦的指定目錄打開 sftp 後，至後台管理 4443 打開 SSH。
+
+![](/assets/ncp_ssh.png)
+
+成功 ssh 登入 nextcloudpi.local 後，輸入下列指令進行 rclone 的安裝並設定遠端 sftp。
+```sh
+sudo -v ; curl https://rclone.org/install.sh | sudo bash
+rclone config
+```
+
+使用 rclone 存取 ncdata 目錄需要有 www-data 的群組權限，否則會有該錯誤。
+```sh
+ERROR : Local file system at /media/myCloudDrive/ncdata/data/ncp/files: error reading source root directory: directory not found
+```
+
+輸入指令加入群組，記得重新登入才會生效。
+```sh
+sudo gpasswd -a {your-ssh-user} www-data
+```
+
+就可以用 rclone sync 開始同步目的備份電腦的資料囉！
+```sh
+rclone sync -P /media/myCloudDrive/ncdata/data/ncp/files remote:
+```
+
+# 總結
+
+上述步驟完成後，陽春版的私有雲便打造完成。
+出遊時手機拍的照片便會透過 Nextcloud APP 即時備份至雲端硬碟，回到家打開電腦 ssh 進樹莓派做異地備份，更進階的玩法可以用排程實現。
+手機一份、雲端硬碟一份，需要時電腦才連上去備份一份，算有勉強符合 321 備份原則了。
 
 **參考資料**
 
