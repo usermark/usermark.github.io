@@ -38,8 +38,9 @@
 <meta property="og:image" content="https://usermark.github.io/assets/freedns.png">
 <meta property="og:image" content="https://usermark.github.io/assets/ncp_freedns.png">
 <meta property="og:image" content="https://usermark.github.io/assets/ncp_ssl.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ncp_ssh.png">
 <meta property="article:published_time" content="2024-09-28T15:38:01.000Z">
-<meta property="article:modified_time" content="2024-09-28T15:38:39.959Z">
+<meta property="article:modified_time" content="2024-09-29T06:01:57.241Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="Raspberry Pi">
 <meta property="article:tag" content="NextCloudPi">
@@ -198,10 +199,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">發表於</span>
-              
 
-              <time title="創建時間：2024-09-28 23:38:01 / 修改時間：23:38:39" itemprop="dateCreated datePublished" datetime="2024-09-28T23:38:01+08:00">2024-09-28</time>
+              <time title="創建時間：2024-09-28 23:38:01" itemprop="dateCreated datePublished" datetime="2024-09-28T23:38:01+08:00">2024-09-28</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2024-09-29 14:01:57" itemprop="dateModified" datetime="2024-09-29T14:01:57+08:00">2024-09-29</time>
+              </span>
 
           
             <span class="post-meta-item" title="閱讀次數" id="busuanzi_container_page_pv" style="display: none;">
@@ -241,7 +248,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rclone lsd remote:album</span><br></pre></td></tr></table></figure>
 
 <p>這裡要特別注意的是同張照片會因不同分類，而重複存在不同目錄，所以不要全部都抓，參考 <a target="_blank" rel="noopener" href="https://rclone.org/googlephotos/">https://rclone.org/googlephotos/</a> 的說明。<br>這邊採用的是按年分類，並複製照片和影片至指定目錄。</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rclone copy /path/to/images remote:media/by-year</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rclone copy remote:media/by-year /path/to/images -P</span><br></pre></td></tr></table></figure>
 
 <p>等全部下載完，就可以透過 Samba 備份進 NextCloud。這時進去 <a target="_blank" rel="noopener" href="https://nextcloudpi.local/">https://nextcloudpi.local</a> 還不會看到剛才上傳的照片和影片，要先在後台管理 4443 執行 nc-scan ，會將新的照片和影片加入資料庫，這樣 NextCloud 就有 Google Photo 所有照片資料囉！<br><img src="/assets/ncp_scan.png"></p>
 <h1 id="修正影片沒有預覽圖-縮圖-的問題"><a href="#修正影片沒有預覽圖-縮圖-的問題" class="headerlink" title="修正影片沒有預覽圖(縮圖)的問題"></a>修正影片沒有預覽圖(縮圖)的問題</h1><p>上傳的影片預設是沒有預覽圖的，要一個個點開才會知道很不方便<br>參考 <a target="_blank" rel="noopener" href="https://shengyu7697.github.io/nextcloud/">https://shengyu7697.github.io/nextcloud/</a>，解法如下。</p>
@@ -269,6 +276,21 @@
             <p>切記備份檔路徑不可以選擇底下有 ncdata 資料夾的，因為備份過程該目錄會變成唯讀狀態。</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Running nc-backup</span><br><span class="line">Installing template <span class="string">&#x27;ncp-metrics.cfg.sh&#x27;</span>...</span><br><span class="line">check free space...</span><br><span class="line">Maintenance mode enabled</span><br><span class="line">backup database...</span><br><span class="line">backup files...</span><br><span class="line">tar: /media/myCloudDrive/ncp-backups/nextcloud-bkp_20240921_1726902238.tar: Cannot write: Read-only file system</span><br><span class="line">tar: Error is not recoverable: exiting now</span><br><span class="line">error generating backup</span><br><span class="line">&#123;<span class="string">&quot;reqId&quot;</span>:<span class="string">&quot;lp43MaIygxNeP3vd4WWI&quot;</span>,<span class="string">&quot;level&quot;</span>:2,<span class="string">&quot;time&quot;</span>:<span class="string">&quot;2024-09-21T07:06:01+00:00&quot;</span>,<span class="string">&quot;remoteAddr&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;user&quot;</span>:<span class="string">&quot;--&quot;</span>,<span class="string">&quot;app&quot;</span>:<span class="string">&quot;no app in context&quot;</span>,<span class="string">&quot;method&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;url&quot;</span>:<span class="string">&quot;--&quot;</span>,<span class="string">&quot;message&quot;</span>:<span class="string">&quot;Temporary directory /media/myCloudDrive/ncdata/data/tmp is not present or writable&quot;</span>,<span class="string">&quot;userAgent&quot;</span>:<span class="string">&quot;--&quot;</span>,<span class="string">&quot;version&quot;</span>:<span class="string">&quot;29.0.4.1&quot;</span>,<span class="string">&quot;data&quot;</span>:[]&#125;</span><br><span class="line">&#123;<span class="string">&quot;reqId&quot;</span>:<span class="string">&quot;lp43MaIygxNeP3vd4WWI&quot;</span>,<span class="string">&quot;level&quot;</span>:3,<span class="string">&quot;time&quot;</span>:<span class="string">&quot;2024-09-21T07:06:01+00:00&quot;</span>,<span class="string">&quot;remoteAddr&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;user&quot;</span>:<span class="string">&quot;--&quot;</span>,<span class="string">&quot;app&quot;</span>:<span class="string">&quot;PHP&quot;</span>,<span class="string">&quot;method&quot;</span>:<span class="string">&quot;&quot;</span>,<span class="string">&quot;url&quot;</span>:<span class="string">&quot;--&quot;</span>,<span class="string">&quot;message&quot;</span>:<span class="string">&quot;fopen(/media/myCloudDrive/ncdata/data/data_dir_writability_test_66ee70595461e.tmp): Failed to open stream: Read-only file system at /var/www/nextcloud/lib/private/legacy/OC_Util.php#572&quot;</span>,<span class="string">&quot;userAgent&quot;</span>:<span class="string">&quot;--&quot;</span>,<span class="string">&quot;version&quot;</span>:<span class="string">&quot;29.0.4.1&quot;</span>,<span class="string">&quot;data&quot;</span>:&#123;<span class="string">&quot;app&quot;</span>:<span class="string">&quot;PHP&quot;</span>&#125;&#125;</span><br><span class="line">Your data directory is not writable.</span><br><span class="line">Permissions can usually be fixed by giving the web server write access to the root directory. See https://docs.nextcloud.com/server/29/go.php?to=admin-dir_permissions.</span><br></pre></td></tr></table></figure>
           </div>
 
+<h1 id="異地備份"><a href="#異地備份" class="headerlink" title="異地備份"></a>異地備份</h1><p>目的備份電腦為 windows 所以無法使用 rsync，rsync 只能在 linux 之間使用，不得不提到強大的 rclone。<br>先在目的備份電腦的指定目錄打開 sftp 後，至後台管理 4443 打開 SSH。</p>
+<p><img src="/assets/ncp_ssh.png"></p>
+<p>成功 ssh 登入 nextcloudpi.local 後，輸入下列指令進行 rclone 的安裝並設定遠端 sftp。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo -v ; curl https://rclone.org/install.sh | sudo bash</span><br><span class="line">rclone config</span><br></pre></td></tr></table></figure>
+
+<p>使用 rclone 存取 ncdata 目錄需要有 www-data 的群組權限，否則會有該錯誤。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR : Local file system at /media/myCloudDrive/ncdata/data/ncp/files: error reading <span class="built_in">source</span> root directory: directory not found</span><br></pre></td></tr></table></figure>
+
+<p>輸入指令加入群組，記得重新登入才會生效。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gpasswd -a &#123;your-ssh-user&#125; www-data</span><br></pre></td></tr></table></figure>
+
+<p>就可以用 rclone sync 開始同步目的備份電腦的資料囉！</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rclone <span class="built_in">sync</span> -P /media/myCloudDrive/ncdata/data/ncp/files remote:</span><br></pre></td></tr></table></figure>
+
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><p>上述步驟完成後，陽春版的私有雲便打造完成。<br>出遊時手機拍的照片便會透過 Nextcloud APP 即時備份至雲端硬碟，回到家打開電腦 ssh 進樹莓派做異地備份，更進階的玩法可以用排程實現。<br>手機一份、雲端硬碟一份，需要時電腦才連上去備份一份，算有勉強符合 321 備份原則了。</p>
 <p><strong>參考資料</strong></p>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://vocus.cc/article/63a3f27cfd897800011b0a0a">[教學] 自己雲端自己管！ | 以 NextCloud 與 Raspberry Pi 自建 NAS 雲端硬碟</a></li>
@@ -357,7 +379,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NextCloudPi"><span class="nav-number">1.</span> <span class="nav-text">NextCloudPi</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E4%BD%BF%E7%94%A8%E8%80%85"><span class="nav-number">2.</span> <span class="nav-text">建立使用者</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Samba"><span class="nav-number">3.</span> <span class="nav-text">Samba</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%82%99%E4%BB%BD-Google-Photo-%E8%87%B3-NextCloud"><span class="nav-number">4.</span> <span class="nav-text">備份 Google Photo 至 NextCloud</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%AD%A3%E5%BD%B1%E7%89%87%E6%B2%92%E6%9C%89%E9%A0%90%E8%A6%BD%E5%9C%96-%E7%B8%AE%E5%9C%96-%E7%9A%84%E5%95%8F%E9%A1%8C"><span class="nav-number">5.</span> <span class="nav-text">修正影片沒有預覽圖(縮圖)的問題</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%AD%A3-HEIC-%E6%B2%92%E6%9C%89%E9%A0%90%E8%A6%BD%E5%9C%96-%E7%B8%AE%E5%9C%96-%E7%9A%84%E5%95%8F%E9%A1%8C"><span class="nav-number">6.</span> <span class="nav-text">修正 HEIC 沒有預覽圖(縮圖)的問題</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NextCloud-%E5%85%AC%E9%96%8B%E5%B0%8D%E5%A4%96"><span class="nav-number">7.</span> <span class="nav-text">NextCloud 公開對外</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%8B%E6%A9%9F-APP-%E8%87%AA%E5%8B%95%E4%B8%8A%E5%82%B3%E5%82%99%E4%BB%BD%E7%85%A7%E7%89%87"><span class="nav-number">8.</span> <span class="nav-text">手機 APP 自動上傳備份照片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%82%99%E4%BB%BD"><span class="nav-number">9.</span> <span class="nav-text">備份</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NextCloudPi"><span class="nav-number">1.</span> <span class="nav-text">NextCloudPi</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E4%BD%BF%E7%94%A8%E8%80%85"><span class="nav-number">2.</span> <span class="nav-text">建立使用者</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Samba"><span class="nav-number">3.</span> <span class="nav-text">Samba</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%82%99%E4%BB%BD-Google-Photo-%E8%87%B3-NextCloud"><span class="nav-number">4.</span> <span class="nav-text">備份 Google Photo 至 NextCloud</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%AD%A3%E5%BD%B1%E7%89%87%E6%B2%92%E6%9C%89%E9%A0%90%E8%A6%BD%E5%9C%96-%E7%B8%AE%E5%9C%96-%E7%9A%84%E5%95%8F%E9%A1%8C"><span class="nav-number">5.</span> <span class="nav-text">修正影片沒有預覽圖(縮圖)的問題</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%AD%A3-HEIC-%E6%B2%92%E6%9C%89%E9%A0%90%E8%A6%BD%E5%9C%96-%E7%B8%AE%E5%9C%96-%E7%9A%84%E5%95%8F%E9%A1%8C"><span class="nav-number">6.</span> <span class="nav-text">修正 HEIC 沒有預覽圖(縮圖)的問題</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NextCloud-%E5%85%AC%E9%96%8B%E5%B0%8D%E5%A4%96"><span class="nav-number">7.</span> <span class="nav-text">NextCloud 公開對外</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%8B%E6%A9%9F-APP-%E8%87%AA%E5%8B%95%E4%B8%8A%E5%82%B3%E5%82%99%E4%BB%BD%E7%85%A7%E7%89%87"><span class="nav-number">8.</span> <span class="nav-text">手機 APP 自動上傳備份照片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%82%99%E4%BB%BD"><span class="nav-number">9.</span> <span class="nav-text">備份</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%95%B0%E5%9C%B0%E5%82%99%E4%BB%BD"><span class="nav-number">10.</span> <span class="nav-text">異地備份</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">11.</span> <span class="nav-text">總結</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
