@@ -3,6 +3,7 @@ title: "[OpenWrt] ASUS RT-N12+ B1 路由器刷機"
 tags:
   - OpenWrt
   - WPA3
+  - 刷機
 date: 2024-09-27 22:59:45
 ---
 
