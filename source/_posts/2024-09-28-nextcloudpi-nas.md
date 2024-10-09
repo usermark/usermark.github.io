@@ -102,11 +102,13 @@ sudo nano /var/www/nextcloud/config/config.php
 # 修正 HEIC 沒有預覽圖(縮圖)的問題
 
 輸入指令確認 imagick 模組是否存在
+
 ```sh
 php -m | grep -i imagick
 ```
 
 沒有的話就安裝並重啟 apache2
+
 ```sh
 sudo apt-get install php-imagick
 sudp service apache2 reload
@@ -136,6 +138,8 @@ sudo nano /var/www/nextcloud/config/config.php
 接著執行 letsencrypt 申請 SSL 憑證，才不會一直看到安全性警告。這裡 80 和 443 port 必須對外才會成功驗證，若是透過 wifi 路由上網的，要去設定 port forwarding 端口轉發。
 ![](/assets/ncp_ssl.png)
 
+完成後憑證放在 /etc/letsencrypt/live/your-domain.com/
+
 # 手機 APP 自動上傳備份照片
 
 安裝 iOS/Android 的 APP 程式，來連接 Nextcloud。成功登入後，可至更多 > 設定 > 自動上傳，將自動上傳照片/影片功能打開。預設只會上傳後續新增的照片，可視情況決定是否打開上傳整個相機膠捲。
@@ -163,6 +167,7 @@ error generating backup
 Your data directory is not writable.
 Permissions can usually be fixed by giving the web server write access to the root directory. See https://docs.nextcloud.com/server/29/go.php?to=admin-dir_permissions.
 ```
+
 {% endnote %}
 
 # 異地備份
@@ -173,22 +178,26 @@ Permissions can usually be fixed by giving the web server write access to the ro
 ![](/assets/ncp_ssh.png)
 
 成功 ssh 登入 nextcloudpi.local 後，輸入下列指令進行 rclone 的安裝並設定遠端 sftp。
+
 ```sh
 sudo -v ; curl https://rclone.org/install.sh | sudo bash
 rclone config
 ```
 
 使用 rclone 存取 ncdata 目錄需要有 www-data 的群組權限，否則會有該錯誤。
+
 ```sh
 ERROR : Local file system at /media/myCloudDrive/ncdata/data/ncp/files: error reading source root directory: directory not found
 ```
 
 輸入指令加入群組，記得重新登入才會生效。
+
 ```sh
 sudo gpasswd -a {your-ssh-user} www-data
 ```
 
 就可以用 rclone sync 開始同步目的備份電腦的資料囉！
+
 ```sh
 rclone sync -P /media/myCloudDrive/ncdata/data/ncp/files remote:
 ```
