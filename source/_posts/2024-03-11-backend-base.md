@@ -14,7 +14,7 @@ Netscape 開發了名為安全通訊端層（Secure Socket Layer，SSL）的上�
 
 參考 [什麼是 TLS（傳輸層安全性）？](https://www.cloudflare.com/zh-tw/learning/ssl/transport-layer-security-tls/)
 
-# 自簽憑證 (Self-Signed Certificate)
+# Self-Signed Certificate (自簽憑證)
 
 可以使用 [OpenSSL 建立自簽憑證](https://blog.miniasp.com/post/2019/02/25/Creating-Self-signed-Certificate-using-OpenSSL)，或是使用免費憑證。[Let’s encrypt](https://letsencrypt.org/zh-tw/)是一家推出免費 SSL 認證服務的數位憑證機構。
 
@@ -66,6 +66,14 @@ Volume 是 Docker 最推薦存放 persisting data（ 數據 ）的機制，因�
 例如無線路由器的規格通常會寫 802.11n：最高 300 Mbps，表示每秒傳輸 37.5MB。
 參考 <https://3day.tw/什麼是mbps什麼是mb-s/>
 
-# 虛擬非軍事區 (Virtual DMZ)
+# Virtual DMZ (虛擬非軍事區)
 
 讓您得以將一部電腦公開顯露在網際網路上，使所有上傳的封包全數轉向您指定的電腦。
+
+# FQDN (Fully-Qualified Domain Name，完整網域名稱)
+
+便是常講的 domain。
+
+# CDN (內容傳遞網路)
+
+是一組地理上分散的伺服器，用於在靠近終端使用者的位置快取內容。能有效緩解 DDoS 攻擊，避免源站伺服器遭受攻擊，導致服務中斷或伺服器癱瘓等問題發生。

@@ -99,12 +99,27 @@ def open_folder(path):
 import time
 from datetime import datetime, timedelta
 
-today = time.strftime('%Y%m%d')
+today = time.strftime('%Y/%m/%d %H:%M:%S')
 print(today)
+# 取得昨天的日期
 yesterday = datetime.today() + timedelta(days=-1)
 print(yesterday.strftime('%Y%m%d'))
 someday = datetime.fromtimestamp(1721095603)
 print(someday.strftime('%Y%m%d'))
+# 取得20年前
+today = datetime.today()
+twenty_years_old = today.replace(year=today.year - 20)
+```
+
+# 取得照片拍攝日期
+
+參考 <https://steam.oxxostudio.tw/category/python/example/image-exif.html>
+
+```python
+from PIL import Image
+
+with Image.open(path) as im:
+    im.getexif().get_ifd(0x8769).get(36867)
 ```
 
 # NAS 連線並取檔
