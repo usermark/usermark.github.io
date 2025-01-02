@@ -111,7 +111,7 @@ php -m | grep -i imagick
 
 ```sh
 sudo apt-get install php-imagick
-sudp service apache2 reload
+sudo service apache2 reload
 ```
 
 在 config.php 新增設定
