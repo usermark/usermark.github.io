@@ -22,7 +22,7 @@ docker run -p 7500:7500 -p 6001:6001 -d -v data:/etc/frp --name frps snowdreamte
 -p 綁定連接埠port。7500 port是給frp網頁使用，6001 port用來作為對外的窗口，待會會用到。
 -d 容器啟動後會進入背景執行。
 -v 用來掛載資料卷到容器，此處的data便是剛建立的。冒號後面的/etc/frp為容器內對應的資料夾。
---name 可以為容器自訂命名。
+-\-name 可以為容器自訂命名。
 
 ![](/assets/docker_frps.png)
 

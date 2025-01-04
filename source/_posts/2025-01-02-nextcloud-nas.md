@@ -20,8 +20,8 @@ docker run -p 8080:80 -p 8443:443 -d -v /D/nextcloud:/var/www/html/data --name n
 ```
 -p 綁定連接埠port。
 -d 容器啟動後會進入背景執行。
--v 用來掛載本機資料夾到容器，此處的 /D/nextcloud 便是 D:\nextcloud，是預計用來放照片的地方。冒號後面的/etc/frp為容器內對應的資料夾。
---name 可以為容器自訂命名。
+-v 用來掛載本機資料夾到容器，此處的 /D/nextcloud 便是 D:\nextcloud，是預計用來放照片的地方。冒號後面的 /var/www/html/data 為容器內對應的資料夾。
+-\-name 可以為容器自訂命名。
 
 執行後，就能連進 http://localhost:8080 查看。
 ![](/assets/nextcloud-init.png)
@@ -53,7 +53,7 @@ grant all on nextcloud.* to 'nc'%'%';
 
 # HTTPS
 
-為了讓網路更安全，一定進行 SSL 加密。
+為了讓網路更安全，一定要進行 SSL 加密。
 
 ```bash
 docker exec -it nextcloud bash
@@ -63,7 +63,7 @@ docker exec -it nextcloud bash
 a2enmod ssl
 ```
 
-接下來有兩個選擇，一個是自簽憑證，一個是 letsencrypt。
+接下來有兩個選擇，一個是自簽憑證，一個是 Let’s Encrypt。
 
 ## 自簽憑證
 
@@ -96,12 +96,68 @@ nano /etc/apache2/sites-available/000-default.conf
 </VirtualHost>
 ```
 
-重啟容器後，回去刷新網頁便會自動導到 https
+重啟容器後，回去刷新網頁便會自動導到 https://localhost:8443/
 ```bash
 docker restart nextcloud
 ```
 
-## letsencrypt
+## Let’s Encrypt
+
+安裝 Let’s Encrypt 客戶端 Certbot 後，執行證書安裝。注意 80 和 443 port 必須對外才會成功驗證，因為筆者使用 docker 對外的 port 分別是 8080 和 8443，有再透過 wifi 路由 port forwarding 端口轉發。
+```bash
+apt install certbot python3-certbot-apache
+certbot --apache
+```
+
+完成後可以看下產生好的 apache 設定檔 /etc/apache2/sites-available/000-default-le-ssl.conf
+```xml
+<IfModule mod_ssl.c>
+	<VirtualHost *:443>
+		ServerName your.domain.com
+
+		ServerAdmin webmaster@localhost
+		DocumentRoot /var/www/html
+
+		ErrorLog ${APACHE_LOG_DIR}/error.log
+		CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+		SSLCertificateFile /etc/letsencrypt/live/your.domain.com/fullchain.pem
+		SSLCertificateKeyFile /etc/letsencrypt/live/your.domain.com/privkey.pem
+		Include /etc/letsencrypt/options-ssl-apache.conf
+	</VirtualHost>
+</IfModule>
+```
+
+/etc/apache2/sites-available/000-default.conf 則多了底下 3 行轉送為 https 的。
+```xml
+<VirtualHost *:80>
+	#ServerName www.example.com
+
+	ServerAdmin webmaster@localhost
+	DocumentRoot /var/www/html
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+	RewriteEngine on
+	RewriteCond %{SERVER_NAME} =your.domain.com
+	RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+</VirtualHost>
+```
+
+# 優化
+
+新增索引以改善資料庫效能
+```bash
+docker exec --user www-data nextcloud php occ db:add-missing-indices
+```
+
+# 常用指令
+
+將新的照片和影片加入資料庫，等同 NextCloudPi 的 nc-scan
+```bash
+docker exec --user www-data nextcloud php occ files:scan --all
+```
 
 **參考資料**
 
