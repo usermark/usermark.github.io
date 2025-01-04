@@ -40,7 +40,7 @@
 <meta property="og:image" content="https://usermark.github.io/assets/ncp_ssl.png">
 <meta property="og:image" content="https://usermark.github.io/assets/ncp_ssh.png">
 <meta property="article:published_time" content="2024-09-28T15:38:01.000Z">
-<meta property="article:modified_time" content="2024-10-12T15:35:52.005Z">
+<meta property="article:modified_time" content="2025-01-01T08:04:36.840Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="Raspberry Pi">
 <meta property="article:tag" content="NextCloudPi">
@@ -207,7 +207,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2024-10-12 23:35:52" itemprop="dateModified" datetime="2024-10-12T23:35:52+08:00">2024-10-12</time>
+                <time title="修改時間：2025-01-01 16:04:36" itemprop="dateModified" datetime="2025-01-01T16:04:36+08:00">2025-01-01</time>
               </span>
 
           
@@ -262,7 +262,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -m | grep -i imagick</span><br></pre></td></tr></table></figure>
 
 <p>沒有的話就安裝並重啟 apache2</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install php-imagick</span><br><span class="line">sudp service apache2 reload</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install php-imagick</span><br><span class="line">sudo service apache2 reload</span><br></pre></td></tr></table></figure>
 
 <p>在 config.php 新增設定<br>sudo nano &#x2F;var&#x2F;www&#x2F;nextcloud&#x2F;config&#x2F;config.php</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;enable_previews&#x27;</span> =&gt; <span class="literal">true</span>,</span><br><span class="line"><span class="string">&#x27;enabledPreviewProviders&#x27;</span> =&gt; [</span><br><span class="line">    <span class="string">&#x27;OC\Preview\Movie&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;OC\Preview\HEIC&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;OC\Preview\PNG&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;OC\Preview\JPEG&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;OC\Preview\GIF&#x27;</span>,</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
@@ -397,14 +397,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">51</span>
+          <span class="site-state-item-count">52</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-count">42</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -453,7 +453,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2024</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
