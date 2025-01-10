@@ -18,6 +18,8 @@ Netscape 開發了名為安全通訊端層（Secure Socket Layer，SSL）的上�
 
 可以使用 [OpenSSL 建立自簽憑證](https://blog.miniasp.com/post/2019/02/25/Creating-Self-signed-Certificate-using-OpenSSL)，或是使用免費憑證。[Let’s encrypt](https://letsencrypt.org/zh-tw/)是一家推出免費 SSL 認證服務的數位憑證機構。
 
+實戰應用 [\[Docker\] 用NextCloud自建NAS雲端硬碟](/2025/01/02/nextcloud-nas/)
+
 # Cipher suite
 
 使用在 TLS 時的演算法集合名稱。
@@ -77,3 +79,9 @@ Volume 是 Docker 最推薦存放 persisting data（ 數據 ）的機制，因�
 # CDN (內容傳遞網路)
 
 是一組地理上分散的伺服器，用於在靠近終端使用者的位置快取內容。能有效緩解 DDoS 攻擊，避免源站伺服器遭受攻擊，導致服務中斷或伺服器癱瘓等問題發生。
+
+# Infra (基礎建設)
+
+所有資訊設備的「維運」，簡單的來說，可以說是一間公司通常會聘請的「網管」的工作項目。
+
+參考 [什麼是 IT 基礎設施？](https://aws.amazon.com/tw/what-is/it-infrastructure/)
