@@ -7,6 +7,7 @@ tags:
   - SQL
   - SQLite
   - DB2
+  - MSSQL
 ---
 
 紀錄開發上常遇到的問題，避免重複踩坑。
@@ -39,6 +40,18 @@ os.add_dll_directory('C:\\Program Files\\clidriver\\bin')
 import ibm_db
 
 conn = ibm_db.connect('DATABASE=enterprise;HOSTNAME=ip;PORT=50000;PROTOCOL=TCPIP;UID=user;PWD=pwd', '', '')
+```
+
+_MSSQL_
+
+```python
+import pymssql
+
+conn = pymssql.connect(host="ip:1433",
+                       user="user",
+                       password="pwd",
+                       database="enterprise",
+                       charset="utf8")
 ```
 
 # 建立 Table

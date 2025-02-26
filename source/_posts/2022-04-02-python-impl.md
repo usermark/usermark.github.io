@@ -35,6 +35,18 @@ with open('config.yml', encoding='UTF-8') as stream:
     configs = yaml.safe_load(stream)
 ```
 
+# 輸出 yaml 換行格式
+
+```python
+def repr_str(dumper: yaml.SafeDumper, data):
+    if '\n' in data:
+        return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
+    return dumper.represent_str(data)
+
+yaml.add_representer(str, repr_str, Dumper=yaml.SafeDumper)
+print(yaml.safe_dump(foo))
+```
+
 # 讀取 zip 檔內的文字檔內容
 
 ```python
@@ -266,18 +278,6 @@ ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verif
 pip install -U "urllib3<1.25"
 ```
 
-# 輸出 yaml 換行格式
-
-```python
-def repr_str(dumper: yaml.SafeDumper, data):
-    if '\n' in data:
-        return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
-    return dumper.represent_str(data)
-
-yaml.add_representer(str, repr_str, Dumper=yaml.SafeDumper)
-print(yaml.safe_dump(foo))
-```
-
 # os.popen()在 Windows 下出現 UnicodeDecodeError: 'cp950' codec can't decode byte
 
 os.popen()是封裝 subprocess.Popen()，並用 io.TextIOWrapper 轉換 bytes 輸出成 str 的結果，而 Windows 下的 cmd 指令預設為 cp950，會造成解析錯誤。
@@ -331,4 +331,61 @@ chunks = split_list(numbers, chunk_size)
 
 print("Chunks:", chunks)
 # Chunks: [[0, 1, 2], [3, 4, 5], [6, 7, 8], [9]]
+```
+
+# 身分證/新舊居留證格式檢驗
+
+```python
+import re
+
+def check_pid(value: str):
+    local_table = {'A':1,'B':0,'C':9,'D':8,'E':7,'F':6,'G':5,'H':4,'I':9,
+                   'J':3,'K':2,'L':2,'M':1,'N':0,'O':8,'P':9,'Q':8,'R':7,
+                   'S':6,'T':5,'U':4,'V':3,'W':1,'X':3,'Y':2,'Z':0}
+    local_table2 = {'A':0,'B':8,'C':6,'D':4}
+    # 符合身分證格式或新式居留證格式
+    if re.match(r'[A-Z]{1}[1-2]{1}[0-9]{8}', value) or re.match(r'[A-Z]{1}[8-9]{1}[0-9]{8}', value):
+        check_num = local_table[value[0]]
+        for i in range(1, 9):
+        check_num += int(value[i])*(9-i)
+        check_num += int(value[9])
+        return check_num % 10 == 0
+    # 符合舊式居留證格式
+    elif re.match(r'[A-Z]{1}[A-D]{1}[0-9]{8}', value):
+        check_num = local_table[value[0]]
+        check_num += local_table2[value[1]]  # 第二碼英文
+        for i in range(2, 9):
+        check_num += int(value[i])*(9-i)
+        check_num += int(value[9])
+        return check_num % 10 == 0
+    return False
+```
+
+# Pandas
+
+## 讀取 csv
+
+```python
+import pandas as pd
+import csv
+
+df = pd.read_csv('path/to/file.csv')
+print(df)
+
+# 不使用 Pandas 的做法
+with open('path/to/file.csv', newline='', encoding='UTF-8-SIG') as csvfile:
+    reader = csv.reader(csvfile)
+    for row in reader:
+        print(row[0])
+```
+
+## 讀取 excel
+
+```python
+import pandas as pd
+
+# sheet_name 不指定則預設讀第一個工作表
+df = pd.read_excel('path/to/file.xlsx', header=0, sheet_name='Sheet1', dtype=str)
+for index, row in df.iterrows():
+    print(row['column_name'])
 ```
