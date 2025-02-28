@@ -28,12 +28,13 @@
 <meta property="og:description" content="紀錄開發上常遇到的問題，避免重複踩坑。">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2023-02-16T23:24:00.000Z">
-<meta property="article:modified_time" content="2024-07-14T14:15:27.383Z">
+<meta property="article:modified_time" content="2025-02-28T15:11:00.925Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="Python">
 <meta property="article:tag" content="SQL">
 <meta property="article:tag" content="SQLite">
 <meta property="article:tag" content="DB2">
+<meta property="article:tag" content="MSSQL">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://usermark.github.io/2023/02/17/python-sql-impl/">
@@ -195,7 +196,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2024-07-14 22:15:27" itemprop="dateModified" datetime="2024-07-14T22:15:27+08:00">2024-07-14</time>
+                <time title="修改時間：2025-02-28 23:11:00" itemprop="dateModified" datetime="2025-02-28T23:11:00+08:00">2025-02-28</time>
               </span>
 
           
@@ -227,6 +228,9 @@
 
 <p>參考 <a target="_blank" rel="noopener" href="https://github.com/ibmdb/python-ibmdb?tab=readme-ov-file#installation">https://github.com/ibmdb/python-ibmdb?tab=readme-ov-file#installation</a><br>將 C:\Users{使用者}\AppData\Local\Programs\Python\Python{版本號}\Lib\site-packages 底下 clidriver 資料夾移動到 C:\Program Files</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.add_dll_directory(<span class="string">&#x27;C:\\Program Files\\clidriver\\bin&#x27;</span>)</span><br><span class="line"><span class="keyword">import</span> ibm_db</span><br><span class="line"></span><br><span class="line">conn = ibm_db.connect(<span class="string">&#x27;DATABASE=enterprise;HOSTNAME=ip;PORT=50000;PROTOCOL=TCPIP;UID=user;PWD=pwd&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><em>MSSQL</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymssql</span><br><span class="line"></span><br><span class="line">conn = pymssql.connect(host=<span class="string">&quot;ip:1433&quot;</span>,</span><br><span class="line">                       user=<span class="string">&quot;user&quot;</span>,</span><br><span class="line">                       password=<span class="string">&quot;pwd&quot;</span>,</span><br><span class="line">                       database=<span class="string">&quot;enterprise&quot;</span>,</span><br><span class="line">                       charset=<span class="string">&quot;utf8&quot;</span>)</span><br></pre></td></tr></table></figure>
 
 <h1 id="建立-Table"><a href="#建立-Table" class="headerlink" title="建立 Table"></a>建立 Table</h1><p>若 db 檔案不存在，會自動建立。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">conn = sqlite3.connect(<span class="string">&#x27;enterprise.db&#x27;</span>)</span><br><span class="line">curs = conn.cursor()</span><br><span class="line">curs.execute(<span class="string">&#x27;&#x27;&#x27;CREATE TABLE IF NOT EXISTS zoo</span></span><br><span class="line"><span class="string">                (critter VARCHAR(20) PRIMARY KEY,</span></span><br><span class="line"><span class="string">                 count INT,</span></span><br><span class="line"><span class="string">                 damages FLOAT)&#x27;&#x27;&#x27;</span>)</span><br><span class="line">curs.close()</span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
@@ -260,6 +264,7 @@
               <a href="/tags/SQL/" rel="tag"># SQL</a>
               <a href="/tags/SQLite/" rel="tag"># SQLite</a>
               <a href="/tags/DB2/" rel="tag"># DB2</a>
+              <a href="/tags/MSSQL/" rel="tag"># MSSQL</a>
           </div>
 
         
@@ -355,7 +360,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">42</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
