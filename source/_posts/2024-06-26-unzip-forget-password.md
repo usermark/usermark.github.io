@@ -64,14 +64,14 @@ $zip2$*0*3*0*5fc1daf064540d695750f1a159f5d8e7*7c06*b*183a8481561fccfb41176c*b331
 至 https://hashcat.net/hashcat/ 下載並解壓縮。並切換到該目錄
 
 ```bash
-> hashcat -m 13600 -a 0 hash.txt example.dict --show
+> hashcat -m 13600 -a 0 hash.txt example.dict
 $zip2$*0*3*0*5fc1daf064540d695750f1a159f5d8e7*7c06*b*183a8481561fccfb41176c*b331ede7817195ecf59d*$/zip2$:passw0rd
 ```
 ![](/assets/zip2.png)
 
 -m 指定雜湊方法的類型，可至<https://hashcat.net/wiki/doku.php?id=example_hashes>查看，使用$zip2$查到對應值為 13600
 -a 破解模式: 0 字典, 1 組合, 3 暴力
--o 輸出檔案，也可以用 -\-show 直接顯示結果
+-o 輸出檔案
 
 其輸出結果最後面便是密碼囉!
 ![](/assets/hashcat.png)
@@ -79,11 +79,8 @@ $zip2$*0*3*0*5fc1daf064540d695750f1a159f5d8e7*7c06*b*183a8481561fccfb41176c*b331
 這是使用字典破解，當然若是密碼更複雜，就要改用暴力破解，假設知道密碼為長度 6 的英文組合
 
 ```bash
-hashcat -m 13600 -a 3 hash.txt ?l?l?l?l?l?l --show
+hashcat -m 13600 -a 3 hash.txt ?l?l?l?l?l?l
 ```
-
-注意，如果設定的範圍太大會出現錯誤
-Integer overflow detected in keyspace of mask
 
 規則可輸入 hashcat -h 查看
 
@@ -98,4 +95,20 @@ Integer overflow detected in keyspace of mask
   s |  !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
   a | ?l?u?d?s
   b | 0x00 - 0xff
+```
+
+# 進階
+
+範例呈現更複雜且通用的情況，暴力破解密碼長度 32 碼，且含特殊字元
+```
+hashcat -m 17230 -a 3 -1 ?l?u?d*!$@_#=; --increment --increment-min 8 hash.txt ?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1 --session my_session
+```
+-m 指定雜湊方法的類型為 17230 PKZIP (Mixed Multi-File Checksum-Only)
+-1 客製化參數
+--increment --increment-min 8 最小從 8 碼開始破解
+--session 方便下次還原繼續跑，當要停止時按一次 c 做紀錄並等待離開
+
+恢復上次進度繼續跑
+```
+hashcat --restore --session my_session
 ```
