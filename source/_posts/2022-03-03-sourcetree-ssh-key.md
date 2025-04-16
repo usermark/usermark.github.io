@@ -20,12 +20,21 @@ ssh-keygen -t rsa -b 4096 -C "your_email"
 # Github新增SSH Key
 
 輸入以下指令查看公鑰內容，並複製輸出內容到剪貼簿。
+{% tabs mac_windows %}
+<!-- tab mac -->
 ```shell
 cat ~/.ssh/id_rsa.pub
 ```
+<!-- endtab -->
+<!-- tab windows -->
+```shell
+type C:\Users\XXX\.ssh\id_rsa.pub
+```
 
-或是使用PuTTYgen查看，選單Conversions > Import key
+或是使用[PuTTYgen](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)查看，選單Conversions > Import key
 ![](/assets/puttygen.png)
+<!-- endtab -->
+{% endtabs %}
 
 登入Github網頁版，到Settings > SSH and GPG keys > New SSH key，貼上剛複製的內容。
 

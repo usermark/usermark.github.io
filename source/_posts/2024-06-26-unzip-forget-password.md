@@ -62,6 +62,7 @@ $zip2$*0*3*0*5fc1daf064540d695750f1a159f5d8e7*7c06*b*183a8481561fccfb41176c*b331
 # 安裝 hashcat
 
 至 https://hashcat.net/hashcat/ 下載並解壓縮。並切換到該目錄
+使用字典破解，更多字典檔可至 <https://github.com/danielmiessler/SecLists> 的 Passwords 資料夾抓
 
 ```bash
 > hashcat -m 13600 -a 0 hash.txt example.dict
@@ -76,7 +77,7 @@ $zip2$*0*3*0*5fc1daf064540d695750f1a159f5d8e7*7c06*b*183a8481561fccfb41176c*b331
 其輸出結果最後面便是密碼囉!
 ![](/assets/hashcat.png)
 
-這是使用字典破解，當然若是密碼更複雜，就要改用暴力破解，假設知道密碼為長度 6 的英文組合
+若要改用暴力破解，假設知道密碼為長度 6 的英文組合
 
 ```bash
 hashcat -m 13600 -a 3 hash.txt ?l?l?l?l?l?l
@@ -100,15 +101,15 @@ hashcat -m 13600 -a 3 hash.txt ?l?l?l?l?l?l
 # 進階
 
 範例呈現更複雜且通用的情況，暴力破解密碼長度 32 碼，且含特殊字元
-```
+```bash
 hashcat -m 17230 -a 3 -1 ?l?u?d*!$@_#=; --increment --increment-min 8 hash.txt ?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1 --session my_session
 ```
 -m 指定雜湊方法的類型為 17230 PKZIP (Mixed Multi-File Checksum-Only)
 -1 客製化參數
---increment --increment-min 8 最小從 8 碼開始破解
---session 方便下次還原繼續跑，當要停止時按一次 c 做紀錄並等待離開
+-\-increment -\-increment-min 8 最小從 8 碼開始破解
+-\-session 方便下次還原繼續跑，當要停止時按一次 c 做紀錄並等待離開
 
 恢復上次進度繼續跑
-```
+```bash
 hashcat --restore --session my_session
 ```
