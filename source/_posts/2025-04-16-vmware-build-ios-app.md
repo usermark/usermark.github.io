@@ -1,23 +1,23 @@
 ---
-title: "[iOS] 從無到有用 VMWare 打包 Flutter iOS app"
+title: "[iOS] 從無到有用 VMware 打包 Flutter iOS app"
 date: 2025-04-16 11:15:38
 tags:
-- VMWare
+- VMware
 - MacOS
 - Flutter
 ---
-手邊 MacBook 版本太舊不能支援新版 Xcode 和上架 APP，無奈只好用 VMWare 安裝 MacOS 15.1 來打包並上架。又遇到 Apple ID 無法在 VMWare 模擬的 MacOS 登入，回"發生未知的錯誤"，需要手動自簽 CSR 憑證上傳 後台，接著後面還有一連串行為才能成功打包並上架。
+手邊 MacBook 版本太舊不能支援新版 Xcode 和上架 APP，無奈只好用 VMware 安裝 MacOS 15.1 來打包並上架。又遇到 Apple ID 無法在 VMware 模擬的 MacOS 登入，回"發生未知的錯誤"，需要手動自簽憑證請求上傳 Apple Developer 後台，接著後面還有一連串行為才能成功打包並上架。
 
 <!--more-->
 # 安裝 VMware Workstation 17 Pro
 
-首先要準備好 Sequoia.iso，取得方式之一是用 MacBook 下載與製作，教學看這篇 [【詳細教學】macOS Sequoia ISO 下載與製作](https://www.drbuho.com/zh-tw/how-to/macos-sequoia-iso)
-
-[在VMWare Workstation 16安裝MacOS](https://hackmd.io/@enoladne/BJjgo8R6F)看這篇就夠了。
-
-https://github.com/DrDonk/unlocker/releases/tag/v4.2.7
+首先要準備好 Sequoia.iso，取得方式之一是用 MacBook 下載與製作，教學看這篇 [【詳細教學】macOS Sequoia ISO 下載與製作](https://www.drbuho.com/zh-tw/how-to/macos-sequoia-iso)。
+然後下載 [unlocker](https://github.com/DrDonk/unlocker/releases/tag/v4.2.7)，再依[在VMware Workstation 16安裝MacOS](https://hackmd.io/@enoladne/BJjgo8R6F)的步驟裝好 VMware。
+特別注意的是：裝好後畫面會小小的，不匹配視窗大小，需要進一步安裝 VMware Tools，找到剛 unlocker 底下的 iso 資料夾，將 darwin.iso 檔掛載到光碟機。
 
 ![](/assets/vmware_unlock.png)
+
+開機後安裝完成，再去「隱私權與安全性」底下的「詳細資訊...」，把 VMware, Inc. 打開即可。
 
 ![](/assets/vmware_unlock2.png)
 
@@ -25,21 +25,43 @@ https://github.com/DrDonk/unlocker/releases/tag/v4.2.7
 
 # 安裝 Xcode 16.2
 
-[如何手動快速下載不同版本的 Xcode](https://blog.poychang.net/manually-download-multiple-versions-of-xcode/)
+至 https://developer.apple.com/downloads/more 搜尋 Xcode 16.2 來下載和安裝，該頁面需要登入 Apple ID。
 
-# 自簽 CSR 憑證
+# 自簽憑證請求
 
-[iOS App 上架流程圖文教學](https://franksios.medium.com/ios-app上架流程圖文教學-724636ddc78b)
+最關鍵的來了，原本若有使用 Apple ID 登入 Xcode 的，會自動在本機產生對應檔案，不用額外做設定。然而 VMware 模擬的 MacOS 無法登 Apple ID，會回”發生未知的錯誤”。因此 cer 憑證檔、Identifier、Provisioning Profile 都要手動處理。
+主要參考這篇 [iOS App 上架流程圖文教學](https://franksios.medium.com/ios-app上架流程圖文教學-724636ddc78b)，底下則是筆者實作的。
 
+## 產生 cer 憑證檔
+
+在產生 cer 憑證檔之前必須先產生 certSigningRequest (CSR) 檔，開啟「鑰匙圖存取」，工具列打開「鑰匙圖存取」->「憑證輔助程式」->「從憑證授權要求憑證」。
+1. 使用者電子郵件填入 Apple ID
+2. 已將要求設為「儲存到硬碟」
+3. 勾選「指定密鑰配對資訊」
+4. 「密鑰大小」和「演算法」分別使用預設的 2048 bits 和 RSA
+
+產出 CSR 檔後，至 Apple Developer 後台「Certificates」新增憑證，要選取「iOS Distribution（App Store and Ad Hoc）」，並上傳前面產好的 CSR 檔。下載 cer 檔至本機後，記得點擊做安裝，安裝後會看到紅色不受信任
 ![](/assets/vmware_cer.png)
 
-改為永遠信任
+手動改為「永遠信任」即可
 
 ![](/assets/vmware_cer2.png)
+
+## 產生 Identifier
+
+跳過不贅述。
+
+## 產生 Provisioning Profile
+
+至 Apple Developer 後台「Profiles」新增，要選取「App Store」，剩下依指示操作即可。
 
 # 安裝 Homebrew 和 git
 
 至 <https://github.com/Homebrew/brew/releases/tag/4.4.31> 抓取 pkg 檔做安裝。
+安裝完後執行指令確認
+```shell
+brew doctor
+```
 
 執行下方指令安裝 git，後面抓取 Flutter SDK 會用到
 ```shell
@@ -48,8 +70,17 @@ brew install git
 
 # 安裝 VS Code 和 Flutter 外掛
 
-# 安裝 CocoPods
+跳過不贅述。
+
+# 安裝 CocoaPods
+
+第二個挑戰在這。
+
+```shell
+brew install chruby ruby-install
+```
 
 **參考資料**
 
-1. [How to properly install Cocoapods(You don’t have write permissions for the /Library/Ruby/Gems/2.6.0 directory)](https://jideije-emeka.medium.com/how-to-properly-install-cocoapods-you-dont-have-write-permissions-for-the-library-ruby-gems-2-6-0-41ba58ee9f2b)
+1. [如何手動快速下載不同版本的 Xcode](https://blog.poychang.net/manually-download-multiple-versions-of-xcode/)
+2. [How to properly install Cocoapods(You don’t have write permissions for the /Library/Ruby/Gems/2.6.0 directory)](https://jideije-emeka.medium.com/how-to-properly-install-cocoapods-you-dont-have-write-permissions-for-the-library-ruby-gems-2-6-0-41ba58ee9f2b)
