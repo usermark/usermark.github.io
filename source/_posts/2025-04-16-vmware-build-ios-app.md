@@ -40,7 +40,10 @@ tags:
 3. 勾選「指定密鑰配對資訊」
 4. 「密鑰大小」和「演算法」分別使用預設的 2048 bits 和 RSA
 
-產出 CSR 檔後，至 Apple Developer 後台「Certificates」新增憑證，要選取「iOS Distribution（App Store and Ad Hoc）」，並上傳前面產好的 CSR 檔。下載 cer 檔至本機後，記得點擊做安裝，安裝後會看到紅色不受信任
+產出 CSR 檔後，至 Apple Developer 後台「Certificates」新增憑證，要選取「iOS Distribution（App Store Connect and Ad Hoc）」，並上傳前面產好的 CSR 檔。
+![](/assets/apple_cer.png)
+
+下載 cer 檔至本機後，記得點擊做安裝，安裝後會看到紅色不受信任
 ![](/assets/vmware_cer.png)
 
 手動改為「永遠信任」即可
@@ -53,7 +56,9 @@ tags:
 
 ## 產生 Provisioning Profile
 
-至 Apple Developer 後台「Profiles」新增，要選取「App Store」，剩下依指示操作即可。
+至 Apple Developer 後台「Profiles」新增，要選取「App Store Connect」，剩下依指示操作即可。
+
+![](/assets/apple_profile.png)
 
 # 安裝 Homebrew 和 git
 
@@ -70,14 +75,38 @@ brew install git
 
 # 安裝 VS Code 和 Flutter 外掛
 
-跳過不贅述。
+跳過不贅述，但記得設定 PATH
+
+```shell
+touch ~/.zshenv
+export PATH=$HOME/development/flutter/bin:$PATH >> ~/.zshenv
+```
 
 # 安裝 CocoaPods
 
 第二個挑戰在這。
 
+依序輸入指令安裝最新版 ruby，需要跑一段時間。
 ```shell
 brew install chruby ruby-install
+ruby-install ruby
+```
+
+設定 shell
+```shell
+echo "source $(brew --prefix)/opt/chruby/share/chruby/chruby.sh" >> ~/.zshrc
+echo "source $(brew --prefix)/opt/chruby/share/chruby/auto.sh" >> ~/.zshrc
+echo "chruby ruby" >> ~/.zshrc
+```
+
+重啟終端機後，執行指令確認版本
+```shell
+ruby -v
+```
+
+最後安裝 CocoaPods
+```shell
+gem install cocoapods
 ```
 
 **參考資料**
