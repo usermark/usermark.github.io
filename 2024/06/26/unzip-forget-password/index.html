@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://usermark.github.io/assets/zip2.png">
 <meta property="og:image" content="https://usermark.github.io/assets/hashcat.png">
 <meta property="article:published_time" content="2024-06-26T06:41:30.000Z">
-<meta property="article:modified_time" content="2025-04-08T12:56:07.840Z">
+<meta property="article:modified_time" content="2025-04-18T13:00:53.378Z">
 <meta property="article:author" content="Mike Chen">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://usermark.github.io/assets/zip2.png">
@@ -194,7 +194,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2025-04-08 20:56:07" itemprop="dateModified" datetime="2025-04-08T20:56:07+08:00">2025-04-08</time>
+                <time title="修改時間：2025-04-18 21:00:53" itemprop="dateModified" datetime="2025-04-18T21:00:53+08:00">2025-04-18</time>
               </span>
 
           
@@ -237,22 +237,22 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$zip2$*0*3*0*5fc1daf064540d695750f1a159f5d8e7*7c06*b*183a8481561fccfb41176c*b331ede7817195ecf59d*$/zip2$</span><br></pre></td></tr></table></figure>
 
 <p>存成檔案 hash.txt</p>
-<h1 id="安裝-hashcat"><a href="#安裝-hashcat" class="headerlink" title="安裝 hashcat"></a>安裝 hashcat</h1><p>至 <a target="_blank" rel="noopener" href="https://hashcat.net/hashcat/">https://hashcat.net/hashcat/</a> 下載並解壓縮。並切換到該目錄</p>
+<h1 id="安裝-hashcat"><a href="#安裝-hashcat" class="headerlink" title="安裝 hashcat"></a>安裝 hashcat</h1><p>至 <a target="_blank" rel="noopener" href="https://hashcat.net/hashcat/">https://hashcat.net/hashcat/</a> 下載並解壓縮。並切換到該目錄<br>使用字典破解，更多字典檔可至 <a target="_blank" rel="noopener" href="https://github.com/danielmiessler/SecLists">https://github.com/danielmiessler/SecLists</a> 的 Passwords 資料夾抓</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; hashcat -m 13600 -a 0 hash.txt example.dict</span><br><span class="line">$zip2$*0*3*0*5fc1daf064540d695750f1a159f5d8e7*7c06*b*183a8481561fccfb41176c*b331ede7817195ecf59d*$/zip2$:passw0rd</span><br></pre></td></tr></table></figure>
 <p><img src="/assets/zip2.png"></p>
 <p>-m 指定雜湊方法的類型，可至<a target="_blank" rel="noopener" href="https://hashcat.net/wiki/doku.php?id=example_hashes">https://hashcat.net/wiki/doku.php?id=example_hashes</a>查看，使用$zip2$查到對應值為 13600<br>-a 破解模式: 0 字典, 1 組合, 3 暴力<br>-o 輸出檔案</p>
 <p>其輸出結果最後面便是密碼囉!<br><img src="/assets/hashcat.png"></p>
-<p>這是使用字典破解，當然若是密碼更複雜，就要改用暴力破解，假設知道密碼為長度 6 的英文組合</p>
+<p>若要改用暴力破解，假設知道密碼為長度 6 的英文組合</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -m 13600 -a 3 hash.txt ?l?l?l?l?l?l</span><br></pre></td></tr></table></figure>
 
 <p>規則可輸入 hashcat -h 查看</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> ? | Charset</span><br><span class="line">===+=========</span><br><span class="line"> l | abcdefghijklmnopqrstuvwxyz [a-z]</span><br><span class="line"> u | ABCDEFGHIJKLMNOPQRSTUVWXYZ [A-Z]</span><br><span class="line"> d | 0123456789                 [0-9]</span><br><span class="line"> h | 0123456789abcdef           [0-9a-f]</span><br><span class="line"> H | 0123456789ABCDEF           [0-9A-F]</span><br><span class="line"> s |  !&quot;#$%&amp;&#x27;()*+,-./:;&lt;=&gt;?@[\]^_`&#123;|&#125;~</span><br><span class="line"> a | ?l?u?d?s</span><br><span class="line"> b | 0x00 - 0xff</span><br></pre></td></tr></table></figure>
 
 <h1 id="進階"><a href="#進階" class="headerlink" title="進階"></a>進階</h1><p>範例呈現更複雜且通用的情況，暴力破解密碼長度 32 碼，且含特殊字元</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -m 17230 -a 3 -1 ?l?u?d*!$@_#=; --increment --increment-min 8 hash.txt ?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1 --session my_session</span><br></pre></td></tr></table></figure>
-<p>-m 指定雜湊方法的類型為 17230 PKZIP (Mixed Multi-File Checksum-Only)<br>-1 客製化參數<br>–increment –increment-min 8 最小從 8 碼開始破解<br>–session 方便下次還原繼續跑，當要停止時按一次 c 做紀錄並等待離開</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -m 17230 -a 3 -1 ?l?u?d*!<span class="variable">$@_</span><span class="comment">#=; --increment --increment-min 8 hash.txt ?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1 --session my_session</span></span><br></pre></td></tr></table></figure>
+<p>-m 指定雜湊方法的類型為 17230 PKZIP (Mixed Multi-File Checksum-Only)<br>-1 客製化參數<br>--increment --increment-min 8 最小從 8 碼開始破解<br>--session 方便下次還原繼續跑，當要停止時按一次 c 做紀錄並等待離開</p>
 <p>恢復上次進度繼續跑</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat --restore --session my_session</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat --restore --session my_session</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -347,14 +347,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-count">53</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
