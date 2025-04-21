@@ -78,8 +78,7 @@ brew install git
 跳過不贅述，但記得設定 PATH
 
 ```shell
-touch ~/.zshenv
-export PATH=$HOME/development/flutter/bin:$PATH >> ~/.zshenv
+echo export PATH=$HOME/development/flutter/bin:$PATH >> ~/.zshenv
 ```
 
 # 安裝 CocoaPods
@@ -108,6 +107,24 @@ ruby -v
 ```shell
 gem install cocoapods
 ```
+# 打包 ipa 上傳
+
+一般來說，Xcode 選擇 Product > Archive > Distribute App > App Store Connect 便可成功上傳 app，但在沒有登入 Apple ID 的情況就會出錯。
+
+![](/assets/xcode_archive.png)
+
+須改用 xcrun altool 的方式，首先 Product > Archive > Distribute App > Custom > App Store Connect > Export 先打包出 ipa。
+至 Apple Developer 後台，找到「App Store Connect API」，建立存取權限為「App管理」的金鑰，
+
+![](/assets/apple_store_api_key.png)
+
+並將 p8 檔下載下來，放至 ~/private_keys 目錄底下。
+執行下方指令上傳 ipa，其中 api_key 對應後台金鑰 ID，apiIssuer 對應後台 Issuer ID
+```shell
+xcrun altool --upload-app -f your_app.ipa -t ios --apiKey XXX --apiIssuer XXX --verbose
+```
+
+等待執行完畢，就可以到 Apple Developer 後台 TestFlight 找到剛上傳的版本囉！
 
 **參考資料**
 
