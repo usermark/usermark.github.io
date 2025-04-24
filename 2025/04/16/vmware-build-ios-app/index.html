@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
@@ -34,8 +34,10 @@
 <meta property="og:image" content="https://usermark.github.io/assets/vmware_cer.png">
 <meta property="og:image" content="https://usermark.github.io/assets/vmware_cer2.png">
 <meta property="og:image" content="https://usermark.github.io/assets/apple_profile.png">
+<meta property="og:image" content="https://usermark.github.io/assets/xcode_archive.png">
+<meta property="og:image" content="https://usermark.github.io/assets/apple_store_api_key.png">
 <meta property="article:published_time" content="2025-04-16T03:15:38.000Z">
-<meta property="article:modified_time" content="2025-04-18T13:00:53.387Z">
+<meta property="article:modified_time" content="2025-04-24T14:20:07.258Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="VMware">
 <meta property="article:tag" content="MacOS">
@@ -202,7 +204,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2025-04-18 21:00:53" itemprop="dateModified" datetime="2025-04-18T21:00:53+08:00">2025-04-18</time>
+                <time title="修改時間：2025-04-24 22:20:07" itemprop="dateModified" datetime="2025-04-24T22:20:07+08:00">2025-04-24</time>
               </span>
 
           
@@ -253,7 +255,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install git</span><br></pre></td></tr></table></figure>
 
 <h1 id="安裝-VS-Code-和-Flutter-外掛"><a href="#安裝-VS-Code-和-Flutter-外掛" class="headerlink" title="安裝 VS Code 和 Flutter 外掛"></a>安裝 VS Code 和 Flutter 外掛</h1><p>跳過不贅述，但記得設定 PATH</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">touch ~/.zshenv</span><br><span class="line">export PATH=$HOME/development/flutter/bin:$PATH &gt;&gt; ~/.zshenv</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo export PATH=$HOME/development/flutter/bin:$PATH &gt;&gt; ~/.zshenv</span><br></pre></td></tr></table></figure>
 
 <h1 id="安裝-CocoaPods"><a href="#安裝-CocoaPods" class="headerlink" title="安裝 CocoaPods"></a>安裝 CocoaPods</h1><p>第二個挑戰在這。</p>
 <p>依序輸入指令安裝最新版 ruby，需要跑一段時間。</p>
@@ -267,7 +269,14 @@
 
 <p>最後安裝 CocoaPods</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem install cocoapods</span><br></pre></td></tr></table></figure>
+<h1 id="打包-ipa-上傳"><a href="#打包-ipa-上傳" class="headerlink" title="打包 ipa 上傳"></a>打包 ipa 上傳</h1><p>一般來說，Xcode 選擇 Product &gt; Archive &gt; Distribute App &gt; App Store Connect 便可成功上傳 app，但在沒有登入 Apple ID 的情況就會出錯。</p>
+<p><img src="/assets/xcode_archive.png"></p>
+<p>須改用 xcrun altool 的方式，首先 Product &gt; Archive &gt; Distribute App &gt; Custom &gt; App Store Connect &gt; Export 先打包出 ipa。<br>至 Apple Developer 後台，找到「App Store Connect API」，建立存取權限為「App管理」的金鑰，</p>
+<p><img src="/assets/apple_store_api_key.png"></p>
+<p>並將 p8 檔下載下來，放至 ~&#x2F;private_keys 目錄底下。<br>執行下方指令上傳 ipa，其中 api_key 對應後台金鑰 ID，apiIssuer 對應後台 Issuer ID</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcrun altool --upload-app -f your_app.ipa -t ios --apiKey XXX --apiIssuer XXX --verbose</span><br></pre></td></tr></table></figure>
 
+<p>等待執行完畢，就可以到 Apple Developer 後台 TestFlight 找到剛上傳的版本囉！</p>
 <p><strong>參考資料</strong></p>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://blog.poychang.net/manually-download-multiple-versions-of-xcode/">如何手動快速下載不同版本的 Xcode</a></li>
@@ -278,7 +287,18 @@
 
     
     
-    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- post-body-end -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="9591303574"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 
       <footer class="post-footer">
           <div class="post-tags">
@@ -356,7 +376,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-VMware-Workstation-17-Pro"><span class="nav-number">1.</span> <span class="nav-text">安裝 VMware Workstation 17 Pro</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-Xcode-16-2"><span class="nav-number">2.</span> <span class="nav-text">安裝 Xcode 16.2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E7%B0%BD%E6%86%91%E8%AD%89%E8%AB%8B%E6%B1%82"><span class="nav-number">3.</span> <span class="nav-text">自簽憑證請求</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A2%E7%94%9F-cer-%E6%86%91%E8%AD%89%E6%AA%94"><span class="nav-number">3.1.</span> <span class="nav-text">產生 cer 憑證檔</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A2%E7%94%9F-Identifier"><span class="nav-number">3.2.</span> <span class="nav-text">產生 Identifier</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A2%E7%94%9F-Provisioning-Profile"><span class="nav-number">3.3.</span> <span class="nav-text">產生 Provisioning Profile</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-Homebrew-%E5%92%8C-git"><span class="nav-number">4.</span> <span class="nav-text">安裝 Homebrew 和 git</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-VS-Code-%E5%92%8C-Flutter-%E5%A4%96%E6%8E%9B"><span class="nav-number">5.</span> <span class="nav-text">安裝 VS Code 和 Flutter 外掛</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-CocoaPods"><span class="nav-number">6.</span> <span class="nav-text">安裝 CocoaPods</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-VMware-Workstation-17-Pro"><span class="nav-number">1.</span> <span class="nav-text">安裝 VMware Workstation 17 Pro</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-Xcode-16-2"><span class="nav-number">2.</span> <span class="nav-text">安裝 Xcode 16.2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E7%B0%BD%E6%86%91%E8%AD%89%E8%AB%8B%E6%B1%82"><span class="nav-number">3.</span> <span class="nav-text">自簽憑證請求</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A2%E7%94%9F-cer-%E6%86%91%E8%AD%89%E6%AA%94"><span class="nav-number">3.1.</span> <span class="nav-text">產生 cer 憑證檔</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A2%E7%94%9F-Identifier"><span class="nav-number">3.2.</span> <span class="nav-text">產生 Identifier</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A2%E7%94%9F-Provisioning-Profile"><span class="nav-number">3.3.</span> <span class="nav-text">產生 Provisioning Profile</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-Homebrew-%E5%92%8C-git"><span class="nav-number">4.</span> <span class="nav-text">安裝 Homebrew 和 git</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-VS-Code-%E5%92%8C-Flutter-%E5%A4%96%E6%8E%9B"><span class="nav-number">5.</span> <span class="nav-text">安裝 VS Code 和 Flutter 外掛</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-CocoaPods"><span class="nav-number">6.</span> <span class="nav-text">安裝 CocoaPods</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%93%E5%8C%85-ipa-%E4%B8%8A%E5%82%B3"><span class="nav-number">7.</span> <span class="nav-text">打包 ipa 上傳</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -395,18 +415,7 @@
   </div>
 
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
-     crossorigin="anonymous"></script>
-<!-- sidebar -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-1615854091847831"
-     data-ad-slot="1915238009"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+
       </div>
 
     </div>

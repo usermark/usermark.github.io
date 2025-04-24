@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
@@ -262,7 +262,7 @@
 <p>因缺少依賴包，至專案底下修改 examples\single_chip\camera_web_server\main\CMakeLists.txt<br>於COMPONENT_REQUIRES新增fatfs, vfs, wpa_supplicant</p>
 <figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">set(COMPONENT_SRCS <span class="string">&quot;app_main.c&quot;</span> <span class="string">&quot;app_camera.c&quot;</span> <span class="string">&quot;app_httpd.c&quot;</span> <span class="string">&quot;app_mdns.c&quot;</span> <span class="string">&quot;app_wifi.c&quot;</span> <span class="string">&quot;app_sd.c&quot;</span> <span class="string">&quot;app_uart.c&quot;</span><span class="string">&quot;app_smart_wifi.c&quot;</span>)</span><br><span class="line">set(COMPONENT_ADD_INCLUDEDIRS <span class="string">&quot;include&quot;</span>)</span><br><span class="line"></span><br><span class="line">set(COMPONENT_REQUIRES</span><br><span class="line">    esp32-camera</span><br><span class="line">    esp-face</span><br><span class="line">    nvs_flash</span><br><span class="line">    esp_http_server</span><br><span class="line">    fb_gfx</span><br><span class="line">    mdns</span><br><span class="line">    fatfs</span><br><span class="line">    vfs</span><br><span class="line">    wpa_supplicant</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">set(COMPONENT_EMBED_FILES</span><br><span class="line">        <span class="string">&quot;www/index_ov2640.html.gz&quot;</span></span><br><span class="line">        <span class="string">&quot;www/index_ov3660.html.gz&quot;</span></span><br><span class="line">        <span class="string">&quot;www/index_ov5640.html.gz&quot;</span></span><br><span class="line">        <span class="string">&quot;www/monitor.html.gz&quot;</span>)</span><br><span class="line"></span><br><span class="line">register_component()</span><br></pre></td></tr></table></figure>
 
-<h2 id="undefined-reference-to-96-app-board-main’"><a href="#undefined-reference-to-96-app-board-main’" class="headerlink" title="undefined reference to &#96;app_board_main’"></a>undefined reference to &#96;app_board_main’</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[18/19] Linking CXX executable camera_web_server.elf</span><br><span class="line">FAILED: camera_web_server.elf</span><br><span class="line">cmd.exe /C &quot;cd . &amp;&amp; C:\Users\XXX\.espressif\tools\xtensa-esp32-elf\esp-2019r2-8.2.0\xtensa-esp32-elf\bin\xtensa-esp32-elf-g++.exe  -mlongcalls -Wno-frame-address  -nostdlib @CMakeFiles\camera_web_server.elf.rsp  -o camera_web_server.elf  &amp;&amp; cd .&quot;</span><br><span class="line">c:/users/XXX/.espressif/tools/xtensa-esp32-elf/esp-2019r2-8.2.0/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/8.2.0/../../../../xtensa-esp32-elf/bin/ld.exe: esp-idf/main/libmain.a(app_main.c.obj):(.literal.app_main+0x8): undefined reference to `app_board_main&#x27;</span><br><span class="line">c:/users/XXX/.espressif/tools/xtensa-esp32-elf/esp-2019r2-8.2.0/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/8.2.0/../../../../xtensa-esp32-elf/bin/ld.exe: esp-idf/main/libmain.a(app_main.c.obj): in function `app_main&#x27;:</span><br><span class="line">d:\ai-thinker-open_esp32-camera_lan\examples\single_chip\camera_web_server\build/../main/app_main.c:32: undefined reference to `app_board_main&#x27;</span><br><span class="line">collect2.exe: error: ld returned 1 exit status</span><br><span class="line">ninja: build stopped: subcommand failed.</span><br><span class="line">ninja failed with exit code 1</span><br></pre></td></tr></table></figure>
+<h2 id="undefined-reference-to-app-board-main’"><a href="#undefined-reference-to-app-board-main’" class="headerlink" title="undefined reference to &#96;app_board_main’"></a>undefined reference to &#96;app_board_main’</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[18/19] Linking CXX executable camera_web_server.elf</span><br><span class="line">FAILED: camera_web_server.elf</span><br><span class="line">cmd.exe /C &quot;cd . &amp;&amp; C:\Users\XXX\.espressif\tools\xtensa-esp32-elf\esp-2019r2-8.2.0\xtensa-esp32-elf\bin\xtensa-esp32-elf-g++.exe  -mlongcalls -Wno-frame-address  -nostdlib @CMakeFiles\camera_web_server.elf.rsp  -o camera_web_server.elf  &amp;&amp; cd .&quot;</span><br><span class="line">c:/users/XXX/.espressif/tools/xtensa-esp32-elf/esp-2019r2-8.2.0/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/8.2.0/../../../../xtensa-esp32-elf/bin/ld.exe: esp-idf/main/libmain.a(app_main.c.obj):(.literal.app_main+0x8): undefined reference to `app_board_main&#x27;</span><br><span class="line">c:/users/XXX/.espressif/tools/xtensa-esp32-elf/esp-2019r2-8.2.0/xtensa-esp32-elf/bin/../lib/gcc/xtensa-esp32-elf/8.2.0/../../../../xtensa-esp32-elf/bin/ld.exe: esp-idf/main/libmain.a(app_main.c.obj): in function `app_main&#x27;:</span><br><span class="line">d:\ai-thinker-open_esp32-camera_lan\examples\single_chip\camera_web_server\build/../main/app_main.c:32: undefined reference to `app_board_main&#x27;</span><br><span class="line">collect2.exe: error: ld returned 1 exit status</span><br><span class="line">ninja: build stopped: subcommand failed.</span><br><span class="line">ninja failed with exit code 1</span><br></pre></td></tr></table></figure>
 
 <p>修改 examples\single_chip\camera_web_server\main\CMakeLists.txt<br>於set(COMPONENT_SRCS 新增app_board.c</p>
 <figure class="highlight make"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set(COMPONENT_SRCS <span class="string">&quot;app_main.c&quot;</span> <span class="string">&quot;app_camera.c&quot;</span> <span class="string">&quot;app_httpd.c&quot;</span> <span class="string">&quot;app_mdns.c&quot;</span> <span class="string">&quot;app_wifi.c&quot;</span> <span class="string">&quot;app_sd.c&quot;</span> <span class="string">&quot;app_uart.c&quot;</span><span class="string">&quot;app_smart_wifi.c&quot;</span> <span class="string">&quot;app_board.c&quot;</span>)</span><br></pre></td></tr></table></figure>
@@ -311,7 +311,18 @@
 
     
     
-    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- post-body-end -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="9591303574"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 
       <footer class="post-footer">
           <div class="post-tags">
@@ -391,7 +402,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8Besp-idf%E7%B7%A8%E8%AD%AF%E7%92%B0%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">建立esp-idf編譯環境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B7%A8%E8%AD%AF%E7%AF%84%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">編譯範例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B7%A8%E8%AD%AF%E9%8C%AF%E8%AA%A4%E8%99%95%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">編譯錯誤處理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#No-such-file-or-directory"><span class="nav-number">3.1.</span> <span class="nav-text">No such file or directory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined-reference-to-96-app-board-main%E2%80%99"><span class="nav-number">3.2.</span> <span class="nav-text">undefined reference to &#96;app_board_main’</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ccache-error-Failed-to-create-temporary-file"><span class="nav-number">3.3.</span> <span class="nav-text">ccache: error: Failed to create temporary file</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%87%92%E9%8C%84"><span class="nav-number">4.</span> <span class="nav-text">燒錄</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6"><span class="nav-number">5.</span> <span class="nav-text">測試</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8Besp-idf%E7%B7%A8%E8%AD%AF%E7%92%B0%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">建立esp-idf編譯環境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B7%A8%E8%AD%AF%E7%AF%84%E4%BE%8B"><span class="nav-number">2.</span> <span class="nav-text">編譯範例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B7%A8%E8%AD%AF%E9%8C%AF%E8%AA%A4%E8%99%95%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">編譯錯誤處理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#No-such-file-or-directory"><span class="nav-number">3.1.</span> <span class="nav-text">No such file or directory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined-reference-to-app-board-main%E2%80%99"><span class="nav-number">3.2.</span> <span class="nav-text">undefined reference to &#96;app_board_main’</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ccache-error-Failed-to-create-temporary-file"><span class="nav-number">3.3.</span> <span class="nav-text">ccache: error: Failed to create temporary file</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%87%92%E9%8C%84"><span class="nav-number">4.</span> <span class="nav-text">燒錄</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B8%AC%E8%A9%A6"><span class="nav-number">5.</span> <span class="nav-text">測試</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -430,18 +441,7 @@
   </div>
 
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
-     crossorigin="anonymous"></script>
-<!-- sidebar -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-1615854091847831"
-     data-ad-slot="1915238009"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+
       </div>
 
     </div>

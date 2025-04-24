@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.3.0">
+<meta name="generator" content="Hexo 7.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
@@ -220,58 +220,71 @@
 <h1 id="建立資料表"><a href="#建立資料表" class="headerlink" title="建立資料表"></a>建立資料表</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 學生表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `Student`(</span><br><span class="line"> `s_id` <span class="type">VARCHAR</span>(<span class="number">20</span>),</span><br><span class="line"> `s_name` <span class="type">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span>,</span><br><span class="line"> `s_birth` <span class="type">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span>,</span><br><span class="line"> `s_sex` <span class="type">VARCHAR</span>(<span class="number">10</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span>,</span><br><span class="line"> <span class="keyword">PRIMARY</span> KEY(`s_id`)</span><br><span class="line">);</span><br><span class="line"><span class="comment">-- 課程表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `Course`(</span><br><span class="line"> `c_id`  <span class="type">VARCHAR</span>(<span class="number">20</span>),</span><br><span class="line"> `c_name` <span class="type">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span>,</span><br><span class="line"> `t_id` <span class="type">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,</span><br><span class="line"> <span class="keyword">PRIMARY</span> KEY(`c_id`)</span><br><span class="line">);</span><br><span class="line"><span class="comment">-- 教師表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `Teacher`(</span><br><span class="line"> `t_id` <span class="type">VARCHAR</span>(<span class="number">20</span>),</span><br><span class="line"> `t_name` <span class="type">VARCHAR</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span>,</span><br><span class="line"> <span class="keyword">PRIMARY</span> KEY(`t_id`)</span><br><span class="line">);</span><br><span class="line"><span class="comment">-- 成績表</span></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `Score`(</span><br><span class="line"> `s_id` <span class="type">VARCHAR</span>(<span class="number">20</span>),</span><br><span class="line"> `c_id`  <span class="type">VARCHAR</span>(<span class="number">20</span>),</span><br><span class="line"> `s_score` <span class="type">INT</span>(<span class="number">3</span>),</span><br><span class="line"> <span class="keyword">PRIMARY</span> KEY(`s_id`,`c_id`)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 插入學生表測試資料</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Student <span class="keyword">values</span>(<span class="string">&#x27;01&#x27;</span> , <span class="string">&#x27;趙雷&#x27;</span> , <span class="string">&#x27;1990-01-01&#x27;</span> , <span class="string">&#x27;男&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Student <span class="keyword">values</span>(<span class="string">&#x27;02&#x27;</span> , <span class="string">&#x27;錢電&#x27;</span> , <span class="string">&#x27;1990-12-21&#x27;</span> , <span class="string">&#x27;男&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Student <span class="keyword">values</span>(<span class="string">&#x27;03&#x27;</span> , <span class="string">&#x27;孫風&#x27;</span> , <span class="string">&#x27;1990-05-20&#x27;</span> , <span class="string">&#x27;男&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Student <span class="keyword">values</span>(<span class="string">&#x27;04&#x27;</span> , <span class="string">&#x27;李雲&#x27;</span> , <span class="string">&#x27;1990-08-06&#x27;</span> , <span class="string">&#x27;男&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Student <span class="keyword">values</span>(<span class="string">&#x27;05&#x27;</span> , <span class="string">&#x27;周梅&#x27;</span> , <span class="string">&#x27;1991-12-01&#x27;</span> , <span class="string">&#x27;女&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Student <span class="keyword">values</span>(<span class="string">&#x27;06&#x27;</span> , <span class="string">&#x27;吳蘭&#x27;</span> , <span class="string">&#x27;1992-03-01&#x27;</span> , <span class="string">&#x27;女&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Student <span class="keyword">values</span>(<span class="string">&#x27;07&#x27;</span> , <span class="string">&#x27;鄭竹&#x27;</span> , <span class="string">&#x27;1989-07-01&#x27;</span> , <span class="string">&#x27;女&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Student <span class="keyword">values</span>(<span class="string">&#x27;08&#x27;</span> , <span class="string">&#x27;王菊&#x27;</span> , <span class="string">&#x27;1990-01-20&#x27;</span> , <span class="string">&#x27;女&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 課程表測試資料</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Course <span class="keyword">values</span>(<span class="string">&#x27;01&#x27;</span> , <span class="string">&#x27;語文&#x27;</span> , <span class="string">&#x27;02&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Course <span class="keyword">values</span>(<span class="string">&#x27;02&#x27;</span> , <span class="string">&#x27;數學&#x27;</span> , <span class="string">&#x27;01&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Course <span class="keyword">values</span>(<span class="string">&#x27;03&#x27;</span> , <span class="string">&#x27;英語&#x27;</span> , <span class="string">&#x27;03&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 教師表測試資料</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Teacher <span class="keyword">values</span>(<span class="string">&#x27;01&#x27;</span> , <span class="string">&#x27;張三&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Teacher <span class="keyword">values</span>(<span class="string">&#x27;02&#x27;</span> , <span class="string">&#x27;李四&#x27;</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Teacher <span class="keyword">values</span>(<span class="string">&#x27;03&#x27;</span> , <span class="string">&#x27;王五&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 成績表測試資料</span></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;01&#x27;</span> , <span class="string">&#x27;01&#x27;</span> , <span class="number">80</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;01&#x27;</span> , <span class="string">&#x27;02&#x27;</span> , <span class="number">90</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;01&#x27;</span> , <span class="string">&#x27;03&#x27;</span> , <span class="number">99</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;02&#x27;</span> , <span class="string">&#x27;01&#x27;</span> , <span class="number">70</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;02&#x27;</span> , <span class="string">&#x27;02&#x27;</span> , <span class="number">60</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;02&#x27;</span> , <span class="string">&#x27;03&#x27;</span> , <span class="number">80</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;03&#x27;</span> , <span class="string">&#x27;01&#x27;</span> , <span class="number">80</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;03&#x27;</span> , <span class="string">&#x27;02&#x27;</span> , <span class="number">80</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;03&#x27;</span> , <span class="string">&#x27;03&#x27;</span> , <span class="number">80</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;04&#x27;</span> , <span class="string">&#x27;01&#x27;</span> , <span class="number">50</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;04&#x27;</span> , <span class="string">&#x27;02&#x27;</span> , <span class="number">30</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;04&#x27;</span> , <span class="string">&#x27;03&#x27;</span> , <span class="number">20</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;05&#x27;</span> , <span class="string">&#x27;01&#x27;</span> , <span class="number">76</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;05&#x27;</span> , <span class="string">&#x27;02&#x27;</span> , <span class="number">87</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;06&#x27;</span> , <span class="string">&#x27;01&#x27;</span> , <span class="number">31</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;06&#x27;</span> , <span class="string">&#x27;03&#x27;</span> , <span class="number">34</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;07&#x27;</span> , <span class="string">&#x27;02&#x27;</span> , <span class="number">89</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> Score <span class="keyword">values</span>(<span class="string">&#x27;07&#x27;</span> , <span class="string">&#x27;03&#x27;</span> , <span class="number">98</span>);</span><br></pre></td></tr></table></figure>
 
 <h1 id="題目"><a href="#題目" class="headerlink" title="題目"></a>題目</h1><ol>
-<li><p>查詢”01”課程比”02”課程成績高的學生的資訊及課程分數</p>
+<li>查詢”01”課程比”02”課程成績高的學生的資訊及課程分數</li>
+</ol>
 <details>
- <summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.<span class="operator">*</span>, b.s_score <span class="keyword">as</span> score_01, c.s_score <span class="keyword">as</span> score_02 <span class="keyword">FROM</span> Student a </span><br><span class="line"><span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id <span class="keyword">AND</span> b.c_id <span class="operator">=</span> <span class="string">&#x27;01&#x27;</span></span><br><span class="line"><span class="keyword">JOIN</span> Score c <span class="keyword">ON</span> a.s_id <span class="operator">=</span> c.s_id <span class="keyword">AND</span> c.c_id <span class="operator">=</span> <span class="string">&#x27;02&#x27;</span></span><br><span class="line"><span class="keyword">WHERE</span> b.s_score <span class="operator">&gt;</span> c.s_score</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+----------+----------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex | score_01 | score_02 |</span><br><span class="line">+------+--------+------------+-------+----------+----------+</span><br><span class="line">| 02   | 錢電   | 1990-12-21 | 男    | 70       | 60       |</span><br><span class="line">| 04   | 李雲   | 1990-08-06 | 男    | 50       | 30       |</span><br><span class="line">+------+--------+------------+-------+----------+----------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢”01”課程比”02”課程成績低的學生的資訊及課程分數</p>
+
+<ol start="2">
+<li>查詢”01”課程比”02”課程成績低的學生的資訊及課程分數</li>
+</ol>
 <details>
- <summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.<span class="operator">*</span>, b.s_score <span class="keyword">as</span> score_01, c.s_score <span class="keyword">as</span> score_02 <span class="keyword">FROM</span> Student a </span><br><span class="line"><span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id <span class="keyword">AND</span> b.c_id <span class="operator">=</span> <span class="string">&#x27;01&#x27;</span></span><br><span class="line"><span class="keyword">JOIN</span> Score c <span class="keyword">ON</span> a.s_id <span class="operator">=</span> c.s_id <span class="keyword">AND</span> c.c_id <span class="operator">=</span> <span class="string">&#x27;02&#x27;</span></span><br><span class="line"><span class="keyword">WHERE</span> b.s_score <span class="operator">&lt;</span> c.s_score</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+----------+----------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex | score_01 | score_02 |</span><br><span class="line">+------+--------+------------+-------+----------+----------+</span><br><span class="line">| 01   | 趙雷   | 1990-01-01 | 男    | 80       | 90       |</span><br><span class="line">| 05   | 周梅   | 1991-12-01 | 女    | 76       | 87       |</span><br><span class="line">+------+--------+------------+-------+----------+----------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢平均成績大於等於60分的同學的學生編號和學生姓名和平均成績</p>
+
+<ol start="3">
+<li>查詢平均成績大於等於60分的同學的學生編號和學生姓名和平均成績</li>
+</ol>
 <details>
- <summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.s_id, s_name, ROUND(<span class="built_in">AVG</span>(s_score), <span class="number">2</span>) <span class="keyword">AS</span> avg_score <span class="keyword">FROM</span> Student a</span><br><span class="line"><span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> a.s_id</span><br><span class="line"><span class="keyword">HAVING</span> avg_score <span class="operator">&gt;=</span> <span class="number">60</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+-----------+</span><br><span class="line">| s_id | s_name | avg_score |</span><br><span class="line">+------+--------+-----------+</span><br><span class="line">| 01   | 趙雷   | 89.67     |</span><br><span class="line">| 02   | 錢電   | 70.0      |</span><br><span class="line">| 03   | 孫風   | 80.0      |</span><br><span class="line">| 05   | 周梅   | 81.5      |</span><br><span class="line">| 07   | 鄭竹   | 93.5      |</span><br><span class="line">+------+--------+-----------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢平均成績小於60分的同學的學生編號和學生姓名和平均成績（包括有成績的和無成績的）</p>
+
+<ol start="4">
+<li>查詢平均成績小於60分的同學的學生編號和學生姓名和平均成績（包括有成績的和無成績的）</li>
+</ol>
 <details>
- <summary>答案</summary>
+    <summary>答案</summary>
 使用ifnull()函式
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.s_id, s_name, ROUND(ifnull(<span class="built_in">AVG</span>(s_score), <span class="number">0</span>), <span class="number">2</span>) <span class="keyword">AS</span> avg_score <span class="keyword">FROM</span> Student a</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> a.s_id</span><br><span class="line"><span class="keyword">HAVING</span> avg_score <span class="operator">&lt;</span> <span class="number">60</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+-----------+</span><br><span class="line">| s_id | s_name | avg_score |</span><br><span class="line">+------+--------+-----------+</span><br><span class="line">| 04   | 李雲   | 33.33     |</span><br><span class="line">| 06   | 吳蘭   | 32.5      |</span><br><span class="line">| 08   | 王菊   | 0.0       |</span><br><span class="line">+------+--------+-----------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢所有同學的學生編號、學生姓名、選課總數、所有課程的總成績（包含沒有選課的）</p>
+
+<ol start="5">
+<li>查詢所有同學的學生編號、學生姓名、選課總數、所有課程的總成績（包含沒有選課的）</li>
+</ol>
 <details>
- <summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.s_id, s_name, <span class="built_in">COUNT</span>(c_id) <span class="keyword">as</span> course_count, ifnull(<span class="built_in">SUM</span>(s_score), <span class="number">0</span>) <span class="keyword">as</span> total_score <span class="keyword">FROM</span> Student a</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> a.s_id</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+--------------+-------------+</span><br><span class="line">| s_id | s_name | course_count | total_score |</span><br><span class="line">+------+--------+--------------+-------------+</span><br><span class="line">| 01   | 趙雷   | 3            | 269         |</span><br><span class="line">| 02   | 錢電   | 3            | 210         |</span><br><span class="line">| 03   | 孫風   | 3            | 240         |</span><br><span class="line">| 04   | 李雲   | 3            | 100         |</span><br><span class="line">| 05   | 周梅   | 2            | 163         |</span><br><span class="line">| 06   | 吳蘭   | 2            | 65          |</span><br><span class="line">| 07   | 鄭竹   | 2            | 187         |</span><br><span class="line">| 08   | 王菊   | 0            | 0           |</span><br><span class="line">+------+--------+--------------+-------------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢”李”姓老師的數量</p>
+
+<ol start="6">
+<li>查詢”李”姓老師的數量</li>
+</ol>
 <details>
- <summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>() <span class="keyword">FROM</span> Teacher</span><br><span class="line"><span class="keyword">WHERE</span> t_name <span class="keyword">LIKE</span> <span class="string">&#x27;李%&#x27;</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+---------+</span><br><span class="line">| COUNT() |</span><br><span class="line">+---------+</span><br><span class="line">| 1       |</span><br><span class="line">+---------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢學過”張三”老師授課的學生資訊</p>
+
+<ol start="7">
+<li>查詢學過”張三”老師授課的學生資訊</li>
+</ol>
 <details>
- <summary>答案</summary>
+    <summary>答案</summary>
 方法一
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Student</span><br><span class="line"><span class="keyword">WHERE</span> s_id <span class="keyword">IN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> s.s_id <span class="keyword">FROM</span> Score s <span class="comment">-- 透過課程找出對應的學號</span></span><br><span class="line">    <span class="keyword">JOIN</span> Course c <span class="keyword">ON</span> s.c_id <span class="operator">=</span> c.c_id <span class="keyword">AND</span> c.t_id <span class="operator">=</span> (</span><br><span class="line">        <span class="keyword">SELECT</span> t_id <span class="keyword">FROM</span> Teacher <span class="keyword">WHERE</span> t_name <span class="operator">=</span> <span class="string">&#x27;張三&#x27;</span></span><br><span class="line">    )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 方法二
@@ -279,379 +292,469 @@
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex |</span><br><span class="line">+------+--------+------------+-------+</span><br><span class="line">| 01   | 趙雷   | 1990-01-01 | 男    |</span><br><span class="line">| 02   | 錢電   | 1990-12-21 | 男    |</span><br><span class="line">| 03   | 孫風   | 1990-05-20 | 男    |</span><br><span class="line">| 04   | 李雲   | 1990-08-06 | 男    |</span><br><span class="line">| 05   | 周梅   | 1991-12-01 | 女    |</span><br><span class="line">| 07   | 鄭竹   | 1989-07-01 | 女    |</span><br><span class="line">+------+--------+------------+-------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢沒學過”張三”老師授課的學生資訊</p>
+
+<ol start="8">
+<li>查詢沒學過”張三”老師授課的學生資訊</li>
+</ol>
 <details>
- <summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Student</span><br><span class="line"><span class="keyword">WHERE</span> s_id <span class="keyword">NOT</span> <span class="keyword">IN</span> ( <span class="comment">-- 透過學號取反</span></span><br><span class="line">    <span class="keyword">SELECT</span> s.s_id <span class="keyword">FROM</span> Score s</span><br><span class="line">    <span class="keyword">JOIN</span> Course c <span class="keyword">ON</span> s.c_id <span class="operator">=</span> c.c_id <span class="keyword">AND</span> c.t_id <span class="operator">=</span> (</span><br><span class="line">        <span class="keyword">SELECT</span> t_id <span class="keyword">FROM</span> Teacher <span class="keyword">WHERE</span> t_name <span class="operator">=</span> <span class="string">&#x27;張三&#x27;</span></span><br><span class="line">    )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex |</span><br><span class="line">+------+--------+------------+-------+</span><br><span class="line">| 06   | 吳蘭   | 1992-03-01 | 女    |</span><br><span class="line">| 08   | 王菊   | 1990-01-20 | 女    |</span><br><span class="line">+------+--------+------------+-------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢學過編號為01，並且也學過編號為02的課程的學生資訊</p>
+
+<ol start="9">
+<li>查詢學過編號為01，並且也學過編號為02的課程的學生資訊</li>
+</ol>
 <details>
- <summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Student</span><br><span class="line"><span class="keyword">WHERE</span> s_id <span class="keyword">IN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> s1.s_id <span class="keyword">FROM</span> Score s1</span><br><span class="line">    <span class="keyword">JOIN</span> Score s2 <span class="keyword">ON</span> s1.s_id <span class="operator">=</span> s2.s_id <span class="comment">-- 透過自連線實現</span></span><br><span class="line">    <span class="keyword">WHERE</span> s1.c_id <span class="operator">=</span> <span class="string">&#x27;01&#x27;</span> <span class="keyword">AND</span> s2.c_id <span class="operator">=</span> <span class="string">&#x27;02&#x27;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex |</span><br><span class="line">+------+--------+------------+-------+</span><br><span class="line">| 01   | 趙雷   | 1990-01-01 | 男    |</span><br><span class="line">| 02   | 錢電   | 1990-12-21 | 男    |</span><br><span class="line">| 03   | 孫風   | 1990-05-20 | 男    |</span><br><span class="line">| 04   | 李雲   | 1990-08-06 | 男    |</span><br><span class="line">| 05   | 周梅   | 1991-12-01 | 女    |</span><br><span class="line">+------+--------+------------+-------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢學過編號為01，但是沒有學過編號為02的課程的學生資訊</p>
+
+<ol start="10">
+<li>查詢學過編號為01，但是沒有學過編號為02的課程的學生資訊</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Student</span><br><span class="line"><span class="keyword">WHERE</span> s_id <span class="keyword">IN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> s_id <span class="keyword">FROM</span> Score </span><br><span class="line">    <span class="keyword">WHERE</span> c_id <span class="operator">=</span> <span class="string">&#x27;01&#x27;</span> <span class="keyword">AND</span> s_id <span class="keyword">NOT</span> <span class="keyword">IN</span> (</span><br><span class="line">        <span class="keyword">SELECT</span> s_id <span class="keyword">FROM</span> Score <span class="keyword">WHERE</span> c_id <span class="operator">=</span> <span class="string">&#x27;02&#x27;</span> <span class="comment">-- 學過02課程的學生</span></span><br><span class="line">    )    </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex |</span><br><span class="line">+------+--------+------------+-------+</span><br><span class="line">| 06   | 吳蘭   | 1992-03-01 | 女    |</span><br><span class="line">+------+--------+------------+-------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢沒有學全所有課程的學生資訊</p>
+
+<ol start="11">
+<li>查詢沒有學全所有課程的學生資訊</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.<span class="operator">*</span>, <span class="built_in">COUNT</span>(b.c_id) <span class="keyword">as</span> course_count <span class="keyword">FROM</span> Student a</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> b.s_id</span><br><span class="line"><span class="keyword">HAVING</span> course_count <span class="operator">&lt;</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="built_in">COUNT</span>() <span class="keyword">FROM</span> Course</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+--------------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex | course_count |</span><br><span class="line">+------+--------+------------+-------+--------------+</span><br><span class="line">| 08   | 王菊   | 1990-01-20 | 女    | 0            |</span><br><span class="line">| 05   | 周梅   | 1991-12-01 | 女    | 2            |</span><br><span class="line">| 06   | 吳蘭   | 1992-03-01 | 女    | 2            |</span><br><span class="line">| 07   | 鄭竹   | 1989-07-01 | 女    | 2            |</span><br><span class="line">+------+--------+------------+-------+--------------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢至少有一門課與學號為”01”的同學所學相同的學生資訊</p>
+
+<ol start="12">
+<li>查詢至少有一門課與學號為”01”的同學所學相同的學生資訊</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.<span class="operator">*</span> <span class="keyword">FROM</span> Student a</span><br><span class="line"><span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">WHERE</span> b.c_id <span class="keyword">IN</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> c_id <span class="keyword">FROM</span> Score <span class="keyword">WHERE</span> s_id <span class="operator">=</span> <span class="string">&#x27;01&#x27;</span></span><br><span class="line">) <span class="keyword">AND</span> b.s_id <span class="operator">!=</span> <span class="string">&#x27;01&#x27;</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> b.s_id</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex |</span><br><span class="line">+------+--------+------------+-------+</span><br><span class="line">| 02   | 錢電   | 1990-12-21 | 男    |</span><br><span class="line">| 03   | 孫風   | 1990-05-20 | 男    |</span><br><span class="line">| 04   | 李雲   | 1990-08-06 | 男    |</span><br><span class="line">| 05   | 周梅   | 1991-12-01 | 女    |</span><br><span class="line">| 06   | 吳蘭   | 1992-03-01 | 女    |</span><br><span class="line">| 07   | 鄭竹   | 1989-07-01 | 女    |</span><br><span class="line">+------+--------+------------+-------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢和”01”號的同學學習的課程完全相同的其他學生資訊</p>
+
+<ol start="13">
+<li>查詢和”01”號的同學學習的課程完全相同的其他學生資訊</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 使用group_concat()函式
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.<span class="operator">*</span> <span class="keyword">FROM</span> Student a</span><br><span class="line"><span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> b.s_id</span><br><span class="line"><span class="keyword">HAVING</span> group_concat(b.c_id) <span class="operator">=</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> group_concat(c_id) <span class="keyword">FROM</span> Score <span class="keyword">WHERE</span> s_id <span class="operator">=</span> <span class="string">&#x27;01&#x27;</span></span><br><span class="line">) <span class="keyword">AND</span> b.s_id <span class="operator">!=</span> <span class="string">&#x27;01&#x27;</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex |</span><br><span class="line">+------+--------+------------+-------+</span><br><span class="line">| 02   | 錢電   | 1990-12-21 | 男    |</span><br><span class="line">| 03   | 孫風   | 1990-05-20 | 男    |</span><br><span class="line">| 04   | 李雲   | 1990-08-06 | 男    |</span><br><span class="line">+------+--------+------------+-------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢沒學過”張三”老師講授的任一門課程的學生姓名<br>PS: 與第8題相似</p>
+
+<ol start="14">
+<li>查詢沒學過”張三”老師講授的任一門課程的學生姓名<br>PS: 與第8題相似</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> s_name <span class="keyword">FROM</span> Student</span><br><span class="line"><span class="keyword">WHERE</span> s_id <span class="keyword">NOT</span> <span class="keyword">IN</span> ( <span class="comment">-- 透過學號取反</span></span><br><span class="line">    <span class="keyword">SELECT</span> s.s_id <span class="keyword">FROM</span> Score s</span><br><span class="line">    <span class="keyword">JOIN</span> Course c <span class="keyword">ON</span> s.c_id <span class="operator">=</span> c.c_id <span class="keyword">AND</span> c.t_id <span class="operator">=</span> (</span><br><span class="line">        <span class="keyword">SELECT</span> t_id <span class="keyword">FROM</span> Teacher <span class="keyword">WHERE</span> t_name <span class="operator">=</span> <span class="string">&#x27;張三&#x27;</span></span><br><span class="line">    )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+--------+</span><br><span class="line">| s_name |</span><br><span class="line">+--------+</span><br><span class="line">| 吳蘭   |</span><br><span class="line">| 王菊   |</span><br><span class="line">+--------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢兩門及其以上不及格課程的同學的學號，姓名及其平均成績</p>
+
+<ol start="15">
+<li>查詢兩門及其以上不及格課程的同學的學號，姓名及其平均成績</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.s_id, s_name, ROUND(<span class="built_in">AVG</span>(s_score), <span class="number">2</span>) <span class="keyword">as</span> avg_score <span class="keyword">FROM</span> Student a</span><br><span class="line"><span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">WHERE</span> s_score <span class="operator">&lt;</span> <span class="number">60</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> b.s_id</span><br><span class="line"><span class="keyword">HAVING</span> <span class="built_in">COUNT</span>(c_id) <span class="operator">&gt;=</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+-----------+</span><br><span class="line">| s_id | s_name | avg_score |</span><br><span class="line">+------+--------+-----------+</span><br><span class="line">| 04   | 李雲   | 33.33     |</span><br><span class="line">| 06   | 吳蘭   | 32.5      |</span><br><span class="line">+------+--------+-----------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>檢索”01”課程分數小於60，按分數降序排列的學生資訊</p>
+
+<ol start="16">
+<li>檢索”01”課程分數小於60，按分數降序排列的學生資訊</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.<span class="operator">*</span>, s_score <span class="keyword">FROM</span> Student a</span><br><span class="line"><span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">WHERE</span> c_id <span class="operator">=</span> <span class="string">&#x27;01&#x27;</span> <span class="keyword">AND</span> s_score <span class="operator">&lt;</span> <span class="number">60</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> s_score <span class="keyword">DESC</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+---------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex | s_score |</span><br><span class="line">+------+--------+------------+-------+---------+</span><br><span class="line">| 04   | 李雲   | 1990-08-06 | 男    | 50      |</span><br><span class="line">| 06   | 吳蘭   | 1992-03-01 | 女    | 31      |</span><br><span class="line">+------+--------+------------+-------+---------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>按平均成績從高到低顯示所有學生的所有課程的成績以及平均成績</p>
+
+<ol start="17">
+<li>按平均成績從高到低顯示所有學生的所有課程的成績以及平均成績</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> s_id,</span><br><span class="line">    <span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> c_id<span class="operator">=</span><span class="string">&#x27;01&#x27;</span> <span class="keyword">THEN</span> s_score <span class="keyword">ELSE</span> <span class="keyword">NULL</span> <span class="keyword">END</span>) <span class="keyword">as</span> score_01,</span><br><span class="line">    <span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> c_id<span class="operator">=</span><span class="string">&#x27;02&#x27;</span> <span class="keyword">THEN</span> s_score <span class="keyword">ELSE</span> <span class="keyword">NULL</span> <span class="keyword">END</span>) <span class="keyword">as</span> score_02,</span><br><span class="line">    <span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> c_id<span class="operator">=</span><span class="string">&#x27;03&#x27;</span> <span class="keyword">THEN</span> s_score <span class="keyword">ELSE</span> <span class="keyword">NULL</span> <span class="keyword">END</span>) <span class="keyword">as</span> score_03,</span><br><span class="line">    ROUND(<span class="built_in">AVG</span>(s_score), <span class="number">2</span>) <span class="keyword">as</span> avg_score</span><br><span class="line"><span class="keyword">FROM</span> Score</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> s_id</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> avg_score <span class="keyword">DESC</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">+------+----------+----------+----------+-----------+</span><br><span class="line">| s_id | score_01 | score_02 | score_03 | avg_score |</span><br><span class="line">+------+----------+----------+----------+-----------+</span><br><span class="line">| 07   |          | 89       | 98       | 93.5      |</span><br><span class="line">| 01   | 80       | 90       | 99       | 89.67     |</span><br><span class="line">| 05   | 76       | 87       |          | 81.5      |</span><br><span class="line">| 03   | 80       | 80       | 80       | 80.0      |</span><br><span class="line">| 02   | 70       | 60       | 80       | 70.0      |</span><br><span class="line">| 04   | 50       | 30       | 20       | 33.33     |</span><br><span class="line">| 06   | 31       |          | 34       | 32.5      |</span><br><span class="line">+------+----------+----------+----------+-----------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢各科成績最高分、最低分和平均分，以如下形式顯示：課程ID，課程name，最高分，最低分，平均分，及格率，中等率，優良率，優秀率(及格為&gt;&#x3D;60，中等為：70-80，優良為：80-90，優秀為：&gt;&#x3D;90)。<br>要求輸出課程號碼和選修人數，查詢結果依人數降序排列，若人數相同，依課程號碼升序排列</p>
+
+<ol start="18">
+<li>查詢各科成績最高分、最低分和平均分，以如下形式顯示：課程ID，課程name，最高分，最低分，平均分，及格率，中等率，優良率，優秀率(及格為&gt;&#x3D;60，中等為：70-80，優良為：80-90，優秀為：&gt;&#x3D;90)。<br>要求輸出課程號碼和選修人數，查詢結果依人數降序排列，若人數相同，依課程號碼升序排列</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> b.c_id <span class="keyword">as</span> <span class="string">&#x27;課程ID&#x27;</span>, c_name <span class="keyword">as</span> <span class="string">&#x27;課程name&#x27;</span>, <span class="built_in">COUNT</span>() <span class="keyword">as</span> <span class="string">&#x27;選修人數&#x27;</span>,</span><br><span class="line">    <span class="built_in">MAX</span>(s_score) <span class="keyword">as</span> <span class="string">&#x27;最高分&#x27;</span>, <span class="built_in">MIN</span>(s_score) <span class="keyword">as</span> <span class="string">&#x27;最低分&#x27;</span>, ROUND(<span class="built_in">AVG</span>(s_score), <span class="number">2</span>) <span class="keyword">as</span> <span class="string">&#x27;平均分&#x27;</span>,</span><br><span class="line">    ROUND(<span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> s_score <span class="operator">&gt;=</span> <span class="number">60</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>)<span class="operator">*</span><span class="number">1.00</span><span class="operator">/</span><span class="built_in">COUNT</span>()<span class="operator">*</span><span class="number">100</span>, <span class="number">2</span>) <span class="keyword">as</span> <span class="string">&#x27;及格率&#x27;</span>,</span><br><span class="line">    ROUND(<span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> s_score <span class="operator">&gt;=</span> <span class="number">70</span> <span class="keyword">AND</span> s_score <span class="operator">&lt;</span> <span class="number">80</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>)<span class="operator">*</span><span class="number">1.00</span><span class="operator">/</span><span class="built_in">COUNT</span>()<span class="operator">*</span><span class="number">100</span>, <span class="number">2</span>) <span class="keyword">as</span> <span class="string">&#x27;中等率&#x27;</span>,</span><br><span class="line">    ROUND(<span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> s_score <span class="operator">&gt;=</span> <span class="number">80</span> <span class="keyword">AND</span> s_score <span class="operator">&lt;</span> <span class="number">90</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>)<span class="operator">*</span><span class="number">1.00</span><span class="operator">/</span><span class="built_in">COUNT</span>()<span class="operator">*</span><span class="number">100</span>, <span class="number">2</span>) <span class="keyword">as</span> <span class="string">&#x27;優良率&#x27;</span>,</span><br><span class="line">    ROUND(<span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> s_score <span class="operator">&gt;=</span> <span class="number">90</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>)<span class="operator">*</span><span class="number">1.00</span><span class="operator">/</span><span class="built_in">COUNT</span>()<span class="operator">*</span><span class="number">100</span>, <span class="number">2</span>) <span class="keyword">as</span> <span class="string">&#x27;優秀率&#x27;</span></span><br><span class="line"><span class="keyword">FROM</span> Score a</span><br><span class="line"><span class="keyword">JOIN</span> Course b <span class="keyword">ON</span> a.c_id <span class="operator">=</span> b.c_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> b.c_id </span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="string">&#x27;選修人數&#x27;</span> <span class="keyword">DESC</span>, b.c_id <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+--------+----------+---------+-------+--------+---------+---------+---------+---------+----------+</span><br><span class="line">| 課程ID | 課程name | 選修人數 | 最高分 | 最低分 | 平均分   | 及格率   | 中等率  | 優良率   | 優秀率   |</span><br><span class="line">+--------+----------+---------+-------+--------+---------+---------+---------+---------+----------+</span><br><span class="line">| 01     | 語文     | 6       | 80    | 31     | 64.5    | 66.67   | 33.33   | 33.33   | 0.0      |</span><br><span class="line">| 02     | 數學     | 6       | 90    | 30     | 72.67   | 83.33   | 0.0     | 50.0    | 16.67    |</span><br><span class="line">| 03     | 英語     | 6       | 99    | 20     | 68.5    | 66.67   | 0.0     | 33.33   | 33.33    |</span><br><span class="line">+--------+----------+---------+-------+--------+---------+---------+---------+---------+----------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>按各科成績進行排序，並顯示排名，分數重複時保留名次空缺</p>
+
+<ol start="19">
+<li>按各科成績進行排序，並顯示排名，分數重複時保留名次空缺</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span>, (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="keyword">DISTINCT</span> s_score) <span class="operator">+</span> <span class="number">1</span> <span class="keyword">FROM</span> Score b</span><br><span class="line">    <span class="keyword">WHERE</span> a.c_id <span class="operator">=</span> b.c_id <span class="keyword">AND</span> b.s_score <span class="operator">&gt;</span> a.s_score) <span class="keyword">as</span> rank</span><br><span class="line"><span class="keyword">FROM</span> Score a</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> c_id, rank</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">+------+------+---------+------+</span><br><span class="line">| s_id | c_id | s_score | rank |</span><br><span class="line">+------+------+---------+------+</span><br><span class="line">| 01   | 01   | 80      | 1    |</span><br><span class="line">| 03   | 01   | 80      | 1    |</span><br><span class="line">| 05   | 01   | 76      | 2    |</span><br><span class="line">| 02   | 01   | 70      | 3    |</span><br><span class="line">| 04   | 01   | 50      | 4    |</span><br><span class="line">| 06   | 01   | 31      | 5    |</span><br><span class="line">| 01   | 02   | 90      | 1    |</span><br><span class="line">| 07   | 02   | 89      | 2    |</span><br><span class="line">| 05   | 02   | 87      | 3    |</span><br><span class="line">| 03   | 02   | 80      | 4    |</span><br><span class="line">| 02   | 02   | 60      | 5    |</span><br><span class="line">| 04   | 02   | 30      | 6    |</span><br><span class="line">| 01   | 03   | 99      | 1    |</span><br><span class="line">| 07   | 03   | 98      | 2    |</span><br><span class="line">| 02   | 03   | 80      | 3    |</span><br><span class="line">| 03   | 03   | 80      | 3    |</span><br><span class="line">| 06   | 03   | 34      | 4    |</span><br><span class="line">| 04   | 03   | 20      | 5    |</span><br><span class="line">+------+------+---------+------+</span><br></pre></td></tr></table></figure>
-</details></li>
-</ol>
+</details>
+
 <ul>
-<li>19.1 按各科成績進行行排序，並顯示排名，分數重複時合併名次<details>
-  <summary>答案</summary>
+<li>19.1 按各科成績進行行排序，並顯示排名，分數重複時合併名次</li>
+</ul>
+<details>
+    <summary>答案</summary>
 方法一
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span>, (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(s_score) <span class="operator">+</span> <span class="number">1</span> <span class="keyword">FROM</span> Score b</span><br><span class="line">    <span class="keyword">WHERE</span> a.c_id <span class="operator">=</span> b.c_id <span class="keyword">AND</span> b.s_score <span class="operator">&gt;</span> a.s_score) <span class="keyword">as</span> rank</span><br><span class="line"><span class="keyword">FROM</span> Score a</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> c_id, rank</span><br></pre></td></tr></table></figure>
 方法二：使用rank()函式
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span> <span class="operator">*</span>, <span class="built_in">rank</span>() <span class="keyword">OVER</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> c_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> s_score <span class="keyword">DESC</span>) <span class="keyword">as</span> rank <span class="keyword">FROM</span> Score)</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> c_id</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">+------+------+---------+------+</span><br><span class="line">| s_id | c_id | s_score | rank |</span><br><span class="line">+------+------+---------+------+</span><br><span class="line">| 01   | 01   | 80      | 1    |</span><br><span class="line">| 03   | 01   | 80      | 1    |</span><br><span class="line">| 05   | 01   | 76      | 3    |</span><br><span class="line">| 02   | 01   | 70      | 4    |</span><br><span class="line">| 04   | 01   | 50      | 5    |</span><br><span class="line">| 06   | 01   | 31      | 6    |</span><br><span class="line">| 01   | 02   | 90      | 1    |</span><br><span class="line">| 07   | 02   | 89      | 2    |</span><br><span class="line">| 05   | 02   | 87      | 3    |</span><br><span class="line">| 03   | 02   | 80      | 4    |</span><br><span class="line">| 02   | 02   | 60      | 5    |</span><br><span class="line">| 04   | 02   | 30      | 6    |</span><br><span class="line">| 01   | 03   | 99      | 1    |</span><br><span class="line">| 07   | 03   | 98      | 2    |</span><br><span class="line">| 02   | 03   | 80      | 3    |</span><br><span class="line">| 03   | 03   | 80      | 3    |</span><br><span class="line">| 06   | 03   | 34      | 5    |</span><br><span class="line">| 04   | 03   | 20      | 6    |</span><br><span class="line">+------+------+---------+------+</span><br></pre></td></tr></table></figure>
-</details></li>
-</ul>
+</details>
+
 <ol start="20">
-<li><p>查詢學生的總成績，並進行排名</p>
+<li>查詢學生的總成績，並進行排名</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 使用row_number()函式
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.s_id, s_name, ifnull(<span class="built_in">SUM</span>(s_score), <span class="number">0</span>) <span class="keyword">as</span> total_score,</span><br><span class="line">    <span class="built_in">row_number</span>() <span class="keyword">OVER</span> (<span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="built_in">SUM</span>(s_score) <span class="keyword">DESC</span>) <span class="keyword">as</span> rank</span><br><span class="line"><span class="keyword">FROM</span> Student a</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> a.s_id</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+-------------+------+</span><br><span class="line">| s_id | s_name | total_score | rank |</span><br><span class="line">+------+--------+-------------+------+</span><br><span class="line">| 01   | 趙雷   | 269         | 1    |</span><br><span class="line">| 03   | 孫風   | 240         | 2    |</span><br><span class="line">| 02   | 錢電   | 210         | 3    |</span><br><span class="line">| 07   | 鄭竹   | 187         | 4    |</span><br><span class="line">| 05   | 周梅   | 163         | 5    |</span><br><span class="line">| 04   | 李雲   | 100         | 6    |</span><br><span class="line">| 06   | 吳蘭   | 65          | 7    |</span><br><span class="line">| 08   | 王菊   | 0           | 8    |</span><br><span class="line">+------+--------+-------------+------+</span><br></pre></td></tr></table></figure>
 </detail>
-</li>
-<li><p>查詢不同老師所教不同課程平均分從高到低顯示</p>
+
+<ol start="21">
+<li>查詢不同老師所教不同課程平均分從高到低顯示</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> c.t_id, t_name, c.c_id, c_name, ROUND(<span class="built_in">AVG</span>(s_score), <span class="number">2</span>) <span class="keyword">as</span> avg_score <span class="keyword">FROM</span> Score s</span><br><span class="line"><span class="keyword">JOIN</span> Course c <span class="keyword">ON</span> s.c_id <span class="operator">=</span> c.c_id</span><br><span class="line"><span class="keyword">JOIN</span> Teacher t <span class="keyword">ON</span> c.t_id <span class="operator">=</span> t.t_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> c.c_id</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> avg_score <span class="keyword">DESC</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------+--------+-----------+</span><br><span class="line">| t_id | t_name | c_id | c_name | avg_score |</span><br><span class="line">+------+--------+------+--------+-----------+</span><br><span class="line">| 01   | 張三   | 02   | 數學   | 72.67     |</span><br><span class="line">| 03   | 王五   | 03   | 英語   | 68.5      |</span><br><span class="line">| 02   | 李四   | 01   | 語文   | 64.5      |</span><br><span class="line">+------+--------+------+--------+-----------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢所有課程的成績第2名到第3名的學生資訊及該課程成績</p>
+
+<ol start="22">
+<li>查詢所有課程的成績第2名到第3名的學生資訊及該課程成績</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> b.<span class="operator">*</span>, c_id, s_score, rank </span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span> <span class="operator">*</span>, <span class="built_in">rank</span>() <span class="keyword">OVER</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> c_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> s_score <span class="keyword">DESC</span>) <span class="keyword">as</span> rank <span class="keyword">FROM</span> Score) a</span><br><span class="line"><span class="keyword">JOIN</span> Student b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">WHERE</span> rank <span class="keyword">BETWEEN</span> <span class="number">2</span> <span class="keyword">AND</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
 結果：因有分數相同，占同個名次，所以課程01才只有呈現第3名
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+------+---------+------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex | c_id | s_score | rank |</span><br><span class="line">+------+--------+------------+-------+------+---------+------+</span><br><span class="line">| 05   | 周梅   | 1991-12-01 | 女    | 01   | 76      | 3    |</span><br><span class="line">| 07   | 鄭竹   | 1989-07-01 | 女    | 02   | 89      | 2    |</span><br><span class="line">| 05   | 周梅   | 1991-12-01 | 女    | 02   | 87      | 3    |</span><br><span class="line">| 07   | 鄭竹   | 1989-07-01 | 女    | 03   | 98      | 2    |</span><br><span class="line">| 02   | 錢電   | 1990-12-21 | 男    | 03   | 80      | 3    |</span><br><span class="line">| 03   | 孫風   | 1990-05-20 | 男    | 03   | 80      | 3    |</span><br><span class="line">+------+--------+------------+-------+------+---------+------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>統計各科成績各分數段人數：課程編號，課程名稱，[100-85]，[85-70]，[70-60]，[60-0] 及所佔百分比</p>
+
+<ol start="23">
+<li>統計各科成績各分數段人數：課程編號，課程名稱，[100-85]，[85-70]，[70-60]，[60-0] 及所佔百分比</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.c_id <span class="keyword">as</span> <span class="string">&#x27;課程編號&#x27;</span>, c_name <span class="keyword">as</span> <span class="string">&#x27;課程名稱&#x27;</span>,</span><br><span class="line">    <span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> s_score <span class="operator">&gt;=</span> <span class="number">85</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>) <span class="keyword">as</span> <span class="string">&#x27;[100-85]&#x27;</span>,</span><br><span class="line">    ROUND(<span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> s_score <span class="operator">&gt;=</span> <span class="number">85</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>)<span class="operator">*</span><span class="number">1.00</span><span class="operator">/</span><span class="built_in">COUNT</span>(a.s_id)<span class="operator">*</span><span class="number">100</span>, <span class="number">2</span>) <span class="keyword">as</span> <span class="string">&#x27;[100-85]百分比&#x27;</span>,</span><br><span class="line">    <span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> s_score <span class="operator">&gt;=</span> <span class="number">70</span> <span class="keyword">AND</span> s_score <span class="operator">&lt;</span> <span class="number">85</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>) <span class="keyword">as</span> <span class="string">&#x27;[85-70]&#x27;</span>,</span><br><span class="line">    ROUND(<span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> s_score <span class="operator">&gt;=</span> <span class="number">70</span> <span class="keyword">AND</span> s_score <span class="operator">&lt;</span> <span class="number">85</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>)<span class="operator">*</span><span class="number">1.00</span><span class="operator">/</span><span class="built_in">COUNT</span>(a.s_id)<span class="operator">*</span><span class="number">100</span>, <span class="number">2</span>) <span class="keyword">as</span> <span class="string">&#x27;[85-70]百分比&#x27;</span>,</span><br><span class="line">    <span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> s_score <span class="operator">&gt;=</span> <span class="number">60</span> <span class="keyword">AND</span> s_score <span class="operator">&lt;</span> <span class="number">70</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>) <span class="keyword">as</span> <span class="string">&#x27;[70-60]&#x27;</span>,</span><br><span class="line">    ROUND(<span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> s_score <span class="operator">&gt;=</span> <span class="number">60</span> <span class="keyword">AND</span> s_score <span class="operator">&lt;</span> <span class="number">70</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>)<span class="operator">*</span><span class="number">1.00</span><span class="operator">/</span><span class="built_in">COUNT</span>(a.s_id)<span class="operator">*</span><span class="number">100</span>, <span class="number">2</span>) <span class="keyword">as</span> <span class="string">&#x27;[70-60]百分比&#x27;</span>,</span><br><span class="line">    <span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> s_score <span class="operator">&lt;</span> <span class="number">60</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>) <span class="keyword">as</span> <span class="string">&#x27;[60-0]&#x27;</span>,</span><br><span class="line">    ROUND(<span class="built_in">SUM</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> s_score <span class="operator">&lt;</span> <span class="number">60</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>)<span class="operator">*</span><span class="number">1.00</span><span class="operator">/</span><span class="built_in">COUNT</span>(a.s_id)<span class="operator">*</span><span class="number">100</span>, <span class="number">2</span>) <span class="keyword">as</span> <span class="string">&#x27;[60-0]百分比&#x27;</span></span><br><span class="line"><span class="keyword">FROM</span> Score a</span><br><span class="line"><span class="keyword">JOIN</span> Course b <span class="keyword">ON</span> a.c_id <span class="operator">=</span> b.c_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> a.c_id</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+---------+----------+----------+---------------+---------+--------------+---------+---------------+--------+-------------+</span><br><span class="line">| 課程編號 | 課程名稱 | [100-85] | [100-85]百分比 | [85-70] | [85-70]百分比 | [70-60] | [70-60]百分比 | [60-0] | [60-0]百分比 |</span><br><span class="line">+---------+----------+----------+---------------+---------+--------------+---------+---------------+--------+-------------+</span><br><span class="line">| 01      | 語文     | 0        | 0.0           | 4       | 66.67         | 0       | 0.0          | 2      | 33.33        |</span><br><span class="line">| 02      | 數學     | 3        | 50.0          | 1       | 16.67         | 1       | 16.67        | 1      | 16.67        |</span><br><span class="line">| 03      | 英語     | 2        | 33.33         | 2       | 33.33         | 0       | 0.0          | 2      | 33.33        |</span><br><span class="line">+---------+----------+----------+---------------+---------+--------------+---------+---------------+--------+-------------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢學生平均成績及其名次<br>PS: 與第20題相似</p>
+
+<ol start="24">
+<li>查詢學生平均成績及其名次<br>PS: 與第20題相似</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.s_id, s_name, ROUND(ifnull(<span class="built_in">AVG</span>(s_score), <span class="number">0</span>), <span class="number">2</span>) <span class="keyword">as</span> avg_score,</span><br><span class="line">    <span class="built_in">row_number</span>() <span class="keyword">OVER</span> (<span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="built_in">AVG</span>(s_score) <span class="keyword">DESC</span>) <span class="keyword">as</span> rank</span><br><span class="line"><span class="keyword">FROM</span> Student a</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> a.s_id</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+-----------+------+</span><br><span class="line">| s_id | s_name | avg_score | rank |</span><br><span class="line">+------+--------+-----------+------+</span><br><span class="line">| 07   | 鄭竹   | 93.5      | 1    |</span><br><span class="line">| 01   | 趙雷   | 89.67     | 2    |</span><br><span class="line">| 05   | 周梅   | 81.5      | 3    |</span><br><span class="line">| 03   | 孫風   | 80.0      | 4    |</span><br><span class="line">| 02   | 錢電   | 70.0      | 5    |</span><br><span class="line">| 04   | 李雲   | 33.33     | 6    |</span><br><span class="line">| 06   | 吳蘭   | 32.5      | 7    |</span><br><span class="line">| 08   | 王菊   | 0.0       | 8    |</span><br><span class="line">+------+--------+-----------+------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢各科成績前三名的記錄</p>
+
+<ol start="25">
+<li>查詢各科成績前三名的記錄</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 使用rank()函式
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span> <span class="operator">*</span>, <span class="built_in">rank</span>() <span class="keyword">OVER</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> c_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> s_score <span class="keyword">DESC</span>) <span class="keyword">as</span> rank <span class="keyword">FROM</span> Score)</span><br><span class="line"><span class="keyword">WHERE</span> rank <span class="operator">&lt;=</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">+------+------+---------+------+</span><br><span class="line">| s_id | c_id | s_score | rank |</span><br><span class="line">+------+------+---------+------+</span><br><span class="line">| 01   | 01   | 80      | 1    |</span><br><span class="line">| 03   | 01   | 80      | 1    |</span><br><span class="line">| 05   | 01   | 76      | 3    |</span><br><span class="line">| 01   | 02   | 90      | 1    |</span><br><span class="line">| 07   | 02   | 89      | 2    |</span><br><span class="line">| 05   | 02   | 87      | 3    |</span><br><span class="line">| 01   | 03   | 99      | 1    |</span><br><span class="line">| 07   | 03   | 98      | 2    |</span><br><span class="line">| 02   | 03   | 80      | 3    |</span><br><span class="line">| 03   | 03   | 80      | 3    |</span><br><span class="line">+------+------+---------+------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢每門課程被選修的學生數</p>
+
+<ol start="26">
+<li>查詢每門課程被選修的學生數</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> c_id, <span class="built_in">COUNT</span>(s_id) <span class="keyword">as</span> num <span class="keyword">FROM</span> Score</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> c_id</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+------+-----+</span><br><span class="line">| c_id | num |</span><br><span class="line">+------+-----+</span><br><span class="line">| 01   | 6   |</span><br><span class="line">| 02   | 6   |</span><br><span class="line">| 03   | 6   |</span><br><span class="line">+------+-----+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢出只選修兩門課程的學生學號和姓名</p>
+
+<ol start="27">
+<li>查詢出只選修兩門課程的學生學號和姓名</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.s_id, s_name <span class="keyword">FROM</span> Score a</span><br><span class="line"><span class="keyword">JOIN</span> Student b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> a.s_id</span><br><span class="line"><span class="keyword">HAVING</span> <span class="built_in">COUNT</span>(c_id) <span class="operator">=</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+</span><br><span class="line">| s_id | s_name |</span><br><span class="line">+------+--------+</span><br><span class="line">| 05   | 周梅   |</span><br><span class="line">| 06   | 吳蘭   |</span><br><span class="line">| 07   | 鄭竹   |</span><br><span class="line">+------+--------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢男生、女生人數</p>
+
+<ol start="28">
+<li>查詢男生、女生人數</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> s_sex, <span class="built_in">COUNT</span>(s_id) <span class="keyword">as</span> num <span class="keyword">FROM</span> Student</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> s_sex</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+-------+-----+</span><br><span class="line">| s_sex | num |</span><br><span class="line">+-------+-----+</span><br><span class="line">| 女    | 4   |</span><br><span class="line">| 男    | 4   |</span><br><span class="line">+-------+-----+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢名字中含有”風”字的學生資訊</p>
+
+<ol start="29">
+<li>查詢名字中含有”風”字的學生資訊</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Student</span><br><span class="line"><span class="keyword">WHERE</span> s_name <span class="keyword">LIKE</span> <span class="string">&#x27;%風%&#x27;</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex |</span><br><span class="line">+------+--------+------------+-------+</span><br><span class="line">| 03   | 孫風   | 1990-05-20 | 男    |</span><br><span class="line">+------+--------+------------+-------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢同名同性學生名單，並統計同名人數</p>
+
+<ol start="30">
+<li>查詢同名同性學生名單，並統計同名人數</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> s1.s_name, s1.s_sex, <span class="built_in">COUNT</span>() <span class="keyword">FROM</span> Student s1</span><br><span class="line"><span class="keyword">JOIN</span> Student s2 <span class="keyword">ON</span> s1.s_name <span class="operator">=</span> s2.s_name <span class="keyword">AND</span> s1.s_sex <span class="operator">=</span> s2.s_sex <span class="keyword">AND</span> s1.s_id <span class="operator">!=</span> s2.s_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> s1.s_name, s1.s_sex</span><br></pre></td></tr></table></figure>
 查無結果
 </details>
-</li>
-<li><p>查詢1990年出生的學生資訊</p>
+
+<ol start="31">
+<li>查詢1990年出生的學生資訊</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Student</span><br><span class="line"><span class="keyword">WHERE</span> strftime(<span class="string">&#x27;%Y&#x27;</span>, s_birth) <span class="operator">=</span> <span class="string">&#x27;1990&#x27;</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex |</span><br><span class="line">+------+--------+------------+-------+</span><br><span class="line">| 01   | 趙雷   | 1990-01-01 | 男    |</span><br><span class="line">| 02   | 錢電   | 1990-12-21 | 男    |</span><br><span class="line">| 03   | 孫風   | 1990-05-20 | 男    |</span><br><span class="line">| 04   | 李雲   | 1990-08-06 | 男    |</span><br><span class="line">| 08   | 王菊   | 1990-01-20 | 女    |</span><br><span class="line">+------+--------+------------+-------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢每門課程的平均成績，結果按平均成績降序排列，平均成績相同時，按課程編號升序排列</p>
+
+<ol start="32">
+<li>查詢每門課程的平均成績，結果按平均成績降序排列，平均成績相同時，按課程編號升序排列</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> c_id, ROUND(<span class="built_in">AVG</span>(s_score), <span class="number">2</span>) <span class="keyword">as</span> avg_score</span><br><span class="line"><span class="keyword">FROM</span> Score</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> c_id </span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> avg_score <span class="keyword">DESC</span>, c_id <span class="keyword">ASC</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+------+-----------+</span><br><span class="line">| c_id | avg_score |</span><br><span class="line">+------+-----------+</span><br><span class="line">| 02   | 72.67     |</span><br><span class="line">| 03   | 68.5      |</span><br><span class="line">| 01   | 64.5      |</span><br><span class="line">+------+-----------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢平均成績大於等於85的所有學生的學號、姓名和平均成績<br>PS: 與第3題相似</p>
+
+<ol start="33">
+<li>查詢平均成績大於等於85的所有學生的學號、姓名和平均成績<br>PS: 與第3題相似</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.s_id, s_name, ROUND(<span class="built_in">AVG</span>(s_score), <span class="number">2</span>) <span class="keyword">AS</span> avg_score <span class="keyword">FROM</span> Student a</span><br><span class="line"><span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> a.s_id</span><br><span class="line"><span class="keyword">HAVING</span> avg_score <span class="operator">&gt;=</span> <span class="number">85</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+-----------+</span><br><span class="line">| s_id | s_name | avg_score |</span><br><span class="line">+------+--------+-----------+</span><br><span class="line">| 01   | 趙雷   | 89.67     |</span><br><span class="line">| 07   | 鄭竹   | 93.5      |</span><br><span class="line">+------+--------+-----------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢課程名稱為”數學”，且分數低於60的學生姓名和分數</p>
+
+<ol start="34">
+<li>查詢課程名稱為”數學”，且分數低於60的學生姓名和分數</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> s_name, s_score <span class="keyword">FROM</span> Score a</span><br><span class="line"><span class="keyword">JOIN</span> Student b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id </span><br><span class="line"><span class="keyword">WHERE</span> a.c_id <span class="operator">=</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> c_id <span class="keyword">FROM</span> Course <span class="keyword">WHERE</span> c_name <span class="operator">=</span> <span class="string">&#x27;數學&#x27;</span></span><br><span class="line">) <span class="keyword">AND</span> s_score <span class="operator">&lt;</span> <span class="number">60</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+--------+---------+</span><br><span class="line">| s_name | s_score |</span><br><span class="line">+--------+---------+</span><br><span class="line">| 李雲   | 30      |</span><br><span class="line">+--------+---------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢所有學生的課程及分數狀況（有學生沒成績，沒選課的狀況）</p>
+
+<ol start="35">
+<li>查詢所有學生的課程及分數狀況（有學生沒成績，沒選課的狀況）</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.s_id, s_name,</span><br><span class="line">    <span class="built_in">MAX</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> c_name<span class="operator">=</span><span class="string">&#x27;語文&#x27;</span> <span class="keyword">THEN</span> s_score <span class="keyword">ELSE</span> <span class="keyword">NULL</span> <span class="keyword">END</span>) <span class="keyword">as</span> <span class="string">&#x27;語文&#x27;</span>,</span><br><span class="line">    <span class="built_in">MAX</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> c_name<span class="operator">=</span><span class="string">&#x27;數學&#x27;</span> <span class="keyword">THEN</span> s_score <span class="keyword">ELSE</span> <span class="keyword">NULL</span> <span class="keyword">END</span>) <span class="keyword">as</span> <span class="string">&#x27;數學&#x27;</span>,</span><br><span class="line">    <span class="built_in">MAX</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> c_name<span class="operator">=</span><span class="string">&#x27;英語&#x27;</span> <span class="keyword">THEN</span> s_score <span class="keyword">ELSE</span> <span class="keyword">NULL</span> <span class="keyword">END</span>) <span class="keyword">as</span> <span class="string">&#x27;英語&#x27;</span></span><br><span class="line"><span class="keyword">FROM</span> Student a</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">JOIN</span> Course c <span class="keyword">ON</span> b.c_id <span class="operator">=</span> c.c_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> a.s_id</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------+------+------+</span><br><span class="line">| s_id | s_name | 語文 | 數學 | 英語 |</span><br><span class="line">+------+--------+------+------+------+</span><br><span class="line">| 01   | 趙雷   | 80   | 90   | 99   |</span><br><span class="line">| 02   | 錢電   | 70   | 60   | 80   |</span><br><span class="line">| 03   | 孫風   | 80   | 80   | 80   |</span><br><span class="line">| 04   | 李雲   | 50   | 30   | 20   |</span><br><span class="line">| 05   | 周梅   | 76   | 87   |      |</span><br><span class="line">| 06   | 吳蘭   | 31   |      | 34   |</span><br><span class="line">| 07   | 鄭竹   |      | 89   | 98   |</span><br><span class="line">+------+--------+------+------+------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢任何一門課程成績在70分以上的姓名、課程名稱和分數</p>
+
+<ol start="36">
+<li>查詢任何一門課程成績在70分以上的姓名、課程名稱和分數</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> s_name, c_name, s_score <span class="keyword">FROM</span> Score a</span><br><span class="line"><span class="keyword">JOIN</span> Course b <span class="keyword">ON</span> a.c_id <span class="operator">=</span> b.c_id <span class="keyword">AND</span> s_score <span class="operator">&gt;</span> <span class="number">70</span></span><br><span class="line"><span class="keyword">JOIN</span> Student c <span class="keyword">ON</span> a.s_id <span class="operator">=</span> c.s_id</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">+--------+--------+---------+</span><br><span class="line">| s_name | c_name | s_score |</span><br><span class="line">+--------+--------+---------+</span><br><span class="line">| 趙雷   | 語文   | 80      |</span><br><span class="line">| 趙雷   | 數學   | 90      |</span><br><span class="line">| 趙雷   | 英語   | 99      |</span><br><span class="line">| 錢電   | 英語   | 80      |</span><br><span class="line">| 孫風   | 語文   | 80      |</span><br><span class="line">| 孫風   | 數學   | 80      |</span><br><span class="line">| 孫風   | 英語   | 80      |</span><br><span class="line">| 周梅   | 語文   | 76      |</span><br><span class="line">| 周梅   | 數學   | 87      |</span><br><span class="line">| 鄭竹   | 數學   | 89      |</span><br><span class="line">| 鄭竹   | 英語   | 98      |</span><br><span class="line">+--------+--------+---------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢不及格的課程</p>
+
+<ol start="37">
+<li>查詢不及格的課程</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> s_name, c_name, s_score <span class="keyword">FROM</span> Score a</span><br><span class="line"><span class="keyword">JOIN</span> Course b <span class="keyword">ON</span> a.c_id <span class="operator">=</span> b.c_id <span class="keyword">AND</span> s_score <span class="operator">&lt;</span> <span class="number">60</span></span><br><span class="line"><span class="keyword">JOIN</span> Student c <span class="keyword">ON</span> a.s_id <span class="operator">=</span> c.s_id</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+--------+--------+---------+</span><br><span class="line">| s_name | c_name | s_score |</span><br><span class="line">+--------+--------+---------+</span><br><span class="line">| 李雲   | 語文   | 50      |</span><br><span class="line">| 李雲   | 數學   | 30      |</span><br><span class="line">| 李雲   | 英語   | 20      |</span><br><span class="line">| 吳蘭   | 語文   | 31      |</span><br><span class="line">| 吳蘭   | 英語   | 34      |</span><br><span class="line">+--------+--------+---------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢課程編號為01且課程成績在80分以上的學生的學號和姓名</p>
+
+<ol start="38">
+<li>查詢課程編號為01且課程成績在80分以上的學生的學號和姓名</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.s_id, s_name <span class="keyword">FROM</span> Score a</span><br><span class="line"><span class="keyword">JOIN</span> Student b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id <span class="keyword">AND</span> c_id <span class="operator">=</span> <span class="string">&#x27;01&#x27;</span> <span class="keyword">AND</span> s_score <span class="operator">&gt;</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
 查無結果
 </details>
-</li>
+
+<ol start="39">
 <li><p>求每門課程的學生人數<br>PS: 與第26題相同</p>
 </li>
 <li><p>成績不重複的情況下，查詢選修”張三”老師所授課程的學生中，成績最高的學生資訊及其成績</p>
+</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> b.<span class="operator">*</span>, <span class="built_in">MAX</span>(s_score) <span class="keyword">FROM</span> Score a</span><br><span class="line"><span class="keyword">JOIN</span> Student b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">WHERE</span> c_id <span class="operator">=</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> c_id <span class="keyword">FROM</span> Teacher t</span><br><span class="line">    <span class="keyword">JOIN</span> Course c <span class="keyword">ON</span> t.t_id <span class="operator">=</span> c.t_id <span class="keyword">AND</span> t_name <span class="operator">=</span> <span class="string">&#x27;張三&#x27;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+--------------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex | MAX(s_score) |</span><br><span class="line">+------+--------+------------+-------+--------------+</span><br><span class="line">| 01   | 趙雷   | 1990-01-01 | 男    | 90           |</span><br><span class="line">+------+--------+------------+-------+--------------+</span><br></pre></td></tr></table></figure>
-</details></li>
-</ol>
+</details>
+
 <ul>
-<li>40.1 成績重複的情況下，查詢選修”張三”老師所授課程的學生中，成績最高的學生資訊及其成績<details>
-  <summary>答案</summary>
+<li>40.1 成績重複的情況下，查詢選修”張三”老師所授課程的學生中，成績最高的學生資訊及其成績</li>
+</ul>
+<details>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> b.<span class="operator">*</span>, s_score </span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span> <span class="operator">*</span>, <span class="built_in">rank</span>() <span class="keyword">OVER</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> c_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> s_score <span class="keyword">DESC</span>) <span class="keyword">as</span> rank <span class="keyword">FROM</span> Score) a</span><br><span class="line"><span class="keyword">JOIN</span> Student b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">WHERE</span> c_id <span class="operator">=</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> c_id <span class="keyword">FROM</span> Teacher t</span><br><span class="line">    <span class="keyword">JOIN</span> Course c <span class="keyword">ON</span> t.t_id <span class="operator">=</span> c.t_id <span class="keyword">AND</span> t_name <span class="operator">=</span> <span class="string">&#x27;張三&#x27;</span></span><br><span class="line">) <span class="keyword">AND</span> rank <span class="operator">=</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+---------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex | s_score |</span><br><span class="line">+------+--------+------------+-------+---------+</span><br><span class="line">| 01   | 趙雷   | 1990-01-01 | 男    | 90      |</span><br><span class="line">+------+--------+------------+-------+---------+</span><br></pre></td></tr></table></figure>
-</details></li>
-</ul>
+</details>
+
 <ol start="41">
-<li><p>查詢不同課程成績相同的學生的學生編號、課程編號、學生成績</p>
+<li>查詢不同課程成績相同的學生的學生編號、課程編號、學生成績</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> a.<span class="operator">*</span> <span class="keyword">FROM</span> Score a</span><br><span class="line"><span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id <span class="keyword">AND</span> a.s_score <span class="operator">=</span> b.s_score <span class="keyword">AND</span> a.c_id <span class="operator">!=</span> b.c_id</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+------+------+---------+</span><br><span class="line">| s_id | c_id | s_score |</span><br><span class="line">+------+------+---------+</span><br><span class="line">| 03   | 01   | 80      |</span><br><span class="line">| 03   | 02   | 80      |</span><br><span class="line">| 03   | 03   | 80      |</span><br><span class="line">+------+------+---------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢每門成績最好的前兩名<br>PS: 與第25題相似</p>
+
+<ol start="42">
+<li>查詢每門成績最好的前兩名<br>PS: 與第25題相似</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> (<span class="keyword">SELECT</span> <span class="operator">*</span>, <span class="built_in">rank</span>() <span class="keyword">OVER</span> (<span class="keyword">PARTITION</span> <span class="keyword">BY</span> c_id <span class="keyword">ORDER</span> <span class="keyword">BY</span> s_score <span class="keyword">DESC</span>) <span class="keyword">as</span> rank <span class="keyword">FROM</span> Score)</span><br><span class="line"><span class="keyword">WHERE</span> rank <span class="operator">&lt;=</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+------+------+---------+------+</span><br><span class="line">| s_id | c_id | s_score | rank |</span><br><span class="line">+------+------+---------+------+</span><br><span class="line">| 01   | 01   | 80      | 1    |</span><br><span class="line">| 03   | 01   | 80      | 1    |</span><br><span class="line">| 01   | 02   | 90      | 1    |</span><br><span class="line">| 07   | 02   | 89      | 2    |</span><br><span class="line">| 01   | 03   | 99      | 1    |</span><br><span class="line">| 07   | 03   | 98      | 2    |</span><br><span class="line">+------+------+---------+------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>統計每門課程的學生選修人數（超過5人的課程才統計）<br>PS: 與第26題相似</p>
+
+<ol start="43">
+<li>統計每門課程的學生選修人數（超過5人的課程才統計）<br>PS: 與第26題相似</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> c_id, <span class="built_in">COUNT</span>(s_id) <span class="keyword">as</span> num <span class="keyword">FROM</span> Score</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> c_id</span><br><span class="line"><span class="keyword">HAVING</span> num <span class="operator">&gt;</span> <span class="number">5</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+------+-----+</span><br><span class="line">| c_id | num |</span><br><span class="line">+------+-----+</span><br><span class="line">| 01   | 6   |</span><br><span class="line">| 02   | 6   |</span><br><span class="line">| 03   | 6   |</span><br><span class="line">+------+-----+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>檢索至少選修兩門課程的學生學號<br>PS: 與第27題相似</p>
+
+<ol start="44">
+<li>檢索至少選修兩門課程的學生學號<br>PS: 與第27題相似</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> s_id <span class="keyword">FROM</span> Score</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> s_id</span><br><span class="line"><span class="keyword">HAVING</span> <span class="built_in">COUNT</span>(c_id) <span class="operator">&gt;=</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">+------+</span><br><span class="line">| s_id |</span><br><span class="line">+------+</span><br><span class="line">| 01   |</span><br><span class="line">| 02   |</span><br><span class="line">| 03   |</span><br><span class="line">| 04   |</span><br><span class="line">| 05   |</span><br><span class="line">| 06   |</span><br><span class="line">| 07   |</span><br><span class="line">+------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢選修了全部課程的學生資訊</p>
+
+<ol start="45">
+<li>查詢選修了全部課程的學生資訊</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.<span class="operator">*</span> <span class="keyword">FROM</span> Student a</span><br><span class="line"><span class="keyword">JOIN</span> Score b <span class="keyword">ON</span> a.s_id <span class="operator">=</span> b.s_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> a.s_id</span><br><span class="line"><span class="keyword">HAVING</span> <span class="built_in">COUNT</span>(b.c_id) <span class="operator">=</span> (<span class="keyword">SELECT</span> <span class="built_in">COUNT</span>() <span class="keyword">FROM</span> Course)</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex |</span><br><span class="line">+------+--------+------------+-------+</span><br><span class="line">| 01   | 趙雷   | 1990-01-01 | 男    |</span><br><span class="line">| 02   | 錢電   | 1990-12-21 | 男    |</span><br><span class="line">| 03   | 孫風   | 1990-05-20 | 男    |</span><br><span class="line">| 04   | 李雲   | 1990-08-06 | 男    |</span><br><span class="line">+------+--------+------------+-------+</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢各學生的年齡，只按年份來算</p>
+
+<ol start="46">
+<li>查詢各學生的年齡，只按年份來算</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> s_name, strftime(<span class="string">&#x27;%Y&#x27;</span>, <span class="string">&#x27;now&#x27;</span>) <span class="operator">-</span> strftime(<span class="string">&#x27;%Y&#x27;</span>, s_birth) <span class="keyword">as</span> age <span class="keyword">FROM</span> Student</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+--------+------+</span><br><span class="line">| s_name | age  |</span><br><span class="line">+--------+------+</span><br><span class="line">| 趙雷   | 33   |</span><br><span class="line">| 錢電   | 33   |</span><br><span class="line">| 孫風   | 33   |</span><br><span class="line">| 李雲   | 33   |</span><br><span class="line">| 周梅   | 32   |</span><br><span class="line">| 吳蘭   | 31   |</span><br><span class="line">| 鄭竹   | 34   |</span><br><span class="line">| 王菊   | 33   |</span><br><span class="line">+--------+------+</span><br></pre></td></tr></table></figure>
-</details></li>
-</ol>
+</details>
+
 <ul>
-<li>46.1 按照出生日期來算，當前月日 &lt; 出生年月的月日則，年齡減一<details>
-  <summary>答案</summary>
+<li>46.1 按照出生日期來算，當前月日 &lt; 出生年月的月日則，年齡減一</li>
+</ul>
+<details>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> s_name, </span><br><span class="line">    strftime(<span class="string">&#x27;%Y&#x27;</span>, <span class="string">&#x27;now&#x27;</span>) <span class="operator">-</span> strftime(<span class="string">&#x27;%Y&#x27;</span>, s_birth) <span class="operator">-</span> (</span><br><span class="line">        <span class="keyword">CASE</span> <span class="keyword">WHEN</span> strftime(<span class="string">&#x27;%m%d&#x27;</span>, <span class="string">&#x27;now&#x27;</span>) <span class="operator">&lt;</span> strftime(<span class="string">&#x27;%m%d&#x27;</span>, s_birth) </span><br><span class="line">        <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">ELSE</span> <span class="number">0</span> <span class="keyword">END</span>) <span class="keyword">as</span> age </span><br><span class="line"><span class="keyword">FROM</span> Student</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+--------+-----+</span><br><span class="line">| s_name | age |</span><br><span class="line">+--------+-----+</span><br><span class="line">| 趙雷   | 33  |</span><br><span class="line">| 錢電   | 32  |</span><br><span class="line">| 孫風   | 33  |</span><br><span class="line">| 李雲   | 33  |</span><br><span class="line">| 周梅   | 31  |</span><br><span class="line">| 吳蘭   | 31  |</span><br><span class="line">| 鄭竹   | 34  |</span><br><span class="line">| 王菊   | 33  |</span><br><span class="line">+--------+-----+</span><br></pre></td></tr></table></figure>
-</details></li>
-</ul>
+</details>
+
 <ol start="47">
-<li><p>查詢本週過生日的學生</p>
+<li>查詢本週過生日的學生</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Student</span><br><span class="line"><span class="keyword">WHERE</span> strftime(<span class="string">&#x27;%W&#x27;</span>, s_birth) <span class="operator">=</span> strftime(<span class="string">&#x27;%W&#x27;</span>, <span class="string">&#x27;now&#x27;</span>)</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢下週過生日的學生</p>
+
+<ol start="48">
+<li>查詢下週過生日的學生</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 使用strftime()函式會得到字串結果，做加減運算後，會變成數字，要小心兩邊的型態是否一致。
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Student</span><br><span class="line"><span class="keyword">WHERE</span> strftime(<span class="string">&#x27;%W&#x27;</span>, s_birth) <span class="operator">+</span> <span class="number">0</span> <span class="operator">=</span> strftime(<span class="string">&#x27;%W&#x27;</span>, <span class="string">&#x27;now&#x27;</span>) <span class="operator">+</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢本月過生日的學生</p>
+
+<ol start="49">
+<li>查詢本月過生日的學生</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Student</span><br><span class="line"><span class="keyword">WHERE</span> strftime(<span class="string">&#x27;%m&#x27;</span>, s_birth) <span class="operator">=</span> strftime(<span class="string">&#x27;%m&#x27;</span>, <span class="string">&#x27;now&#x27;</span>)</span><br></pre></td></tr></table></figure>
 </details>
-</li>
-<li><p>查詢下月過生日的學生</p>
+
+<ol start="50">
+<li>查詢下月過生日的學生</li>
+</ol>
 <details>
-<summary>答案</summary>
+    <summary>答案</summary>
 使用strftime()函式會得到字串結果，做加減運算後，會變成數字，要小心兩邊的型態是否一致。
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Student</span><br><span class="line"><span class="keyword">WHERE</span> strftime(<span class="string">&#x27;%m&#x27;</span>, s_birth) <span class="operator">+</span> <span class="number">0</span> <span class="operator">=</span> strftime(<span class="string">&#x27;%m&#x27;</span>, <span class="string">&#x27;now&#x27;</span>) <span class="operator">+</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
-</details></li>
-</ol>
+</details>
+
 <p>其它</p>
 <ul>
-<li>查詢在成績表存在成績的學生資訊<details>
-  <summary>答案</summary>
+<li>查詢在成績表存在成績的學生資訊</li>
+</ul>
+<details>
+    <summary>答案</summary>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> b.<span class="operator">*</span> <span class="keyword">FROM</span> Score a, Student b</span><br><span class="line"><span class="keyword">WHERE</span> a.s_id <span class="operator">=</span> b.s_id</span><br></pre></td></tr></table></figure>
 結果
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">+------+--------+------------+-------+</span><br><span class="line">| s_id | s_name | s_birth    | s_sex |</span><br><span class="line">+------+--------+------------+-------+</span><br><span class="line">| 01   | 趙雷   | 1990-01-01 | 男    |</span><br><span class="line">| 02   | 錢電   | 1990-12-21 | 男    |</span><br><span class="line">| 03   | 孫風   | 1990-05-20 | 男    |</span><br><span class="line">| 04   | 李雲   | 1990-08-06 | 男    |</span><br><span class="line">| 05   | 周梅   | 1991-12-01 | 女    |</span><br><span class="line">| 06   | 吳蘭   | 1992-03-01 | 女    |</span><br><span class="line">| 07   | 鄭竹   | 1989-07-01 | 女    |</span><br><span class="line">+------+--------+------------+-------+</span><br></pre></td></tr></table></figure>
-</details></li>
-</ul>
+</details>
+
 <p><strong>參考資料</strong></p>
 <ol>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/hansome_hong/article/details/131211316">50道SQL练习题</a></li>
@@ -664,7 +767,18 @@
 
     
     
-    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- post-body-end -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="9591303574"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 
       <footer class="post-footer">
           <div class="post-tags">
@@ -783,18 +897,7 @@
   </div>
 
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
-     crossorigin="anonymous"></script>
-<!-- sidebar -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-1615854091847831"
-     data-ad-slot="1915238009"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+
       </div>
 
     </div>
