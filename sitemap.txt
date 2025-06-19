@@ -1,3 +1,5 @@
+https://usermark.github.io/2025/06/19/linux-chmod-chown/
+https://usermark.github.io/2025/06/19/docker-command/
 https://usermark.github.io/about/index.html
 https://usermark.github.io/2024/07/14/sql-impl/
 https://usermark.github.io/2025/04/16/vmware-build-ios-app/
@@ -102,3 +104,4 @@ https://usermark.github.io/tags/MariaDB/
 https://usermark.github.io/tags/VMware/
 https://usermark.github.io/tags/MacOS/
 https://usermark.github.io/tags/Flutter/
+https://usermark.github.io/tags/Linux/
