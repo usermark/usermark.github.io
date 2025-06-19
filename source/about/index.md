@@ -10,8 +10,8 @@ comments: false
 # 前端
 
 - Android、Java：是最熟悉的
-- Python：自學，有寫些小工具加強工作效率，用過 Flask、Tkinter
-- Flutter: 自學
+- Python：有寫些小工具加強工作效率，用過 Flask、Tkinter
+- Flutter: 有上架作品
 - Bootstrap：會套用並理解規則
 - jQuery：會基本用法，以及使用 ajax 傳送 json 資料
 - Unity3D、C#：處理與原生 Android 相關的插件用於遊戲開發，例如通知和推播
