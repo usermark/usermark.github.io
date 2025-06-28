@@ -44,3 +44,16 @@ docker cp local_file.txt my_container:/app/
 ```bash
 docker cp my_container:/app/data.txt /D/temp/
 ```
+
+根據 Dockerfile 打包成 image 
+```bash
+docker image build -t asia-east1-docker.pkg.dev/xxx/hub/frps:v1 .
+```
+
+上傳至 Artifact Registry
+```bash
+docker push asia-east1-docker.pkg.dev/xxx/hub/frps:v1
+```
+
+**參考資料**
+1. [實作 Dockerfile + flask 教學](https://www.maxlist.xyz/2020/01/11/docker-flask/)
