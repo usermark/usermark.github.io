@@ -127,6 +127,28 @@ android {
 
 這樣做還有個好處是可將properties排除於git版控，只保留重要或敏感的資料於本地端。
 
+改用build.gralde.kts的話則會是
+```kotlin
+import java.io.FileInputStream
+import java.util.Properties
+
+// Load keystore
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties()
+keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
+android {
+    signingConfigs {
+        register("release") {
+            storeFile = file(keystoreProperties["storeFile"] as String)
+            storePassword = keystoreProperties["storePassword"] as String
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+        }
+    }
+}
+```
+
 參考<https://stackoverflow.com/questions/20562189/sign-apk-without-putting-keystore-info-in-build-gradle>
 
 # 使用AsyncTask注意事項
