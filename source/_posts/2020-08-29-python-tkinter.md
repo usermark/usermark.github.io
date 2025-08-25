@@ -251,6 +251,44 @@ class Application:
 
 ![](/assets/custom_frame.png)
 
+# 第三方元件介紹
+
+## CodeView
+
+需安裝 Chlorophyll
+
+```sh
+pipenv install chlorophyll
+```
+
+有一點要特別注意，直接設定 CodeView 元件的 height 無作用，只能外部包一層 Frame 達到限制高度的目的。
+
+```python
+import pygments.lexers
+from chlorophyll import CodeView
+from tkinter import *
+from tkinter.ttk import *
+
+if __name__ == "__main__":
+    window = Tk()
+    window.title("CodeView")
+    window.geometry("300x200")
+
+    # 創建一個 Frame 容器來控制高度
+    frame = Frame(window, height=100)
+    frame.pack(fill=X)
+    frame.pack_propagate(False)  # 防止子組件改變 Frame 大小
+    
+    sql_text = CodeView(frame, lexer=pygments.lexers.get_lexer_by_name('sql'), color_scheme="ayu-dark")
+    sql_text.pack(fill=BOTH, expand=True)
+    
+    sql_text.insert(END, "SELECT * FROM users WHERE age > 30;")
+
+    window.mainloop()
+```
+
+![](/assets/tk_codeview.png)
+
 # 佈局
 
 ## Pack
