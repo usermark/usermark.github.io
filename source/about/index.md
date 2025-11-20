@@ -20,7 +20,6 @@ comments: false
 # 其他
 
 - IoT：玩過樹莓派、Arduino、D1 mini、ESP32，[作品集](/iot-works)
-- Git：團隊開發有用到，跑過 code review 加 merge，以及 Git flow
 - Blender：因興趣自學，[作品集](/blender-works)
 - 3D列印：[作品集](/3d-print-works)
 

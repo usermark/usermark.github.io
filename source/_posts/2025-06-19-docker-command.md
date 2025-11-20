@@ -30,6 +30,12 @@ docker run -p 80:80 -d --name my_container nginx
 -d 容器啟動後會進入背景執行。
 -\-name 可以為容器自訂命名。
 
+新建並啟動 container，並指定掛載資料夾
+```bash
+docker run -p 80:80 -p 443:443 -d -v /D/data:/var/www/html/data --name my_container nginx
+```
+-v 用來掛載本機資料夾到容器，此處的 /D/data 便是 D:\data，冒號後面的 /var/www/html/data 為容器內對應的資料夾。
+
 進入 container
 ```bash
 docker exec -it my_container bash

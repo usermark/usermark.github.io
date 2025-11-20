@@ -76,6 +76,12 @@ Volume 是 Docker 最推薦存放 persisting data（ 數據 ）的機制，因�
 
 便是常講的 domain。
 
+# DoH (DNS over HTTPS)
+
+是 DoT 的替代方案。使用 DoH 時，DNS 查詢和回應會加密，但它們是透過 HTTP 或 HTTP/2 通訊協定傳送，而不是直接透過 UDP 傳送。確保攻擊者無法偽造或更改 DNS 流量。從網路管理員的角度來看，DoH 流量表現為與其他 HTTPS 流量一樣，如普通使用者與網站和 Web 應用程式進行的互動。
+
+參考 [DNS over TLS 與 DNS over HTTPS | 保護 DNS](https://www.cloudflare.com/zh-tw/learning/dns/dns-over-tls/)
+
 # CDN (內容傳遞網路)
 
 是一組地理上分散的伺服器，用於在靠近終端使用者的位置快取內容。能有效緩解 DDoS 攻擊，避免源站伺服器遭受攻擊，導致服務中斷或伺服器癱瘓等問題發生。
