@@ -29,7 +29,7 @@
 <meta property="og:description" content="整理常用的指令。">
 <meta property="og:locale" content="zh_TW">
 <meta property="article:published_time" content="2025-06-19T08:55:32.000Z">
-<meta property="article:modified_time" content="2025-06-28T14:54:01.507Z">
+<meta property="article:modified_time" content="2025-11-20T14:48:06.719Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="Docker">
 <meta name="twitter:card" content="summary">
@@ -202,7 +202,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2025-06-28 22:54:01" itemprop="dateModified" datetime="2025-06-28T22:54:01+08:00">2025-06-28</time>
+                <time title="修改時間：2025-11-20 22:48:06" itemprop="dateModified" datetime="2025-11-20T22:48:06+08:00">2025-11-20</time>
               </span>
 
           
@@ -238,6 +238,9 @@
 <p>新建並啟動 container</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 80:80 -d --name my_container nginx</span><br></pre></td></tr></table></figure>
 <p>-p 綁定連接埠port。<br>-d 容器啟動後會進入背景執行。<br>--name 可以為容器自訂命名。</p>
+<p>新建並啟動 container，並指定掛載資料夾</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 80:80 -p 443:443 -d -v /D/data:/var/www/html/data --name my_container nginx</span><br></pre></td></tr></table></figure>
+<p>-v 用來掛載本機資料夾到容器，此處的 &#x2F;D&#x2F;data 便是 D:\data，冒號後面的 &#x2F;var&#x2F;www&#x2F;html&#x2F;data 為容器內對應的資料夾。</p>
 <p>進入 container</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it my_container bash</span><br></pre></td></tr></table></figure>
 
