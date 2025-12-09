@@ -32,5 +32,5 @@ chmod 775 README.txt
 
 修改 data 目錄的擁有者為 mike，群組為 www-data
 ```bash
-chmod mike:www-data data
+chown mike:www-data data
 ```
