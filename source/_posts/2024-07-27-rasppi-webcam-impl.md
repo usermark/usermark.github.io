@@ -4,7 +4,7 @@ date: 2024-07-27 15:20:37
 tags:
 - Raspberry Pi
 ---
-使用手邊已有的上古USB鏡頭做練習，解析度只有320x240。
+使用樹莓派，加上手邊已有的上古USB鏡頭做練習，解析度只有320x240。
 <!--more-->
 ![](/assets/cubeternet.jpg)
 
