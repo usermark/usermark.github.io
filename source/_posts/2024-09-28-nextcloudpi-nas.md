@@ -23,11 +23,11 @@ date: 2024-09-28 23:38:01
 ![](/assets/home_net_pi.png)
 
 等待一段時間便可用瀏覽器打開 https://nextcloudpi.local
-第一次會看到 Activation 的畫面，記住兩組帳密後，按下 Activate 開啟初始化設定。
+第一次會看到 Activation 的畫面，記住兩組帳密後，按下「Activate」開啟初始化設定。
 畫面轉到後台管理 https://nextcloudpi.local:4443 後，使用 ncp 第一組帳密登入。
 ![](/assets/ncp_wizard.png)
 
-依照初始化精靈的指示做設定，在詢問是否會使用外接硬碟來儲存資料時，我選 Yes。
+依照初始化精靈的指示做設定，在詢問是否會使用外接硬碟來儲存資料時，我選「Yes」。
 ![](/assets/ncp_wizard_usb.png)
 
 這時才接上外接硬碟，並做格式化，注意資料會被刪除。因為一般外接硬碟都是 NTFS 檔案格式，並不支援 Linux 所需的權限控管，要格式化成 Btrfs 才行。

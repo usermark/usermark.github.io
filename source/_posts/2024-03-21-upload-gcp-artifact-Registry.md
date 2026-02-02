@@ -10,7 +10,7 @@ tags:
 <!--more-->
 # 建立存放區
 
-首先決定映像檔要放那個[地區](https://cloud.google.com/artifact-registry/docs/repositories/repo-locations)，例如asia-east1(台灣)。於存放區建立
+首先決定映像檔要放那個[地區](https://cloud.google.com/artifact-registry/docs/repositories/repo-locations)，例如「asia-east1(台灣)」。於存放區建立
 ![](/assets/gcp_hub.png)
 
 # 設定docker
@@ -55,7 +55,7 @@ Do you want to continue (Y/n)?
 }
 ```
 
-進入GCP頁面 > IAM 與管理 > 服務帳戶，建立服務帳戶，並授予"Artifact Registry 服務代理"的角色。
+進入GCP頁面 >「IAM 與管理」>「服務帳戶」>「建立服務帳戶」，並授予「Artifact Registry 服務代理」的角色。
 ![](/assets/gcp_role_auth.png)
 
 使用剛新增好的服務帳戶，建立憑證並登入docker

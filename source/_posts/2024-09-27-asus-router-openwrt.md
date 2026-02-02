@@ -102,7 +102,7 @@ Starting kernel ...
 電腦的 IP 改為 192.168.3.2。
 ![](/assets/pc_lan.png)
 
-重啟路由器，並選擇 4: System Enter Boot Command Line Interface.
+重啟路由器，並選擇「4: System Enter Boot Command Line Interface.」
 ```sh
 4: System Enter Boot Command Line Interface.
 
@@ -131,7 +131,7 @@ saveenv
 打開 Tftpd32，並設定 Current Directory 為 bin 檔所在目錄。
 ![](/assets/tftp32.png)
 
-重啟路由器，並選擇 2: Load System code then write to Flash via TFTP.
+重啟路由器，並選擇「2: Load System code then write to Flash via TFTP.」
 ```sh
 2: System Load System code then write to Flash via TFTP.
  Warning!! Erase Linux in Flash then burn new one. Are you sure?(Y/N)

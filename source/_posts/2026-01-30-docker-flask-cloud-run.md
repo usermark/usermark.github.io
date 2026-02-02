@@ -11,7 +11,7 @@ tags:
 
 # 使用 docker 運行 Flask 網站
 
-寫一個簡單的 main.py
+建立一個 hello_world 資料夾，寫一個簡單的 main.py
 ```python
 import flask
 
@@ -25,13 +25,13 @@ if __name__ == '__main__':
     app.run('0.0.0.0', 8000, debug=True)
 ```
 
-產生 requirements.txt
+建立 requirements.txt
 ```
 flask
 gunicorn
 ```
 
-Dockerfile 內容如下
+建立 Dockerfile
 ```
 FROM python:3.11
 WORKDIR /app
@@ -58,8 +58,23 @@ docker run -p 8000:8000 -d --name hello01 hello_world
 ```
 
 接著打開瀏覽器 http://localhost:8000
+看到 Hello World 便表示成功囉！
 
 # 上傳到 Google Cloud Run 執行
+
+參考 [\[GCP\] GCP上傳映像檔至 Artifact Registry](/2024/03/21/upload-gcp-artifact-Registry/) 這篇的作法
+
+輸入指令下tag
+```shell
+docker tag hello_world asia-east1-docker.pkg.dev/xxx/hub/hello_world:v1
+```
+
+輸入指令上傳image
+```shell
+docker push asia-east1-docker.pkg.dev/xxx/hub/hello_world:v1
+```
+
+進入GCP頁面 > 至「Cloud Run」選擇「部署容器」
 
 # 進階：使用 Firestore Database
 
@@ -67,6 +82,10 @@ docker run -p 8000:8000 -d --name hello01 hello_world
 
 ```shell
 pip install --upgrade firebase-admin
+```
+
+```
+
 ```
 
 **參考資料**
