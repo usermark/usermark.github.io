@@ -28,7 +28,6 @@ if __name__ == '__main__':
 建立 requirements.txt
 ```
 flask
-gunicorn
 ```
 
 建立 Dockerfile
@@ -37,7 +36,7 @@ FROM python:3.11
 WORKDIR /app
 COPY . /app
 RUN pip install --upgrade -r requirements.txt
-CMD gunicorn main:app
+CMD python main.py
 ```
 
 參數說明：

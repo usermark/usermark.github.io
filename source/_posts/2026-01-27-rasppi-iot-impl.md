@@ -6,6 +6,7 @@ tags:
   - Home Assistant
 date: 2026-01-27 21:47:44
 ---
+先從小專案開始，慢慢加大規模。
 <!--more-->
 
 # Home Assistant
@@ -30,6 +31,16 @@ date: 2026-01-27 21:47:44
 ![](/assets/ha1.png)
 
 要特別講下，如何關機，筆者找了一下，所以特別紀錄和提醒。
-關機藏在右上角3個點，選重新啟動後，才會跳出 關閉系統 的選項。
+先選「設定」，關機藏在右上角3個點，選「重新啟動 Home Assistant」後，要再按下「進階設定」，才會跳出「關閉系統」的選項。
 
 ![](/assets/ha2.png)
+
+至附加元件商店，找到 File editor 並安裝，安裝後按下「啟動」
+
+在 configuration.yaml 加入
+```
+rest_command:
+  light_switch:
+    url: "http://192.168.1.107/"
+    method: GET
+```
