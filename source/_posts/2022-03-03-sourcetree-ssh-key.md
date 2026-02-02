@@ -31,12 +31,12 @@ cat ~/.ssh/id_rsa.pub
 type C:\Users\XXX\.ssh\id_rsa.pub
 ```
 
-或是使用[PuTTYgen](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)查看，選單Conversions > Import key
+或是使用[PuTTYgen](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)查看，選單「Conversions」>「Import key」
 ![](/assets/puttygen.png)
 <!-- endtab -->
 {% endtabs %}
 
-登入Github網頁版，到Settings > SSH and GPG keys > New SSH key，貼上剛複製的內容。
+登入Github網頁版，到「Settings」>「SSH and GPG keys」>「New SSH key」，貼上剛複製的內容。
 
 # SourceTree設定
 
