@@ -37,7 +37,9 @@ date: 2026-01-27 21:47:44
 
 至附加元件商店，找到 File editor 並安裝，安裝後按下「啟動」
 
-在 configuration.yaml 加入
+![](/assets/file_editor_config.png)
+
+透過「File editor」，在 configuration.yaml 加入
 ```
 rest_command:
   light_switch:

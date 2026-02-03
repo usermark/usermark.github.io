@@ -74,8 +74,13 @@ docker push asia-east1-docker.pkg.dev/xxx/hub/hello_world:v1
 ```
 
 進入GCP頁面 > 至「Cloud Run」選擇「部署容器」
+![](/assets/cloud_run.png)
+
+選擇剛才上傳至 Artifact Registry 的 image，注意底下的 port 預設是 8080，要改成 8000 (或指定 port)。
+![](/assets/cloud_run2.png)
 
 待部署完成後，就可以打開GCP提供的網址做確認。
+![](/assets/cloud_run3.png)
 
 下次還有修改 image 的話，可直接用下列指令建立
 ```shell
