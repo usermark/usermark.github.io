@@ -164,9 +164,9 @@ menu:
 
 新增留言功能，順便說明如何打開相關套件。
 
-首先至Github的Settings > Developer Settings > OAuth Apps > New OAuth App，輸入相關資訊。
+首先至Github的「Settings」>「Developer Settings」>「OAuth Apps」>「New OAuth App」，輸入相關資訊。
 
-申請完後會獲得一組Client ID和Client Secrt。
+申請完後會獲得一組 Client ID 和 Client Secrt。
 
 編輯source\_data\next.yml
 ```yaml
@@ -198,7 +198,7 @@ npm i --save gitalk
 npm install hexo-deployer-git --save
 ```
 
-編輯_config.yml，建議使用gh-pages分支，而不是master分支，方便將原始檔和實際要公開部署的分開控管。
+編輯 _config.yml，建議使用 gh-pages 分支，而不是 master 分支，方便將原始檔和實際要公開部署的分開控管。
 ```yaml
 deploy:
   type: git

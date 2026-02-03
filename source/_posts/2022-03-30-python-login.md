@@ -1,6 +1,6 @@
 ---
 layout: article
-title: '[Python] 爬蟲練習-登入'
+title: '[Python] 爬蟲練習 - 登入'
 date: 2022-03-30 07:22
 tags: Python
 ---

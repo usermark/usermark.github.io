@@ -3,6 +3,7 @@ title: "[Raspberry Pi] 用NextCloudPi自建NAS雲端硬碟"
 tags:
   - Raspberry Pi
   - NextCloudPi
+  - NextCloud
   - NAS
 date: 2024-09-28 23:38:01
 ---

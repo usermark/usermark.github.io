@@ -63,17 +63,24 @@ docker run -p 8000:8000 -d --name hello01 hello_world
 
 參考 [\[GCP\] GCP上傳映像檔至 Artifact Registry](/2024/03/21/upload-gcp-artifact-Registry/) 這篇的作法
 
-輸入指令下tag
+輸入指令下 tag
 ```shell
 docker tag hello_world asia-east1-docker.pkg.dev/xxx/hub/hello_world:v1
 ```
 
-輸入指令上傳image
+輸入指令上傳 image
 ```shell
 docker push asia-east1-docker.pkg.dev/xxx/hub/hello_world:v1
 ```
 
 進入GCP頁面 > 至「Cloud Run」選擇「部署容器」
+
+待部署完成後，就可以打開GCP提供的網址做確認。
+
+下次還有修改 image 的話，可直接用下列指令建立
+```shell
+docker image build -t asia-east1-docker.pkg.dev/xxx/hub/hello_world:v2 .
+```
 
 # 進階：使用 Firestore Database
 

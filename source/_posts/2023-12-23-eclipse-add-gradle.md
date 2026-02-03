@@ -51,7 +51,7 @@ BUILD SUCCESSFUL in 12s
 進去查看會長這樣，把這幾個檔案選取後，複製進原先的專案。
 ![](/assets/gradle_folder.png)
 
-切換回Eclipse IDE，打開專案的Properties，至Project Natures手動新增Gradle Project Nature。
+切換回Eclipse IDE，打開專案的「Properties」，至「Project Natures」手動新增「Gradle Project Nature」。
 ![](/assets/manual_add_gradle.png)
 
 接著刷新下Gradle Tasks，就會看到可執行的task囉！
@@ -63,7 +63,7 @@ BUILD SUCCESSFUL in 12s
 原先引入第三方lib要在Java Build Path一個個加，且相依的jar要自行管控，例如tomcat的jsp-api，比較麻煩。
 ![](/assets/eclipse_libs.png)
 
-修改build.gradleb如下
+修改build.gradle如下
 ```groovy
 apply plugin: 'java'
 
@@ -76,10 +76,10 @@ dependencies {
 }
 ```
 
-點選Refresh Gradle Project後
+點選「Refresh Gradle Project」後
 
 ![](/assets/gradle_sync.png)
 
-再回到Java Build Path查看，已將tomcat-jsp-api.jar以及相依的jar都一併引入，超級方便！
+再回到「Java Build Path」查看，已將tomcat-jsp-api.jar以及相依的jar都一併引入，超級方便！
 
 ![](/assets/eclipse_libs_with_gradle.png)
