@@ -30,7 +30,7 @@ docker run -p 8080:80 -p 8443:443 -d -v /D/nextcloud:/var/www/html/data --name n
 
 # MariaDB
 
-先用 root 連進去後，建立資料庫 nextcloud
+筆者是安裝在 Windows 電腦上，先用 root 連進去後，建立資料庫 nextcloud
 ```bash
 mysql -u root -p
 ```

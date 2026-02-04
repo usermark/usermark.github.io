@@ -5,6 +5,7 @@ tags:
   - Docker
   - Flask
   - Google Cloud Run
+  - Firestore
 ---
 放了很久，遲遲未整理和紀錄，今天終於下定決心。
 <!--more-->
@@ -91,12 +92,56 @@ docker image build -t asia-east1-docker.pkg.dev/xxx/hub/hello_world:v2 .
 
 既然服務都放在 GCP，就來整合下 Firestore
 
+新增 Firebase Admin SDK
 ```shell
 pip install --upgrade firebase-admin
 ```
 
+在 GCP 控制台中，前往「IAM 與管理」>「服務帳戶」。產生新的私密金鑰，並儲存 JSON 檔案。
+
+修改 main.py
+```python
+from datetime import datetime, timedelta, timezone
+from flask import request
+
+from firebase_admin import initialize_app, firestore, credentials
+import flask
+
+cred = credentials.Certificate("firebase-adminsdk.json")
+initialize_app(cred)
+db = firestore.client()
+
+app = flask.Flask(__name__)
+
+@app.route('/')
+def index():
+    docs = db.collection("todo").stream()
+    result = ''
+    for doc in docs:
+        result += f'{doc.id} => {doc.to_dict()["content"]}<br>'
+    return result
+
+@app.post('/todo')
+def todo():
+    payload = request.get_json()
+    title = payload['title']
+    expires_at = datetime.now(timezone.utc) + timedelta(minutes=30)
+    db.collection("todo").document(title).set({
+        'content': payload['content'],
+        'expires_at': expires_at
+    })
+    return 'OK'
+
+if __name__ == '__main__':
+    app.run('0.0.0.0', 8000, debug=True)
 ```
 
+大致說明下功能，為簡單的待辦清單，GET 取得所有清單，POST 用來新增一筆事項。
+
+修改 requirements.txt
+```
+flask
+firebase-admin
 ```
 
 **參考資料**

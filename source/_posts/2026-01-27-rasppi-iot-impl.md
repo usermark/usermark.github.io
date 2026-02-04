@@ -35,6 +35,8 @@ date: 2026-01-27 21:47:44
 
 ![](/assets/ha2.png)
 
+# 安裝 File editor
+
 至附加元件商店，找到 File editor 並安裝，安裝後按下「啟動」
 
 ![](/assets/file_editor_config.png)

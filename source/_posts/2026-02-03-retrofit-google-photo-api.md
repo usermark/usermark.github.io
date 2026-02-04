@@ -4,6 +4,7 @@ date: 2026-02-03 10:37:40
 tags:
 - Android
 - Retrofit
+- Java
 ---
 以Google Photos API的uploads為例。用Jetpack新提供的相片挑選工具，取得要上送的照片URI後，轉換成InputStream上送至服務。
 <!--more-->
