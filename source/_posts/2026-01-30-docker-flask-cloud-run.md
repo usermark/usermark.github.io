@@ -97,7 +97,7 @@ docker image build -t asia-east1-docker.pkg.dev/xxx/hub/hello_world:v2 .
 pip install --upgrade firebase-admin
 ```
 
-在 GCP 控制台中，前往「IAM 與管理」>「服務帳戶」。產生新的私密金鑰，並儲存 JSON 檔案。
+先在 Firebase 建立好專案，再到 GCP 控制台中，前往「IAM 與管理」>「服務帳戶」，找到「firebase-adminsdk」開頭的帳號，進入並建立金鑰，會取得 JSON 檔案。複製一份到專案資料夾底下，並命名為 firebase-adminsdk.json
 
 修改 main.py
 ```python
