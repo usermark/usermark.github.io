@@ -1,6 +1,6 @@
 ---
 title: '[Android] Retrofit應用 - Google Photos API'
-date: 2026-02-03 10:37:40
+date: 2026-02-04 10:37:40
 tags:
 - Android
 - Retrofit

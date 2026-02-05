@@ -9,7 +9,6 @@ tags:
 ---
 [Memories 入門指南](https://memories.gallery/install/)就很夠用，但筆者還是紀錄下實際安裝過程中遇到的問題。
 <!--more-->
-初步安裝好 Memories 後，進入 NextCloud >「管理設定」>「回憶」
 
 # 支援 HEIC 和影片格式
 
@@ -46,6 +45,7 @@ array(
 
 # 反向地理編碼 Reverse Geocoding (Places)
 
+初步安裝好 Memories 後，進入 NextCloud >「管理設定」>「回憶」
 選擇「下載地圖資料庫」
 ![](/assets/memories_places.png)
 
@@ -93,8 +93,14 @@ plugin-dir=C:\Program Files\MariaDB 11.6/lib/plugin
 
 重啟 MariaDB 服務後再次輸入前個指令，確認是否修改成功。
 
+再次選擇「下載地圖資料庫」，等待一段時間就會成功。
+
+如果建立索引沒開始跑，可以主動要求建立
 ```shell
 docker exec -it nextcloud php occ memories:index
 ```
 
-再次選擇「下載地圖資料庫」，等待一段時間就會成功。
+完成後，就可以看到「回憶」>「地圖」出現分類好的照片，
+但「人物」還未出現，因為所需的模型尚未下載完成，輸入指令主動下載
+```shell
+```

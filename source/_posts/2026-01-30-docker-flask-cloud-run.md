@@ -80,13 +80,8 @@ docker push asia-east1-docker.pkg.dev/xxx/hub/hello_world:v1
 選擇剛才上傳至 Artifact Registry 的 image，注意底下的 port 預設是 8080，要改成 8000 (或指定 port)。
 ![](/assets/cloud_run2.png)
 
-待部署完成後，就可以打開GCP提供的網址做確認。
+待部署完成後，就可以打開 GCP 提供的網址做確認。
 ![](/assets/cloud_run3.png)
-
-下次還有修改 image 的話，可直接用下列指令建立
-```shell
-docker image build -t asia-east1-docker.pkg.dev/xxx/hub/hello_world:v2 .
-```
 
 # 進階：使用 Firestore Database
 
@@ -142,6 +137,23 @@ if __name__ == '__main__':
 ```
 flask
 firebase-admin
+```
+
+再次上傳到 Artifact Registry
+```shell
+docker image build -t asia-east1-docker.pkg.dev/xxx/hub/hello_world:v2 .
+docker push asia-east1-docker.pkg.dev/xxx/hub/hello_world:v2
+```
+
+再次部署完成後，點開網址看到會是空白的。
+輸入指令建立一筆資料
+```shell
+curl --location 'http://your_gcp_url:8000/todo' --header 'Content-Type: application/json' --data '{ "title": "Hello", "content": "Hello World" }'
+```
+
+刷新頁面後，就會看到
+```
+Hello => Hello World
 ```
 
 **參考資料**
