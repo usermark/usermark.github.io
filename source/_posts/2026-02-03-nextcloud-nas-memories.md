@@ -94,13 +94,26 @@ plugin-dir=C:\Program Files\MariaDB 11.6/lib/plugin
 重啟 MariaDB 服務後再次輸入前個指令，確認是否修改成功。
 
 再次選擇「下載地圖資料庫」，等待一段時間就會成功。
+![](/assets/memories_places2.png)
 
 如果建立索引沒開始跑，可以主動要求建立
 ```shell
 docker exec -it nextcloud php occ memories:index
 ```
 
+![](/assets/memories_index.png)
+
 完成後，就可以看到「回憶」>「地圖」出現分類好的照片，
-但「人物」還未出現，因為所需的模型尚未下載完成，輸入指令主動下載
+但「人物」還未出現，因為所需的模型尚未下載完成
+
+進入 NextCloud >「管理設定」>「識別」，會看到
+![](/assets/recognize_models.png)
+
+輸入指令主動下載
 ```shell
+docker exec -it nextcloud php occ recognize:download-models
+```
+
+```shell
+docker exec -it nextcloud php occ recognize:recrawl
 ```

@@ -92,7 +92,11 @@ docker push asia-east1-docker.pkg.dev/xxx/hub/hello_world:v1
 pip install --upgrade firebase-admin
 ```
 
-先在 Firebase 建立好專案，再到 GCP 控制台中，前往「IAM 與管理」>「服務帳戶」，找到「firebase-adminsdk」開頭的帳號，進入並建立金鑰，會取得 JSON 檔案。複製一份到專案資料夾底下，並命名為 firebase-adminsdk.json
+先在 Firebase 建立好專案，再到 GCP 控制台中，前往「IAM 與管理」>「服務帳戶」，找到「firebase-adminsdk」開頭的帳號。
+![](/assets/firebase_admin_sdk.png)
+
+進入並建立金鑰，會取得 JSON 檔案。複製一份到專案資料夾底下，並命名為 firebase-adminsdk.json
+![](/assets/firebase_admin_sdk2.png)
 
 修改 main.py
 ```python
@@ -146,15 +150,44 @@ docker push asia-east1-docker.pkg.dev/xxx/hub/hello_world:v2
 ```
 
 再次部署完成後，點開網址看到會是空白的。
-輸入指令建立一筆資料
+等下，怎麼不是空白的
+![](/assets/no_firestore.png)
+
+原來是忘了在 Firebase 控制台先初始化 Firestore
+![](/assets/init_firestore.png)
+
+完成後，刷新網址就會看到錯誤消失了。
+接著輸入指令建立一筆資料
 ```shell
-curl --location 'http://your_gcp_url:8000/todo' --header 'Content-Type: application/json' --data '{ "title": "Hello", "content": "Hello World" }'
+curl -X POST -H "Content-Type: application/json" -d "{ \"title\": \"Hello\", \"content\": \"Hello World\" }" 'http://your_gcp_url/todo'
 ```
 
 刷新頁面後，就會看到
 ```
 Hello => Hello World
 ```
+
+在 Firebase 控制台也會看到剛建立好的資料
+![](/assets/firestore_first_row.png)
+
+到這邊還沒結束喔！
+
+# 進階：使用存留時間 (TTL) 政策管理資料保留機制
+
+為什麼要多一個 expires_at 欄位，且是當下時間加 30 分鐘呢？
+為了讓過期的資料能自動被刪掉，是個很方便的機制。
+參考<https://firebase.google.com/docs/firestore/ttl?hl=zh-tw>
+
+從 GCP 控制台找到 Firestore，並進入資料庫
+![](/assets/gcp_firestore.png)
+
+選擇「存留時間」>「建立政策」
+![](/assets/gcp_firestore_policy.png)
+
+輸入集合群組名稱和時間戳記欄位名稱後，點「建立」
+![](/assets/gcp_firestore_policy2.png)
+
+過超過 30 分鐘，通常會更久，要看排程何時執行，過期的資料就會自動刪除囉。
 
 **參考資料**
 
