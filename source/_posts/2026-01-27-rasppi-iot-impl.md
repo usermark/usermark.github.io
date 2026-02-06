@@ -4,6 +4,7 @@ tags:
   - Raspberry Pi
   - IOT
   - Home Assistant
+  - 3D 列印
 date: 2026-01-27 21:47:44
 ---
 先從小專案開始，慢慢加大規模。
@@ -11,10 +12,51 @@ date: 2026-01-27 21:47:44
 
 # 遙控電燈開關
 
-使用[ESP8266WebServer](/assets/ESP8266WebServer.py)模組提供網站功能，以及Servo模組控制伺服馬達的角度。
+<table>
+  <tr>
+    <td><img src="/assets/light_switch.jpg"/></td>
+    <td><img src="/assets/light_switch2.jpg"/></td>
+  </tr>
+</table>
 
+3D 列印設計好的外殼 <https://www.tinkercad.com/things/2Xyr9GqkHPA-remote-control-light-switch>
+使用 [ESP8266WebServer](/assets/ESP8266WebServer.py) 模組提供網站功能，以及 [Servo](/assets/servo.py) 模組控制伺服馬達的角度。
+
+main.py
 ```python
+from machine import Pin
+from servo import Servo
+import ESP8266WebServer
+import network
+import time
 
+motor = Servo(pin=0)
+angle = 0
+
+def handleCmd(socket, args):
+    global angle
+    print(angle)
+    if angle == 0:
+        motor.move(50)
+        angle = 50
+    else:
+        motor.move(0)
+        angle = 0
+    ESP8266WebServer.ok(socket, "200", "OK")
+
+sta_if = network.WLAN(network.STA_IF)
+sta_if.active(True)
+sta_if.connect('無線網路名稱', '密碼')
+while not sta_if.isconnected():
+    print('連線中')
+    time.sleep(1)
+    pass
+ESP8266WebServer.begin(80)
+ESP8266WebServer.onPath("/", handleCmd)
+print("address:" + sta_if.ifconfig()[0])
+
+while True:
+    ESP8266WebServer.handleClient()
 ```
 
 Android 手機可以安裝 HTTP Request Shortcuts，方便用手機一鍵控制開關。
@@ -47,7 +89,7 @@ Android 手機可以安裝 HTTP Request Shortcuts，方便用手機一鍵控制�
 
 # 安裝 File editor
 
-至附加元件商店，找到 File editor 並安裝，安裝後按下「啟動」
+至「設定」>「附加元件」>「附加元件商店」，找到 File editor 並安裝，安裝後按下「啟動」，並「新增至側邊欄」
 
 ![](/assets/file_editor_config.png)
 
@@ -58,3 +100,41 @@ rest_command:
     url: "http://192.168.1.107/"
     method: GET
 ```
+
+至「開發工具」重新載入 YAML 設定後，就可以在「動作」搜尋到建立好的 light_switch，可按下「執行動作」確認服務正常。
+![](/assets/ha_action.png)
+
+# 新增電燈開關的卡片
+
+至「總覽」>「編輯儀表板」>「接管」，接管後下次就不會再出現
+![](/assets/ha_edit.png)
+
+按下「自行編輯」
+![](/assets/ha_edit2.png)
+
+選「增加面板」
+![](/assets/ha_edit3.png)
+
+找到「按鈕面板」
+![](/assets/ha_edit4.png)
+
+往下找到「互動」並設定「圖示」和「執行動作」
+![](/assets/ha_action_card.png)
+
+或是直接「使用文字編輯器」
+```
+show_name: true
+show_icon: true
+type: button
+tap_action:
+  action: perform-action
+  perform_action: rest_command.light_switch
+  target: {}
+icon: mdi:lightbulb-on
+```
+
+按下「儲存」並「完成」，就可以實際點擊玩看看。
+
+# 心得
+
+實際玩過，發現有時會想直接手動開關電燈，但伺服馬達的舵片會卡著。初步想到的解法是舵片不要鎖，方便隨時可取下，不影響到手動去開關。

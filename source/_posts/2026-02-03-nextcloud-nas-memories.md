@@ -106,6 +106,8 @@ docker exec -it nextcloud php occ memories:index
 完成後，就可以看到「回憶」>「地圖」出現分類好的照片，
 但「人物」還未出現，因為所需的模型尚未下載完成
 
+# 臉部識別
+
 進入 NextCloud >「管理設定」>「識別」，會看到
 ![](/assets/recognize_models.png)
 
@@ -114,7 +116,14 @@ docker exec -it nextcloud php occ memories:index
 docker exec -it nextcloud php occ recognize:download-models
 ```
 
+下載完後，臉部識別還未執行
+![](/assets/recognize_models2.png)
+
 輸入指令立刻開始辨識
 ```shell
 docker exec -it nextcloud php occ recognize:classify
 ```
+
+![](/assets/recognize_models3.png)
+
+完成後，回到「人物」
