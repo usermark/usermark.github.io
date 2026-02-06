@@ -74,7 +74,7 @@ docker tag hello_world asia-east1-docker.pkg.dev/xxx/hub/hello_world:v1
 docker push asia-east1-docker.pkg.dev/xxx/hub/hello_world:v1
 ```
 
-進入GCP頁面 > 至「Cloud Run」選擇「部署容器」
+進入 GCP 頁面 > 至「Cloud Run」選擇「部署容器」
 ![](/assets/cloud_run.png)
 
 選擇剛才上傳至 Artifact Registry 的 image，注意底下的 port 預設是 8080，要改成 8000 (或指定 port)。
@@ -159,7 +159,7 @@ docker push asia-east1-docker.pkg.dev/xxx/hub/hello_world:v2
 完成後，刷新網址就會看到錯誤消失了。
 接著輸入指令建立一筆資料
 ```shell
-curl -X POST -H "Content-Type: application/json" -d "{ \"title\": \"Hello\", \"content\": \"Hello World\" }" 'http://your_gcp_url/todo'
+curl -X POST -H "Content-Type: application/json" -d "{ \"title\": \"Hello\", \"content\": \"Hello World\" }" 'https://your_gcp_url/todo'
 ```
 
 刷新頁面後，就會看到

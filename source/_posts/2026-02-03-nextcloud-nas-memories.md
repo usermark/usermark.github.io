@@ -114,6 +114,7 @@ docker exec -it nextcloud php occ memories:index
 docker exec -it nextcloud php occ recognize:download-models
 ```
 
+輸入指令立刻開始辨識
 ```shell
-docker exec -it nextcloud php occ recognize:recrawl
+docker exec -it nextcloud php occ recognize:classify
 ```

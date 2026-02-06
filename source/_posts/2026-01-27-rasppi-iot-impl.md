@@ -9,6 +9,16 @@ date: 2026-01-27 21:47:44
 先從小專案開始，慢慢加大規模。
 <!--more-->
 
+# 遙控電燈開關
+
+使用[ESP8266WebServer](/assets/ESP8266WebServer.py)模組提供網站功能，以及Servo模組控制伺服馬達的角度。
+
+```python
+
+```
+
+Android 手機可以安裝 HTTP Request Shortcuts，方便用手機一鍵控制開關。
+
 # Home Assistant
 
 使用樹莓派官方提供的 Raspberry Pi Imager 做燒錄。

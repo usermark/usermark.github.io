@@ -26,7 +26,7 @@ docker run -p 8080:80 -p 8443:443 -d -v /D/nextcloud:/var/www/html/data --name n
 執行後，就能連進 http://localhost:8080 查看。
 ![](/assets/nextcloud-init.png)
 
-到這邊先不要急著按安裝，系統預設採用 SQLite 作為資料庫，方便快速上手，但不適用於中大型或服務站台，因此筆者改用 MariaDB。
+到這邊先不要急著按「安裝」，系統預設採用 SQLite 作為資料庫，方便快速上手，但不適用於中大型或服務站台，因此筆者改用 MariaDB。
 
 # MariaDB
 
