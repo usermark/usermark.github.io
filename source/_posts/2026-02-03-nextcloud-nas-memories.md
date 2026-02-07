@@ -119,11 +119,31 @@ docker exec -it nextcloud php occ recognize:download-models
 下載完後，臉部識別還未執行
 ![](/assets/recognize_models2.png)
 
-輸入指令立刻開始辨識
+輸入指令立刻開始辨識，這裡視照片量而定，通常花費最多時間。
 ```shell
 docker exec -it nextcloud php occ recognize:classify
 ```
 
 ![](/assets/recognize_models3.png)
 
-完成後，回到「人物」
+完成後，回到「人物」卻還是空的
+![](/assets/empty_face.png)
+
+輸入指令要求針對臉部進行分類
+```shell
+docker exec -it nextcloud php occ recognize:cluster-faces
+```
+
+會看到以下輸出
+```
+Clustering face detections for user Mike
+ClusterDebug: Retrieving face detections for user Mike
+ClusterDebug: Found 6508 fresh detections. Adding 0 old detections and 0 sampled detections from already existing clusters. Calculating clusters on 6508 detections.
+```
+
+再次回到「人物」就有囉
+![](/assets/faces.png)
+
+辨識下來，沒有分類的很好，需要手動整理一下
+可開啟「在預覽中標記人」後，進行修正。
+![](/assets/face_classify.png)
