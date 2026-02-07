@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="IUJ04DyRucs8xo_BKf0Q-i4i4IC2yI3u8vnYlmlJvX8">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="先從小專案開始，慢慢加大規模。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Raspberry Pi] 從遙控電燈開關開始 IOT 冒險">
+<meta property="og:url" content="https://usermark.github.io/2026/01/27/rasppi-iot-impl/index.html">
+<meta property="og:site_name" content="Mike的筆記">
+<meta property="og:description" content="先從小專案開始，慢慢加大規模。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://usermark.github.io/assets/light_switch.jpg">
+<meta property="og:image" content="https://usermark.github.io/assets/light_switch2.jpg">
+<meta property="og:image" content="https://usermark.github.io/assets/rpi_imager_ha1.png">
+<meta property="og:image" content="https://usermark.github.io/assets/rpi_imager_ha2.png">
+<meta property="og:image" content="https://usermark.github.io/assets/rpi_imager_ha3.png">
+<meta property="og:image" content="https://usermark.github.io/assets/rpi_imager_ha4.png">
+<meta property="og:image" content="https://usermark.github.io/assets/rpi_imager_ha5.png">
+<meta property="og:image" content="https://usermark.github.io/assets/rpi_imager_ha6.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ha1.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ha2.png">
+<meta property="og:image" content="https://usermark.github.io/assets/file_editor_config.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ha_action.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ha_edit.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ha_edit2.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ha_edit3.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ha_edit4.png">
+<meta property="og:image" content="https://usermark.github.io/assets/ha_action_card.png">
+<meta property="article:published_time" content="2026-01-27T13:47:44.000Z">
+<meta property="article:modified_time" content="2026-02-06T16:02:29.363Z">
+<meta property="article:author" content="Mike Chen">
+<meta property="article:tag" content="IOT">
+<meta property="article:tag" content="Raspberry Pi">
+<meta property="article:tag" content="3D 列印">
+<meta property="article:tag" content="Home Assistant">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://usermark.github.io/assets/light_switch.jpg">
+
+<link rel="canonical" href="https://usermark.github.io/2026/01/27/rasppi-iot-impl/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[Raspberry Pi] 從遙控電燈開關開始 IOT 冒險 | Mike的筆記</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-707YEB6V4T"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-707YEB6V4T');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mike的筆記</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2026/01/27/rasppi-iot-impl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [Raspberry Pi] 從遙控電燈開關開始 IOT 冒險
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2026-01-27 21:47:44" itemprop="dateCreated datePublished" datetime="2026-01-27T21:47:44+08:00">2026-01-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2026-02-07 00:02:29" itemprop="dateModified" datetime="2026-02-07T00:02:29+08:00">2026-02-07</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="閱讀次數" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">閱讀次數：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>先從小專案開始，慢慢加大規模。</p>
+<span id="more"></span>
+
+<h1 id="遙控電燈開關"><a href="#遙控電燈開關" class="headerlink" title="遙控電燈開關"></a>遙控電燈開關</h1><table>
+  <tr>
+    <td><img src="/assets/light_switch.jpg"/></td>
+    <td><img src="/assets/light_switch2.jpg"/></td>
+  </tr>
+</table>
+
+<p>3D 列印設計好的外殼 <a target="_blank" rel="noopener" href="https://www.tinkercad.com/things/2Xyr9GqkHPA-remote-control-light-switch">https://www.tinkercad.com/things/2Xyr9GqkHPA-remote-control-light-switch</a><br>使用 <a href="/assets/ESP8266WebServer.py">ESP8266WebServer</a> 模組提供網站功能，以及 <a href="/assets/servo.py">Servo</a> 模組控制伺服馬達的角度。</p>
+<p>main.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> machine <span class="keyword">import</span> Pin</span><br><span class="line"><span class="keyword">from</span> servo <span class="keyword">import</span> Servo</span><br><span class="line"><span class="keyword">import</span> ESP8266WebServer</span><br><span class="line"><span class="keyword">import</span> network</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">motor = Servo(pin=<span class="number">0</span>)</span><br><span class="line">angle = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handleCmd</span>(<span class="params">socket, args</span>):</span><br><span class="line">    <span class="keyword">global</span> angle</span><br><span class="line">    <span class="built_in">print</span>(angle)</span><br><span class="line">    <span class="keyword">if</span> angle == <span class="number">0</span>:</span><br><span class="line">        motor.move(<span class="number">50</span>)</span><br><span class="line">        angle = <span class="number">50</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        motor.move(<span class="number">0</span>)</span><br><span class="line">        angle = <span class="number">0</span></span><br><span class="line">    ESP8266WebServer.ok(socket, <span class="string">&quot;200&quot;</span>, <span class="string">&quot;OK&quot;</span>)</span><br><span class="line"></span><br><span class="line">sta_if = network.WLAN(network.STA_IF)</span><br><span class="line">sta_if.active(<span class="literal">True</span>)</span><br><span class="line">sta_if.connect(<span class="string">&#x27;無線網路名稱&#x27;</span>, <span class="string">&#x27;密碼&#x27;</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="keyword">not</span> sta_if.isconnected():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;連線中&#x27;</span>)</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line">ESP8266WebServer.begin(<span class="number">80</span>)</span><br><span class="line">ESP8266WebServer.onPath(<span class="string">&quot;/&quot;</span>, handleCmd)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;address:&quot;</span> + sta_if.ifconfig()[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    ESP8266WebServer.handleClient()</span><br></pre></td></tr></table></figure>
+
+<p>Android 手機可以安裝 HTTP Request Shortcuts，方便用手機一鍵控制開關。</p>
+<h1 id="Home-Assistant"><a href="#Home-Assistant" class="headerlink" title="Home Assistant"></a>Home Assistant</h1><p>使用樹莓派官方提供的 Raspberry Pi Imager 做燒錄。</p>
+<p><img src="/assets/rpi_imager_ha1.png"></p>
+<p><img src="/assets/rpi_imager_ha2.png"></p>
+<p><img src="/assets/rpi_imager_ha3.png"></p>
+<p><img src="/assets/rpi_imager_ha4.png"></p>
+<p><img src="/assets/rpi_imager_ha5.png"></p>
+<p><img src="/assets/rpi_imager_ha6.png"></p>
+<p>燒錄完成後，插入 SD 卡並將樹莓派接上實體網路線後開啟。<br>等待一段時間便可用瀏覽器打開 <a target="_blank" rel="noopener" href="http://homeassistant.local:8123/">http://homeassistant.local:8123/</a></p>
+<p><img src="/assets/ha1.png"></p>
+<p>要特別講下，如何關機，筆者找了一下，所以特別紀錄和提醒。<br>先選「設定」，關機藏在右上角3個點，選「重新啟動 Home Assistant」後，要再按下「進階設定」，才會跳出「關閉系統」的選項。</p>
+<p><img src="/assets/ha2.png"></p>
+<h1 id="安裝-File-editor"><a href="#安裝-File-editor" class="headerlink" title="安裝 File editor"></a>安裝 File editor</h1><p>至「設定」&gt;「附加元件」&gt;「附加元件商店」，找到 File editor 並安裝，安裝後按下「啟動」，並「新增至側邊欄」</p>
+<p><img src="/assets/file_editor_config.png"></p>
+<p>透過「File editor」，在 configuration.yaml 加入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rest_command:</span><br><span class="line">  light_switch:</span><br><span class="line">    url: &quot;http://192.168.1.107/&quot;</span><br><span class="line">    method: GET</span><br></pre></td></tr></table></figure>
+
+<p>至「開發工具」重新載入 YAML 設定後，就可以在「動作」搜尋到建立好的 light_switch，可按下「執行動作」確認服務正常。<br><img src="/assets/ha_action.png"></p>
+<h1 id="新增電燈開關的卡片"><a href="#新增電燈開關的卡片" class="headerlink" title="新增電燈開關的卡片"></a>新增電燈開關的卡片</h1><p>至「總覽」&gt;「編輯儀表板」&gt;「接管」，接管後下次就不會再出現<br><img src="/assets/ha_edit.png"></p>
+<p>按下「自行編輯」<br><img src="/assets/ha_edit2.png"></p>
+<p>選「增加面板」<br><img src="/assets/ha_edit3.png"></p>
+<p>找到「按鈕面板」<br><img src="/assets/ha_edit4.png"></p>
+<p>往下找到「互動」並設定「圖示」和「執行動作」<br><img src="/assets/ha_action_card.png"></p>
+<p>或是直接「使用文字編輯器」</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">show_name: true</span><br><span class="line">show_icon: true</span><br><span class="line">type: button</span><br><span class="line">tap_action:</span><br><span class="line">  action: perform-action</span><br><span class="line">  perform_action: rest_command.light_switch</span><br><span class="line">  target: &#123;&#125;</span><br><span class="line">icon: mdi:lightbulb-on</span><br></pre></td></tr></table></figure>
+
+<p>按下「儲存」並「完成」，就可以實際點擊玩看看。</p>
+<h1 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h1><p>實際玩過，發現有時會想直接手動開關電燈，但伺服馬達的舵片會卡著。初步想到的解法是舵片不要鎖，方便隨時可取下，不影響到手動去開關。</p>
+
+    </div>
+
+    
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- post-body-end -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="9591303574"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/IOT/" rel="tag"># IOT</a>
+              <a href="/tags/Raspberry-Pi/" rel="tag"># Raspberry Pi</a>
+              <a href="/tags/3D-%E5%88%97%E5%8D%B0/" rel="tag"># 3D 列印</a>
+              <a href="/tags/Home-Assistant/" rel="tag"># Home Assistant</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/06/19/linux-chmod-chown/" rel="prev" title="[Linux] chmod chown 權限控制">
+      <i class="fa fa-chevron-left"></i> [Linux] chmod chown 權限控制
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/01/30/docker-flask-cloud-run/" rel="next" title="[Docker] 上架 Flask 網站到 Google Cloud Run">
+      [Docker] 上架 Flask 網站到 Google Cloud Run <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%81%99%E6%8E%A7%E9%9B%BB%E7%87%88%E9%96%8B%E9%97%9C"><span class="nav-number">1.</span> <span class="nav-text">遙控電燈開關</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Home-Assistant"><span class="nav-number">2.</span> <span class="nav-text">Home Assistant</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-File-editor"><span class="nav-number">3.</span> <span class="nav-text">安裝 File editor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E9%9B%BB%E7%87%88%E9%96%8B%E9%97%9C%E7%9A%84%E5%8D%A1%E7%89%87"><span class="nav-number">4.</span> <span class="nav-text">新增電燈開關的卡片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%83%E5%BE%97"><span class="nav-number">5.</span> <span class="nav-text">心得</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mike Chen</p>
+  <div class="site-description" itemprop="description">現居高雄，熟悉 Android 和 Python 開發，喜歡學習新事物和閱讀。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/usermark" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;usermark" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:trexcobras@gmail.com" title="E-Mail → mailto:trexcobras@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mike Chen</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="訪客總數">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="總瀏覽次數">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'fe34fe28201c28ecaca2',
+      clientSecret: '6b0f055d80dc258148f06400ce27502351d56921',
+      repo        : 'usermark.github.io',
+      owner       : 'usermark',
+      admin       : ['usermark'],
+      id          : '2b98f74f3c0be69e42316a1c6c417d23',
+        language: 'zh-TW',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

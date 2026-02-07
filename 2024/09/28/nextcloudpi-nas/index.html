@@ -41,10 +41,11 @@
 <meta property="og:image" content="https://usermark.github.io/assets/ncp_ssl.png">
 <meta property="og:image" content="https://usermark.github.io/assets/ncp_ssh.png">
 <meta property="article:published_time" content="2024-09-28T15:38:01.000Z">
-<meta property="article:modified_time" content="2025-01-01T08:04:36.840Z">
+<meta property="article:modified_time" content="2026-02-03T12:01:19.264Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="Raspberry Pi">
 <meta property="article:tag" content="NextCloudPi">
+<meta property="article:tag" content="NextCloud">
 <meta property="article:tag" content="NAS">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://usermark.github.io/assets/rpi_imager.png">
@@ -217,7 +218,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2025-01-01 16:04:36" itemprop="dateModified" datetime="2025-01-01T16:04:36+08:00">2025-01-01</time>
+                <time title="修改時間：2026-02-03 20:01:19" itemprop="dateModified" datetime="2026-02-03T20:01:19+08:00">2026-02-03</time>
               </span>
 
           
@@ -243,8 +244,8 @@
 
 <h1 id="NextCloudPi"><a href="#NextCloudPi" class="headerlink" title="NextCloudPi"></a>NextCloudPi</h1><p>至 <a target="_blank" rel="noopener" href="https://github.com/nextcloud/nextcloudpi/releases">https://github.com/nextcloud/nextcloudpi/releases</a> 下載最新的映像檔，我使用的是 Pi4。<br>使用樹莓派官方提供的 Raspberry Pi Imager 做燒錄。<br><img src="/assets/rpi_imager.png"></p>
 <p>燒錄完成後，插入 SD 卡並啟動樹莓派，先不要外接硬碟，稍後依指示再接上。<br>另外網路部分我是接實體網路線，與個人電腦在同一網段。<br><img src="/assets/home_net_pi.png"></p>
-<p>等待一段時間便可用瀏覽器打開 <a target="_blank" rel="noopener" href="https://nextcloudpi.local/">https://nextcloudpi.local</a><br>第一次會看到 Activation 的畫面，記住兩組帳密後，按下 Activate 開啟初始化設定。<br>畫面轉到後台管理 <a target="_blank" rel="noopener" href="https://nextcloudpi.local:4443/">https://nextcloudpi.local:4443</a> 後，使用 ncp 第一組帳密登入。<br><img src="/assets/ncp_wizard.png"></p>
-<p>依照初始化精靈的指示做設定，在詢問是否會使用外接硬碟來儲存資料時，我選 Yes。<br><img src="/assets/ncp_wizard_usb.png"></p>
+<p>等待一段時間便可用瀏覽器打開 <a target="_blank" rel="noopener" href="https://nextcloudpi.local/">https://nextcloudpi.local</a><br>第一次會看到 Activation 的畫面，記住兩組帳密後，按下「Activate」開啟初始化設定。<br>畫面轉到後台管理 <a target="_blank" rel="noopener" href="https://nextcloudpi.local:4443/">https://nextcloudpi.local:4443</a> 後，使用 ncp 第一組帳密登入。<br><img src="/assets/ncp_wizard.png"></p>
+<p>依照初始化精靈的指示做設定，在詢問是否會使用外接硬碟來儲存資料時，我選「Yes」。<br><img src="/assets/ncp_wizard_usb.png"></p>
 <p>這時才接上外接硬碟，並做格式化，注意資料會被刪除。因為一般外接硬碟都是 NTFS 檔案格式，並不支援 Linux 所需的權限控管，要格式化成 Btrfs 才行。<br>另外，前面啟動不先接上是因為 NextCloud 預設會自動掛載外接硬碟至 &#x2F;media&#x2F;USBdrive，這時就無法格式化。<br>初始化精靈完成後，可檢查下 data disk usage 的硬碟空間是否為 1TB。<br><img src="/assets/ncp_system_info.png"></p>
 <p>初步架設到這邊就都完成了，可以連進 <a target="_blank" rel="noopener" href="https://nextcloudpi.local/">https://nextcloudpi.local</a> 使用 ncp 第二組帳密登入體驗囉!</p>
 <h1 id="建立使用者"><a href="#建立使用者" class="headerlink" title="建立使用者"></a>建立使用者</h1><p>登入後，習慣會先建立群組和使用者 (或家庭成員)，與 ncp 管理者權限做區分。<br><img src="/assets/ncp_user.png"></p>
@@ -329,6 +330,7 @@
           <div class="post-tags">
               <a href="/tags/Raspberry-Pi/" rel="tag"># Raspberry Pi</a>
               <a href="/tags/NextCloudPi/" rel="tag"># NextCloudPi</a>
+              <a href="/tags/NextCloud/" rel="tag"># NextCloud</a>
               <a href="/tags/NAS/" rel="tag"># NAS</a>
           </div>
 
@@ -418,14 +420,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">51</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -463,7 +465,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

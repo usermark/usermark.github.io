@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://usermark.github.io/assets/gcp_repo.png">
 <meta property="og:image" content="https://usermark.github.io/assets/gcp_repo2.png">
 <meta property="article:published_time" content="2024-03-20T18:19:08.000Z">
-<meta property="article:modified_time" content="2024-04-09T15:29:26.304Z">
+<meta property="article:modified_time" content="2026-02-02T12:13:14.999Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="GCP">
 <meta property="article:tag" content="Docker">
@@ -208,7 +208,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2024-04-09 23:29:26" itemprop="dateModified" datetime="2024-04-09T23:29:26+08:00">2024-04-09</time>
+                <time title="修改時間：2026-02-02 20:13:14" itemprop="dateModified" datetime="2026-02-02T20:13:14+08:00">2026-02-02</time>
               </span>
 
           
@@ -231,7 +231,7 @@
       
         <p>參考 <a target="_blank" rel="noopener" href="https://cloud.google.com/artifact-registry/docs/docker/pushing-and-pulling">https://cloud.google.com/artifact-registry/docs/docker/pushing-and-pulling</a> 即可，也記錄自己理解的。</p>
 <span id="more"></span>
-<h1 id="建立存放區"><a href="#建立存放區" class="headerlink" title="建立存放區"></a>建立存放區</h1><p>首先決定映像檔要放那個<a target="_blank" rel="noopener" href="https://cloud.google.com/artifact-registry/docs/repositories/repo-locations">地區</a>，例如asia-east1(台灣)。於存放區建立<br><img src="/assets/gcp_hub.png"></p>
+<h1 id="建立存放區"><a href="#建立存放區" class="headerlink" title="建立存放區"></a>建立存放區</h1><p>首先決定映像檔要放那個<a target="_blank" rel="noopener" href="https://cloud.google.com/artifact-registry/docs/repositories/repo-locations">地區</a>，例如「asia-east1(台灣)」。於存放區建立<br><img src="/assets/gcp_hub.png"></p>
 <h1 id="設定docker"><a href="#設定docker" class="headerlink" title="設定docker"></a>設定docker</h1><p>確認 %USERPROFILE%\.docker\config.json 裡面是否有 asia-east1-docker.pkg.dev<br>第一次使用不會有，會長這樣</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;auths&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;credsStore&quot;</span><span class="punctuation">:</span> <span class="string">&quot;desktop&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;currentContext&quot;</span><span class="punctuation">:</span> <span class="string">&quot;default&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
@@ -244,7 +244,7 @@
 <p>新增後長這樣</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;auths&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;credsStore&quot;</span><span class="punctuation">:</span> <span class="string">&quot;desktop&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;currentContext&quot;</span><span class="punctuation">:</span> <span class="string">&quot;default&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;credHelpers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;asia-east1-docker.pkg.dev&quot;</span><span class="punctuation">:</span> <span class="string">&quot;gcloud&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
-<p>進入GCP頁面 &gt; IAM 與管理 &gt; 服務帳戶，建立服務帳戶，並授予”Artifact Registry 服務代理”的角色。<br><img src="/assets/gcp_role_auth.png"></p>
+<p>進入GCP頁面 &gt;「IAM 與管理」&gt;「服務帳戶」&gt;「建立服務帳戶」，並授予「Artifact Registry 服務代理」的角色。<br><img src="/assets/gcp_role_auth.png"></p>
 <p>使用剛新增好的服務帳戶，建立憑證並登入docker</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcloud auth print-access-token --impersonate-service-account XXX@XXX.iam.gserviceaccount.com | docker login -u oauth2accesstoken --password-stdin https://asia-east1-docker.pkg.dev</span><br></pre></td></tr></table></figure>
 
@@ -299,12 +299,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2024/03/16/docker-frp-impl/" rel="prev" title="[Docker] 入門-frp實戰">
-      <i class="fa fa-chevron-left"></i> [Docker] 入門-frp實戰
+    <a href="/2024/03/16/docker-frp-impl/" rel="prev" title="[Docker] 入門 - frp 實戰">
+      <i class="fa fa-chevron-left"></i> [Docker] 入門 - frp 實戰
     </a></div>
       <div class="post-nav-item">
-    <a href="/2024/04/28/3d-print-rc/" rel="next" title="[3D列印] RC遙控車入門-螺絲、軸承、馬達、電子變速器(ESC)、鋰離子電池、平衡充電器、插頭、2.4Ghz遙控器">
-      [3D列印] RC遙控車入門-螺絲、軸承、馬達、電子變速器(ESC)、鋰離子電池、平衡充電器、插頭、2.4Ghz遙控器 <i class="fa fa-chevron-right"></i>
+    <a href="/2024/04/28/3d-print-rc/" rel="next" title="[3D 列印] RC遙控車入門-螺絲、軸承、馬達、電子變速器(ESC)、鋰離子電池、平衡充電器、插頭、2.4Ghz遙控器">
+      [3D 列印] RC遙控車入門-螺絲、軸承、馬達、電子變速器(ESC)、鋰離子電池、平衡充電器、插頭、2.4Ghz遙控器 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -379,14 +379,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">51</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -424,7 +424,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

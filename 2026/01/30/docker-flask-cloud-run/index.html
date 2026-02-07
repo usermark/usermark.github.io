@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="IUJ04DyRucs8xo_BKf0Q-i4i4IC2yI3u8vnYlmlJvX8">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="放了很久，遲遲未整理和紀錄，今天終於下定決心。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Docker] 上架 Flask 網站到 Google Cloud Run">
+<meta property="og:url" content="https://usermark.github.io/2026/01/30/docker-flask-cloud-run/index.html">
+<meta property="og:site_name" content="Mike的筆記">
+<meta property="og:description" content="放了很久，遲遲未整理和紀錄，今天終於下定決心。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://usermark.github.io/assets/cloud_run.png">
+<meta property="og:image" content="https://usermark.github.io/assets/cloud_run2.png">
+<meta property="og:image" content="https://usermark.github.io/assets/cloud_run3.png">
+<meta property="og:image" content="https://usermark.github.io/assets/firebase_admin_sdk.png">
+<meta property="og:image" content="https://usermark.github.io/assets/firebase_admin_sdk2.png">
+<meta property="og:image" content="https://usermark.github.io/assets/no_firestore.png">
+<meta property="og:image" content="https://usermark.github.io/assets/init_firestore.png">
+<meta property="og:image" content="https://usermark.github.io/assets/firestore_first_row.png">
+<meta property="og:image" content="https://usermark.github.io/assets/gcp_firestore.png">
+<meta property="og:image" content="https://usermark.github.io/assets/gcp_firestore_policy.png">
+<meta property="og:image" content="https://usermark.github.io/assets/gcp_firestore_policy2.png">
+<meta property="article:published_time" content="2026-01-30T08:46:48.000Z">
+<meta property="article:modified_time" content="2026-02-06T11:59:42.791Z">
+<meta property="article:author" content="Mike Chen">
+<meta property="article:tag" content="Flask">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Google Cloud Run">
+<meta property="article:tag" content="Firestore">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://usermark.github.io/assets/cloud_run.png">
+
+<link rel="canonical" href="https://usermark.github.io/2026/01/30/docker-flask-cloud-run/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[Docker] 上架 Flask 網站到 Google Cloud Run | Mike的筆記</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-707YEB6V4T"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-707YEB6V4T');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mike的筆記</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2026/01/30/docker-flask-cloud-run/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [Docker] 上架 Flask 網站到 Google Cloud Run
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2026-01-30 16:46:48" itemprop="dateCreated datePublished" datetime="2026-01-30T16:46:48+08:00">2026-01-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2026-02-06 19:59:42" itemprop="dateModified" datetime="2026-02-06T19:59:42+08:00">2026-02-06</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="閱讀次數" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">閱讀次數：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>放了很久，遲遲未整理和紀錄，今天終於下定決心。</p>
+<span id="more"></span>
+
+<h1 id="使用-docker-運行-Flask-網站"><a href="#使用-docker-運行-Flask-網站" class="headerlink" title="使用 docker 運行 Flask 網站"></a>使用 docker 運行 Flask 網站</h1><p>建立一個 hello_world 資料夾，寫一個簡單的 main.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> flask</span><br><span class="line"></span><br><span class="line">app = flask.Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">hello_world</span>():</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Hello World&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run(<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="number">8000</span>, debug=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>建立 requirements.txt</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flask</span><br></pre></td></tr></table></figure>
+
+<p>建立 Dockerfile</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FROM python:3.11</span><br><span class="line">WORKDIR /app</span><br><span class="line">COPY . /app</span><br><span class="line">RUN pip install --upgrade -r requirements.txt</span><br><span class="line">CMD python main.py</span><br></pre></td></tr></table></figure>
+
+<p>參數說明：</p>
+<ul>
+<li>FROM 為運行的 image</li>
+<li>WORKDIR 為工作目錄</li>
+<li>COPY 複製專案目錄至指定目錄(&#x2F;app)</li>
+<li>RUN 運行 image 時，要多跑的指令 </li>
+<li>CMD 每次啟動容器時所執行的指令</li>
+</ul>
+<p>根據 Dockerfile 打包成 image</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker image build -t hello_world .</span><br></pre></td></tr></table></figure>
+
+<p>新建並啟動 container</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 8000:8000 -d --name hello01 hello_world</span><br></pre></td></tr></table></figure>
+
+<p>接著打開瀏覽器 <a target="_blank" rel="noopener" href="http://localhost:8000/">http://localhost:8000</a><br>看到 Hello World 便表示成功囉！</p>
+<h1 id="上傳到-Google-Cloud-Run-執行"><a href="#上傳到-Google-Cloud-Run-執行" class="headerlink" title="上傳到 Google Cloud Run 執行"></a>上傳到 Google Cloud Run 執行</h1><p>參考 <a href="/2024/03/21/upload-gcp-artifact-Registry/">[GCP] GCP上傳映像檔至 Artifact Registry</a> 這篇的作法</p>
+<p>輸入指令下 tag</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker tag hello_world asia-east1-docker.pkg.dev/xxx/hub/hello_world:v1</span><br></pre></td></tr></table></figure>
+
+<p>輸入指令上傳 image</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker push asia-east1-docker.pkg.dev/xxx/hub/hello_world:v1</span><br></pre></td></tr></table></figure>
+
+<p>進入 GCP 頁面 &gt; 至「Cloud Run」選擇「部署容器」<br><img src="/assets/cloud_run.png"></p>
+<p>選擇剛才上傳至 Artifact Registry 的 image，注意底下的 port 預設是 8080，要改成 8000 (或指定 port)。<br><img src="/assets/cloud_run2.png"></p>
+<p>待部署完成後，就可以打開 GCP 提供的網址做確認。<br><img src="/assets/cloud_run3.png"></p>
+<h1 id="進階：使用-Firestore-Database"><a href="#進階：使用-Firestore-Database" class="headerlink" title="進階：使用 Firestore Database"></a>進階：使用 Firestore Database</h1><p>既然服務都放在 GCP，就來整合下 Firestore</p>
+<p>新增 Firebase Admin SDK</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade firebase-admin</span><br></pre></td></tr></table></figure>
+
+<p>先在 Firebase 建立好專案，再到 GCP 控制台中，前往「IAM 與管理」&gt;「服務帳戶」，找到「firebase-adminsdk」開頭的帳號。<br><img src="/assets/firebase_admin_sdk.png"></p>
+<p>進入並建立金鑰，會取得 JSON 檔案。複製一份到專案資料夾底下，並命名為 firebase-adminsdk.json<br><img src="/assets/firebase_admin_sdk2.png"></p>
+<p>修改 main.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta, timezone</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> firebase_admin <span class="keyword">import</span> initialize_app, firestore, credentials</span><br><span class="line"><span class="keyword">import</span> flask</span><br><span class="line"></span><br><span class="line">cred = credentials.Certificate(<span class="string">&quot;firebase-adminsdk.json&quot;</span>)</span><br><span class="line">initialize_app(cred)</span><br><span class="line">db = firestore.client()</span><br><span class="line"></span><br><span class="line">app = flask.Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index</span>():</span><br><span class="line">    docs = db.collection(<span class="string">&quot;todo&quot;</span>).stream()</span><br><span class="line">    result = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> doc <span class="keyword">in</span> docs:</span><br><span class="line">        result += <span class="string">f&#x27;<span class="subst">&#123;doc.<span class="built_in">id</span>&#125;</span> =&gt; <span class="subst">&#123;doc.to_dict()[<span class="string">&quot;content&quot;</span>]&#125;</span>&lt;br&gt;&#x27;</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.post(<span class="params"><span class="string">&#x27;/todo&#x27;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">todo</span>():</span><br><span class="line">    payload = request.get_json()</span><br><span class="line">    title = payload[<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line">    expires_at = datetime.now(timezone.utc) + timedelta(minutes=<span class="number">30</span>)</span><br><span class="line">    db.collection(<span class="string">&quot;todo&quot;</span>).document(title).<span class="built_in">set</span>(&#123;</span><br><span class="line">        <span class="string">&#x27;content&#x27;</span>: payload[<span class="string">&#x27;content&#x27;</span>],</span><br><span class="line">        <span class="string">&#x27;expires_at&#x27;</span>: expires_at</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;OK&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run(<span class="string">&#x27;0.0.0.0&#x27;</span>, <span class="number">8000</span>, debug=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>大致說明下功能，為簡單的待辦清單，GET 取得所有清單，POST 用來新增一筆事項。</p>
+<p>修改 requirements.txt</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">flask</span><br><span class="line">firebase-admin</span><br></pre></td></tr></table></figure>
+
+<p>再次上傳到 Artifact Registry</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker image build -t asia-east1-docker.pkg.dev/xxx/hub/hello_world:v2 .</span><br><span class="line">docker push asia-east1-docker.pkg.dev/xxx/hub/hello_world:v2</span><br></pre></td></tr></table></figure>
+
+<p>再次部署完成後，點開網址看到會是空白的。<br>等下，怎麼不是空白的<br><img src="/assets/no_firestore.png"></p>
+<p>原來是忘了在 Firebase 控制台先初始化 Firestore<br><img src="/assets/init_firestore.png"></p>
+<p>完成後，刷新網址就會看到錯誤消失了。<br>接著輸入指令建立一筆資料</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST -H &quot;Content-Type: application/json&quot; -d &quot;&#123; \&quot;title\&quot;: \&quot;Hello\&quot;, \&quot;content\&quot;: \&quot;Hello World\&quot; &#125;&quot; &#x27;https://your_gcp_url/todo&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>刷新頁面後，就會看到</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello =&gt; Hello World</span><br></pre></td></tr></table></figure>
+
+<p>在 Firebase 控制台也會看到剛建立好的資料<br><img src="/assets/firestore_first_row.png"></p>
+<p>到這邊還沒結束喔！</p>
+<h1 id="進階：使用存留時間-TTL-政策管理資料保留機制"><a href="#進階：使用存留時間-TTL-政策管理資料保留機制" class="headerlink" title="進階：使用存留時間 (TTL) 政策管理資料保留機制"></a>進階：使用存留時間 (TTL) 政策管理資料保留機制</h1><p>為什麼要多一個 expires_at 欄位，且是當下時間加 30 分鐘呢？<br>為了讓過期的資料能自動被刪掉，是個很方便的機制。<br>參考<a target="_blank" rel="noopener" href="https://firebase.google.com/docs/firestore/ttl?hl=zh-tw">https://firebase.google.com/docs/firestore/ttl?hl=zh-tw</a></p>
+<p>從 GCP 控制台找到 Firestore，並進入資料庫<br><img src="/assets/gcp_firestore.png"></p>
+<p>選擇「存留時間」&gt;「建立政策」<br><img src="/assets/gcp_firestore_policy.png"></p>
+<p>輸入集合群組名稱和時間戳記欄位名稱後，點「建立」<br><img src="/assets/gcp_firestore_policy2.png"></p>
+<p>過超過 30 分鐘，通常會更久，要看排程何時執行，過期的資料就會自動刪除囉。</p>
+<p><strong>參考資料</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://www.maxlist.xyz/2020/01/11/docker-flask/">實作 Dockerfile + flask 教學</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- post-body-end -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="9591303574"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Flask/" rel="tag"># Flask</a>
+              <a href="/tags/Docker/" rel="tag"># Docker</a>
+              <a href="/tags/Google-Cloud-Run/" rel="tag"># Google Cloud Run</a>
+              <a href="/tags/Firestore/" rel="tag"># Firestore</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/01/27/rasppi-iot-impl/" rel="prev" title="[Raspberry Pi] 從遙控電燈開關開始 IOT 冒險">
+      <i class="fa fa-chevron-left"></i> [Raspberry Pi] 從遙控電燈開關開始 IOT 冒險
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2026/02/03/nextcloud-nas-memories/" rel="next" title="[Docker] 用NextCloud自建NAS雲端硬碟 - 安裝 Memories">
+      [Docker] 用NextCloud自建NAS雲端硬碟 - 安裝 Memories <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-docker-%E9%81%8B%E8%A1%8C-Flask-%E7%B6%B2%E7%AB%99"><span class="nav-number">1.</span> <span class="nav-text">使用 docker 運行 Flask 網站</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%8A%E5%82%B3%E5%88%B0-Google-Cloud-Run-%E5%9F%B7%E8%A1%8C"><span class="nav-number">2.</span> <span class="nav-text">上傳到 Google Cloud Run 執行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%B2%E9%9A%8E%EF%BC%9A%E4%BD%BF%E7%94%A8-Firestore-Database"><span class="nav-number">3.</span> <span class="nav-text">進階：使用 Firestore Database</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%B2%E9%9A%8E%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%AD%98%E7%95%99%E6%99%82%E9%96%93-TTL-%E6%94%BF%E7%AD%96%E7%AE%A1%E7%90%86%E8%B3%87%E6%96%99%E4%BF%9D%E7%95%99%E6%A9%9F%E5%88%B6"><span class="nav-number">4.</span> <span class="nav-text">進階：使用存留時間 (TTL) 政策管理資料保留機制</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mike Chen</p>
+  <div class="site-description" itemprop="description">現居高雄，熟悉 Android 和 Python 開發，喜歡學習新事物和閱讀。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">51</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/usermark" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;usermark" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:trexcobras@gmail.com" title="E-Mail → mailto:trexcobras@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mike Chen</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="訪客總數">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="總瀏覽次數">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'fe34fe28201c28ecaca2',
+      clientSecret: '6b0f055d80dc258148f06400ce27502351d56921',
+      repo        : 'usermark.github.io',
+      owner       : 'usermark',
+      admin       : ['usermark'],
+      id          : 'ebb733ecaa954d70a4326d9539376a6b',
+        language: 'zh-TW',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>

@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://usermark.github.io/assets/gradle_sync.png">
 <meta property="og:image" content="https://usermark.github.io/assets/eclipse_libs_with_gradle.png">
 <meta property="article:published_time" content="2023-12-23T06:46:38.000Z">
-<meta property="article:modified_time" content="2023-12-23T13:30:03.669Z">
+<meta property="article:modified_time" content="2026-02-03T12:01:19.263Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="Eclipse">
 <meta property="article:tag" content="Gradle">
@@ -203,10 +203,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">發表於</span>
-              
 
-              <time title="創建時間：2023-12-23 14:46:38 / 修改時間：21:30:03" itemprop="dateCreated datePublished" datetime="2023-12-23T14:46:38+08:00">2023-12-23</time>
+              <time title="創建時間：2023-12-23 14:46:38" itemprop="dateCreated datePublished" datetime="2023-12-23T14:46:38+08:00">2023-12-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2026-02-03 20:01:19" itemprop="dateModified" datetime="2026-02-03T20:01:19+08:00">2026-02-03</time>
+              </span>
 
           
             <span class="post-meta-item" title="閱讀次數" id="busuanzi_container_page_pv" style="display: none;">
@@ -235,15 +241,15 @@
 <figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&gt;<span class="built_in">mkdir</span> DemoGradle</span><br><span class="line"></span><br><span class="line">&gt;<span class="built_in">cd</span> DemoGradle</span><br><span class="line"></span><br><span class="line">&gt;gradle init</span><br><span class="line"></span><br><span class="line">Select <span class="built_in">type</span> of project to generate:</span><br><span class="line">  <span class="number">1</span>: basic</span><br><span class="line">  <span class="number">2</span>: application</span><br><span class="line">  <span class="number">3</span>: library</span><br><span class="line">  <span class="number">4</span>: Gradle plugin</span><br><span class="line">Enter selection (default: basic) [<span class="number">1</span>..<span class="number">4</span>] <span class="number">1</span></span><br><span class="line"></span><br><span class="line">Select build script DSL:</span><br><span class="line">  <span class="number">1</span>: Kotlin</span><br><span class="line">  <span class="number">2</span>: Groovy</span><br><span class="line">Enter selection (default: Kotlin) [<span class="number">1</span>..<span class="number">2</span>] <span class="number">2</span></span><br><span class="line"></span><br><span class="line">Project name (default: DemoGradle):</span><br><span class="line">Generate build using new APIs and behavior (some features may change <span class="keyword">in</span> the next minor release)? (default: no) [yes, no]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt; Task :init</span><br><span class="line">To learn <span class="built_in">more</span> about Gradle by exploring our Samples <span class="built_in">at</span> https://docs.gradle.org/<span class="number">8</span>.<span class="number">5</span>/samples</span><br><span class="line"></span><br><span class="line">BUILD SUCCESSFUL <span class="keyword">in</span> <span class="number">12</span>s</span><br><span class="line"><span class="number">2</span> actionable tasks: <span class="number">2</span> executed</span><br></pre></td></tr></table></figure>
 
 <p>進去查看會長這樣，把這幾個檔案選取後，複製進原先的專案。<br><img src="/assets/gradle_folder.png"></p>
-<p>切換回Eclipse IDE，打開專案的Properties，至Project Natures手動新增Gradle Project Nature。<br><img src="/assets/manual_add_gradle.png"></p>
+<p>切換回Eclipse IDE，打開專案的「Properties」，至「Project Natures」手動新增「Gradle Project Nature」。<br><img src="/assets/manual_add_gradle.png"></p>
 <p>接著刷新下Gradle Tasks，就會看到可執行的task囉！<br><img src="/assets/gradle_task.png"></p>
 <h1 id="補充"><a href="#補充" class="headerlink" title="補充"></a>補充</h1><p>至於為何需要加上Gradle Nature，對Eclipse IDE有什麼影響？<br>原先引入第三方lib要在Java Build Path一個個加，且相依的jar要自行管控，例如tomcat的jsp-api，比較麻煩。<br><img src="/assets/eclipse_libs.png"></p>
-<p>修改build.gradleb如下</p>
+<p>修改build.gradle如下</p>
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">apply <span class="attr">plugin:</span> <span class="string">&#x27;java&#x27;</span></span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">  mavenCentral() </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">  implementation <span class="string">&#x27;org.apache.tomcat:tomcat-jsp-api:7.0.109&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>點選Refresh Gradle Project後</p>
+<p>點選「Refresh Gradle Project」後</p>
 <p><img src="/assets/gradle_sync.png"></p>
-<p>再回到Java Build Path查看，已將tomcat-jsp-api.jar以及相依的jar都一併引入，超級方便！</p>
+<p>再回到「Java Build Path」查看，已將tomcat-jsp-api.jar以及相依的jar都一併引入，超級方便！</p>
 <p><img src="/assets/eclipse_libs_with_gradle.png"></p>
 
     </div>
@@ -355,14 +361,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">51</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -400,7 +406,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

@@ -39,7 +39,7 @@
 <meta property="og:image" content="https://usermark.github.io/assets/tftp32.png">
 <meta property="og:image" content="https://usermark.github.io/assets/openwrt_login.png">
 <meta property="article:published_time" content="2024-09-27T14:59:45.000Z">
-<meta property="article:modified_time" content="2024-09-30T13:49:53.244Z">
+<meta property="article:modified_time" content="2026-02-02T12:13:15.002Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="OpenWrt">
 <meta property="article:tag" content="WPA3">
@@ -215,7 +215,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2024-09-30 21:49:53" itemprop="dateModified" datetime="2024-09-30T21:49:53+08:00">2024-09-30</time>
+                <time title="修改時間：2026-02-02 20:13:15" itemprop="dateModified" datetime="2026-02-02T20:13:15+08:00">2026-02-02</time>
               </span>
 
           
@@ -251,14 +251,14 @@
 
 <h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>因為以前有用過這台路由器，其 IP 為 192.168.3.1。建議網路配置簡單些，只讓路由器的 LAN 孔接電腦，WAN 孔不接。<br><img src="/assets/home_net_lan.png"></p>
 <p>電腦的 IP 改為 192.168.3.2。<br><img src="/assets/pc_lan.png"></p>
-<p>重啟路由器，並選擇 4: System Enter Boot Command Line Interface.</p>
+<p>重啟路由器，並選擇「4: System Enter Boot Command Line Interface.」</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">4: System Enter Boot Command Line Interface.</span><br><span class="line"></span><br><span class="line">U-Boot 1.1.8 (Dec  7 2017 - 13:23:42)</span><br><span class="line">MT7628 <span class="comment"># printenv</span></span><br><span class="line">bootcmd=tftp</span><br><span class="line">bootdelay=2</span><br><span class="line">baudrate=57600</span><br><span class="line">ethaddr=<span class="string">&quot;00:AA:BB:CC:DD:10&quot;</span></span><br><span class="line">ipaddr=192.168.1.1</span><br><span class="line">serverip=192.168.1.75</span><br><span class="line">stdin=serial</span><br><span class="line">stdout=serial</span><br><span class="line">stderr=serial</span><br></pre></td></tr></table></figure>
 
 <p>輸入 printenv 查看當前環境配置，輸入下方指令做修改</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setenv ipaddr 192.168.3.1</span><br><span class="line">setenv serverip 192.168.3.2</span><br><span class="line">saveenv</span><br></pre></td></tr></table></figure>
 
 <h1 id="燒錄"><a href="#燒錄" class="headerlink" title="燒錄"></a>燒錄</h1><p>打開 Tftpd32，並設定 Current Directory 為 bin 檔所在目錄。<br><img src="/assets/tftp32.png"></p>
-<p>重啟路由器，並選擇 2: Load System code then write to Flash via TFTP.</p>
+<p>重啟路由器，並選擇「2: Load System code then write to Flash via TFTP.」</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2: System Load System code <span class="keyword">then</span> write to Flash via TFTP.</span><br><span class="line"> Warning!! Erase Linux <span class="keyword">in</span> Flash <span class="keyword">then</span> burn new one. Are you sure?(Y/N)</span><br><span class="line">Please Input new ones /or Ctrl-C to discard</span><br><span class="line">   Input device IP (192.168.3.1) ==:192.168.3.1</span><br><span class="line">   Input server IP (192.168.3.2) ==:192.168.3.2</span><br><span class="line">   Input Linux Kernel filename () ==:openwrt-22.03.7-ramips-mt76x8-asus_rt-n11p-b1-squashfs-sysupgrade.bin</span><br></pre></td></tr></table></figure>
 
 <p>按下 Enter 鍵後，等待檔案上傳並執行，直到看到下面 OpenWrt 的啟動資訊表示刷機成功囉！</p>
@@ -388,14 +388,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">55</span>
+          <span class="site-state-item-count">59</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-count">51</span>
         <span class="site-state-item-name">標籤</span></a>
       </div>
   </nav>
@@ -433,7 +433,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2025</span>
+  <span itemprop="copyrightYear">2026</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
