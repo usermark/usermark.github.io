@@ -46,7 +46,7 @@
 <meta property="og:image" content="https://usermark.github.io/assets/ha_edit4.png">
 <meta property="og:image" content="https://usermark.github.io/assets/ha_action_card.png">
 <meta property="article:published_time" content="2026-01-27T13:47:44.000Z">
-<meta property="article:modified_time" content="2026-02-06T16:02:29.363Z">
+<meta property="article:modified_time" content="2026-02-09T13:28:41.930Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="IOT">
 <meta property="article:tag" content="Raspberry Pi">
@@ -223,7 +223,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2026-02-07 00:02:29" itemprop="dateModified" datetime="2026-02-07T00:02:29+08:00">2026-02-07</time>
+                <time title="修改時間：2026-02-09 21:28:41" itemprop="dateModified" datetime="2026-02-09T21:28:41+08:00">2026-02-09</time>
               </span>
 
           
@@ -259,6 +259,8 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> machine <span class="keyword">import</span> Pin</span><br><span class="line"><span class="keyword">from</span> servo <span class="keyword">import</span> Servo</span><br><span class="line"><span class="keyword">import</span> ESP8266WebServer</span><br><span class="line"><span class="keyword">import</span> network</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">motor = Servo(pin=<span class="number">0</span>)</span><br><span class="line">angle = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handleCmd</span>(<span class="params">socket, args</span>):</span><br><span class="line">    <span class="keyword">global</span> angle</span><br><span class="line">    <span class="built_in">print</span>(angle)</span><br><span class="line">    <span class="keyword">if</span> angle == <span class="number">0</span>:</span><br><span class="line">        motor.move(<span class="number">50</span>)</span><br><span class="line">        angle = <span class="number">50</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        motor.move(<span class="number">0</span>)</span><br><span class="line">        angle = <span class="number">0</span></span><br><span class="line">    ESP8266WebServer.ok(socket, <span class="string">&quot;200&quot;</span>, <span class="string">&quot;OK&quot;</span>)</span><br><span class="line"></span><br><span class="line">sta_if = network.WLAN(network.STA_IF)</span><br><span class="line">sta_if.active(<span class="literal">True</span>)</span><br><span class="line">sta_if.connect(<span class="string">&#x27;無線網路名稱&#x27;</span>, <span class="string">&#x27;密碼&#x27;</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="keyword">not</span> sta_if.isconnected():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;連線中&#x27;</span>)</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line">ESP8266WebServer.begin(<span class="number">80</span>)</span><br><span class="line">ESP8266WebServer.onPath(<span class="string">&quot;/&quot;</span>, handleCmd)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;address:&quot;</span> + sta_if.ifconfig()[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    ESP8266WebServer.handleClient()</span><br></pre></td></tr></table></figure>
 
 <p>Android 手機可以安裝 HTTP Request Shortcuts，方便用手機一鍵控制開關。</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/UQaciRk0dsg?si=Yivd59a6kDZQ43jw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 <h1 id="Home-Assistant"><a href="#Home-Assistant" class="headerlink" title="Home Assistant"></a>Home Assistant</h1><p>使用樹莓派官方提供的 Raspberry Pi Imager 做燒錄。</p>
 <p><img src="/assets/rpi_imager_ha1.png"></p>
 <p><img src="/assets/rpi_imager_ha2.png"></p>
@@ -285,6 +287,8 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">show_name: true</span><br><span class="line">show_icon: true</span><br><span class="line">type: button</span><br><span class="line">tap_action:</span><br><span class="line">  action: perform-action</span><br><span class="line">  perform_action: rest_command.light_switch</span><br><span class="line">  target: &#123;&#125;</span><br><span class="line">icon: mdi:lightbulb-on</span><br></pre></td></tr></table></figure>
 
 <p>按下「儲存」並「完成」，就可以實際點擊玩看看。</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5A0sYedumG0?si=2Lm0814umF5Ssuxl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 <h1 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h1><p>實際玩過，發現有時會想直接手動開關電燈，但伺服馬達的舵片會卡著。初步想到的解法是舵片不要鎖，方便隨時可取下，不影響到手動去開關。</p>
 
     </div>
