@@ -61,6 +61,8 @@ while True:
 
 Android 手機可以安裝 HTTP Request Shortcuts，方便用手機一鍵控制開關。
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/UQaciRk0dsg?si=Yivd59a6kDZQ43jw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 # Home Assistant
 
 使用樹莓派官方提供的 Raspberry Pi Imager 做燒錄。
@@ -134,6 +136,8 @@ icon: mdi:lightbulb-on
 ```
 
 按下「儲存」並「完成」，就可以實際點擊玩看看。
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5A0sYedumG0?si=2Lm0814umF5Ssuxl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 # 心得
 
