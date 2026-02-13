@@ -1,10 +1,11 @@
 ---
-title: "[Raspberry Pi] 從遙控電燈開關開始 IOT 冒險"
+title: "[Raspberry Pi] 從遙控電燈開關開始 IOT 冒險 - 整合 Home Assistant"
 tags:
   - Raspberry Pi
   - IOT
   - Home Assistant
   - 3D 列印
+  - Servo
 date: 2026-01-27 21:47:44
 ---
 先從小專案開始，慢慢加大規模。
@@ -102,6 +103,7 @@ rest_command:
     url: "http://192.168.1.107/"
     method: GET
 ```
+注意：記得先去路由器固定 ip，否則下次重新連線，會因為 ip 改變，而找不到。
 
 至「開發工具」重新載入 YAML 設定後，就可以在「動作」搜尋到建立好的 light_switch，可按下「執行動作」確認服務正常。
 ![](/assets/ha_action.png)

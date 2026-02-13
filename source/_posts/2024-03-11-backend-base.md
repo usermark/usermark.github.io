@@ -66,6 +66,7 @@ Volume 是 Docker 最推薦存放 persisting data（ 數據 ）的機制，因�
 - 8Mbps = 1MB/s
 
 例如無線路由器的規格通常會寫 802.11n：最高 300 Mbps，表示每秒傳輸 37.5MB。
+而中華電信寬頻上網 500M，也是 Mbps，表示每秒最大傳輸 62.5MB。
 參考 <https://3day.tw/什麼是mbps什麼是mb-s/>
 
 # Virtual DMZ (虛擬非軍事區)
@@ -75,6 +76,10 @@ Volume 是 Docker 最推薦存放 persisting data（ 數據 ）的機制，因�
 # FQDN (Fully-Qualified Domain Name，完整網域名稱)
 
 便是常講的 domain。
+
+# mDNS
+
+是一種無需傳統 DNS 伺服器，即可在區域網路（LAN）內進行主機名稱解析和服務發現的網路協定。使用「.local」結尾的網域名稱。
 
 # DoH (DNS over HTTPS)
 

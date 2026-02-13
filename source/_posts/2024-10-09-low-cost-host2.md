@@ -70,7 +70,7 @@ config uhttpd 'welcome'
 
 # 防火牆對外
 
-還需要開啟防火牆才能對外，Network > Firewall > Traffic Rules
+還需要開啟防火牆才能對外，「Network」>「Firewall」>「Traffic Rules」
 
 ![](/assets/openwrt_firewall.png)
 

@@ -1,5 +1,5 @@
 ---
-title: "[ESP32] 安信可ESP32-CAM鏡頭實作"
+title: "[ESP32] 安信可 ESP32-CAM 鏡頭實作"
 date: 2024-05-24 09:06:05
 tags:
 - ESP32
@@ -54,7 +54,7 @@ idf.py menuconfig
 chcp 437
 ```
 
-Camera Web Server ---> Camera Pins ---> Select Camera Pinout ---> 選擇 ESP32-CAM by AI-Thinker
+Camera Web Server ---> Camera Pins ---> Select Camera Pinout ---> 選擇「ESP32-CAM by AI-Thinker」
 ![](/assets/idf_fix.png)
 
 ![](/assets/idf_2.png)
@@ -192,7 +192,7 @@ esptool.py failed with exit code 2
 ![](/assets/bootloader_bin.png)
 
 調整log層級即可，先重新執行idf.py menuconfig
-Bootloader config ---> Bootloader log verbosity ---> 選擇 Error
+Bootloader config ---> Bootloader log verbosity ---> 選擇「Error」
 ![](/assets/idf_5.png)
 
 重新編譯後，bootloader.bin大小剩下25,488
@@ -218,7 +218,7 @@ Brownout detector was triggered
 ```
 表示供電不足，參考 [解決ESP32 CAM Brownout detector 問題](https://www.nmking.io/index.php/2022/12/15/713/)，所以如果中間有接USB延長線的先拿掉。
 另外我的解法是調整Flash SPI speed，先重新執行idf.py menuconfig
-Serial flasher config ---> Flash SPI speed ---> 選擇 40 MHz
+Serial flasher config ---> Flash SPI speed ---> 選擇「40 MHz」
 ![](/assets/idf_6.png)
 
 重新編譯和燒錄後，再次執行idf.py monitor
