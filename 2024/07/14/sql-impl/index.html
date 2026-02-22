@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 7.3.0">
+<meta name="generator" content="Hexo 8.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
@@ -31,8 +31,8 @@
 <meta property="article:published_time" content="2024-07-14T14:11:12.000Z">
 <meta property="article:modified_time" content="2026-01-28T12:51:28.132Z">
 <meta property="article:author" content="Mike Chen">
-<meta property="article:tag" content="SQL">
 <meta property="article:tag" content="DB2">
+<meta property="article:tag" content="SQL">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://usermark.github.io/2024/07/14/sql-impl/">
@@ -286,6 +286,10 @@
 
 <h1 id="預存程序"><a href="#預存程序" class="headerlink" title="預存程序"></a>預存程序</h1><p><em>DB2</em><br>傳回單一結果集，參考<a target="_blank" rel="noopener" href="https://www.ibm.com/docs/zh-tw/db2/11.5?topic=procedures-returning-result-sets-from-sql">https://www.ibm.com/docs/zh-tw/db2/11.5?topic=procedures-returning-result-sets-from-sql</a></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> REPLACE <span class="keyword">PROCEDURE</span> sp_read_emp(<span class="keyword">IN</span> p_job <span class="type">VARCHAR</span>(<span class="number">10</span>))</span><br><span class="line"><span class="keyword">LANGUAGE</span> <span class="keyword">SQL</span></span><br><span class="line"><span class="keyword">DYNAMIC</span> <span class="keyword">RESULT</span> SETS <span class="number">1</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  <span class="keyword">DECLARE</span> c_emp <span class="keyword">CURSOR</span> <span class="keyword">WITH</span> <span class="keyword">RETURN</span> <span class="keyword">FOR</span></span><br><span class="line">    <span class="keyword">SELECT</span> salary, bonus, comm</span><br><span class="line">    <span class="keyword">FROM</span> employee</span><br><span class="line">    <span class="keyword">WHERE</span> job <span class="operator">!=</span> p_job;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">OPEN</span> c_emp;</span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">CALL</span> sp_read_emp(<span class="string">&#x27;PRES&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
 
     </div>
 
@@ -396,7 +400,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>

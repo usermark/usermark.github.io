@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 7.3.0">
+<meta name="generator" content="Hexo 8.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
@@ -31,8 +31,8 @@
 <meta property="article:published_time" content="2023-07-10T05:46:28.000Z">
 <meta property="article:modified_time" content="2023-07-30T00:14:40.450Z">
 <meta property="article:author" content="Mike Chen">
-<meta property="article:tag" content="Android">
 <meta property="article:tag" content="AES">
+<meta property="article:tag" content="Android">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://usermark.github.io/2023/07/10/android-aes/">
@@ -268,6 +268,10 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> SecretKeySpec <span class="title function_">getSecretKey</span><span class="params">(String key)</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="type">KeyGenerator</span> <span class="variable">kg</span> <span class="operator">=</span> KeyGenerator.getInstance(KEY_ALGORITHM);</span><br><span class="line">        kg.init(<span class="number">128</span>);</span><br><span class="line">        <span class="type">SecretKey</span> <span class="variable">secretKey</span> <span class="operator">=</span> kg.generateKey();</span><br><span class="line">        <span class="type">byte</span>[] keyBytes = secretKey.getEncoded();</span><br><span class="line">        <span class="type">SunSecureRandom</span> <span class="variable">sunRandom</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SunSecureRandom</span>();</span><br><span class="line">        sunRandom.engineSetSeed(key.getBytes(StandardCharsets.UTF_8));</span><br><span class="line">        sunRandom.engineNextBytes(keyBytes);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">SecretKeySpec</span>(keyBytes, KEY_ALGORITHM);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>最終不管是在Java或Android上跑都可以得到同樣的加密結果，完整實作範例於此 <a target="_blank" rel="noopener" href="https://github.com/usermark/AesSample">https://github.com/usermark/AesSample</a></p>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
 
     </div>
 
@@ -377,7 +381,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>

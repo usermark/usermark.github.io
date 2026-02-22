@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 7.3.0">
+<meta name="generator" content="Hexo 8.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
@@ -23,7 +23,7 @@
 
   <meta name="description" content="先從小專案開始，慢慢加大規模。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[Raspberry Pi] 從遙控電燈開關開始 IOT 冒險">
+<meta property="og:title" content="[Raspberry Pi] 從遙控電燈開關開始 IOT 冒險 - 整合 Home Assistant">
 <meta property="og:url" content="https://usermark.github.io/2026/01/27/rasppi-iot-impl/index.html">
 <meta property="og:site_name" content="Mike的筆記">
 <meta property="og:description" content="先從小專案開始，慢慢加大規模。">
@@ -46,12 +46,13 @@
 <meta property="og:image" content="https://usermark.github.io/assets/ha_edit4.png">
 <meta property="og:image" content="https://usermark.github.io/assets/ha_action_card.png">
 <meta property="article:published_time" content="2026-01-27T13:47:44.000Z">
-<meta property="article:modified_time" content="2026-02-09T13:28:41.930Z">
+<meta property="article:modified_time" content="2026-02-21T13:42:10.444Z">
 <meta property="article:author" content="Mike Chen">
-<meta property="article:tag" content="IOT">
-<meta property="article:tag" content="Raspberry Pi">
 <meta property="article:tag" content="3D 列印">
 <meta property="article:tag" content="Home Assistant">
+<meta property="article:tag" content="IOT">
+<meta property="article:tag" content="Raspberry Pi">
+<meta property="article:tag" content="Servo">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://usermark.github.io/assets/light_switch.jpg">
 
@@ -68,7 +69,7 @@
   };
 </script>
 
-  <title>[Raspberry Pi] 從遙控電燈開關開始 IOT 冒險 | Mike的筆記</title>
+  <title>[Raspberry Pi] 從遙控電燈開關開始 IOT 冒險 - 整合 Home Assistant | Mike的筆記</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-707YEB6V4T"></script>
     <script>
@@ -206,7 +207,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          [Raspberry Pi] 從遙控電燈開關開始 IOT 冒險
+          [Raspberry Pi] 從遙控電燈開關開始 IOT 冒險 - 整合 Home Assistant
         </h1>
 
         <div class="post-meta">
@@ -223,7 +224,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2026-02-09 21:28:41" itemprop="dateModified" datetime="2026-02-09T21:28:41+08:00">2026-02-09</time>
+                <time title="修改時間：2026-02-21 21:42:10" itemprop="dateModified" datetime="2026-02-21T21:42:10+08:00">2026-02-21</time>
               </span>
 
           
@@ -256,9 +257,9 @@
 
 <p>3D 列印設計好的外殼 <a target="_blank" rel="noopener" href="https://www.tinkercad.com/things/2Xyr9GqkHPA-remote-control-light-switch">https://www.tinkercad.com/things/2Xyr9GqkHPA-remote-control-light-switch</a><br>使用 <a href="/assets/ESP8266WebServer.py">ESP8266WebServer</a> 模組提供網站功能，以及 <a href="/assets/servo.py">Servo</a> 模組控制伺服馬達的角度。</p>
 <p>main.py</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> machine <span class="keyword">import</span> Pin</span><br><span class="line"><span class="keyword">from</span> servo <span class="keyword">import</span> Servo</span><br><span class="line"><span class="keyword">import</span> ESP8266WebServer</span><br><span class="line"><span class="keyword">import</span> network</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">motor = Servo(pin=<span class="number">0</span>)</span><br><span class="line">angle = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handleCmd</span>(<span class="params">socket, args</span>):</span><br><span class="line">    <span class="keyword">global</span> angle</span><br><span class="line">    <span class="built_in">print</span>(angle)</span><br><span class="line">    <span class="keyword">if</span> angle == <span class="number">0</span>:</span><br><span class="line">        motor.move(<span class="number">50</span>)</span><br><span class="line">        angle = <span class="number">50</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        motor.move(<span class="number">0</span>)</span><br><span class="line">        angle = <span class="number">0</span></span><br><span class="line">    ESP8266WebServer.ok(socket, <span class="string">&quot;200&quot;</span>, <span class="string">&quot;OK&quot;</span>)</span><br><span class="line"></span><br><span class="line">sta_if = network.WLAN(network.STA_IF)</span><br><span class="line">sta_if.active(<span class="literal">True</span>)</span><br><span class="line">sta_if.connect(<span class="string">&#x27;無線網路名稱&#x27;</span>, <span class="string">&#x27;密碼&#x27;</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="keyword">not</span> sta_if.isconnected():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;連線中&#x27;</span>)</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line">ESP8266WebServer.begin(<span class="number">80</span>)</span><br><span class="line">ESP8266WebServer.onPath(<span class="string">&quot;/&quot;</span>, handleCmd)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;address:&quot;</span> + sta_if.ifconfig()[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    ESP8266WebServer.handleClient()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> machine <span class="keyword">import</span> Pin</span><br><span class="line"><span class="keyword">from</span> servo <span class="keyword">import</span> Servo</span><br><span class="line"><span class="keyword">import</span> ESP8266WebServer</span><br><span class="line"><span class="keyword">import</span> network</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">motor = Servo(pin=<span class="number">0</span>)</span><br><span class="line">switch = <span class="number">0</span></span><br><span class="line">reset = -<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handleCmd</span>(<span class="params">socket, args</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;angle&quot;</span> <span class="keyword">in</span> args:</span><br><span class="line">        <span class="built_in">print</span>(args[<span class="string">&quot;angle&quot;</span>])</span><br><span class="line">        motor.move(<span class="built_in">int</span>(args[<span class="string">&quot;angle&quot;</span>]))</span><br><span class="line">        ESP8266WebServer.ok(socket, <span class="string">&quot;200&quot;</span>, <span class="string">&quot;OK&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">global</span> switch, reset</span><br><span class="line">    <span class="built_in">print</span>(switch)</span><br><span class="line">    reset = time.time() + <span class="number">10</span></span><br><span class="line">    <span class="keyword">if</span> switch == <span class="number">0</span>:</span><br><span class="line">        motor.move(<span class="number">75</span>)</span><br><span class="line">        switch = <span class="number">1</span></span><br><span class="line">        ESP8266WebServer.ok(socket, <span class="string">&quot;200&quot;</span>, <span class="string">&quot;On&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        motor.move(<span class="number">0</span>)</span><br><span class="line">        switch = <span class="number">0</span></span><br><span class="line">        ESP8266WebServer.ok(socket, <span class="string">&quot;200&quot;</span>, <span class="string">&quot;Off&quot;</span>)</span><br><span class="line"></span><br><span class="line">sta_if = network.WLAN(network.STA_IF)</span><br><span class="line">sta_if.active(<span class="literal">True</span>)</span><br><span class="line">sta_if.connect(<span class="string">&#x27;無線網路名稱&#x27;</span>, <span class="string">&#x27;密碼&#x27;</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="keyword">not</span> sta_if.isconnected():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;連線中&#x27;</span>)</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line">ESP8266WebServer.begin(<span class="number">80</span>)</span><br><span class="line">ESP8266WebServer.onPath(<span class="string">&quot;/&quot;</span>, handleCmd)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;address:&quot;</span> + sta_if.ifconfig()[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    ESP8266WebServer.handleClient()</span><br><span class="line">    <span class="keyword">if</span> reset != -<span class="number">1</span> <span class="keyword">and</span> time.time() &gt; reset:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;reset&#x27;</span>)</span><br><span class="line">        reset = -<span class="number">1</span></span><br><span class="line">        motor.move(<span class="number">35</span>)</span><br></pre></td></tr></table></figure>
 
-<p>Android 手機可以安裝 HTTP Request Shortcuts，方便用手機一鍵控制開關。</p>
+<p>第12行：可傳入指定參數 angle 方便校準。<br>第42行：保留直接手動開關電燈的方式，不讓伺服馬達的舵片卡著開關，10秒後會自動回到初始位置。<br>Android 手機可以安裝 HTTP Request Shortcuts，方便用手機一鍵控制開關。</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/UQaciRk0dsg?si=Yivd59a6kDZQ43jw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 <h1 id="Home-Assistant"><a href="#Home-Assistant" class="headerlink" title="Home Assistant"></a>Home Assistant</h1><p>使用樹莓派官方提供的 Raspberry Pi Imager 做燒錄。</p>
@@ -276,7 +277,7 @@
 <p><img src="/assets/file_editor_config.png"></p>
 <p>透過「File editor」，在 configuration.yaml 加入</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rest_command:</span><br><span class="line">  light_switch:</span><br><span class="line">    url: &quot;http://192.168.1.107/&quot;</span><br><span class="line">    method: GET</span><br></pre></td></tr></table></figure>
-
+<p>注意：記得先去路由器固定 ip，否則下次重新連線，會因為 ip 改變，而找不到。</p>
 <p>至「開發工具」重新載入 YAML 設定後，就可以在「動作」搜尋到建立好的 light_switch，可按下「執行動作」確認服務正常。<br><img src="/assets/ha_action.png"></p>
 <h1 id="新增電燈開關的卡片"><a href="#新增電燈開關的卡片" class="headerlink" title="新增電燈開關的卡片"></a>新增電燈開關的卡片</h1><p>至「總覽」&gt;「編輯儀表板」&gt;「接管」，接管後下次就不會再出現<br><img src="/assets/ha_edit.png"></p>
 <p>按下「自行編輯」<br><img src="/assets/ha_edit2.png"></p>
@@ -289,7 +290,11 @@
 <p>按下「儲存」並「完成」，就可以實際點擊玩看看。</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/5A0sYedumG0?si=2Lm0814umF5Ssuxl" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-<h1 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h1><p>實際玩過，發現有時會想直接手動開關電燈，但伺服馬達的舵片會卡著。初步想到的解法是舵片不要鎖，方便隨時可取下，不影響到手動去開關。</p>
+<h1 id="心得"><a href="#心得" class="headerlink" title="心得"></a>心得</h1><p>再也不用站起來開關電燈，躺著想睡，直接透過手機關燈～</p>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
 
     </div>
 
@@ -311,9 +316,10 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/IOT/" rel="tag"># IOT</a>
-              <a href="/tags/Raspberry-Pi/" rel="tag"># Raspberry Pi</a>
               <a href="/tags/3D-%E5%88%97%E5%8D%B0/" rel="tag"># 3D 列印</a>
+              <a href="/tags/Raspberry-Pi/" rel="tag"># Raspberry Pi</a>
               <a href="/tags/Home-Assistant/" rel="tag"># Home Assistant</a>
+              <a href="/tags/Servo/" rel="tag"># Servo</a>
           </div>
 
         
@@ -402,7 +408,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>

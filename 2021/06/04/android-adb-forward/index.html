@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 7.3.0">
+<meta name="generator" content="Hexo 8.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
@@ -265,6 +265,10 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line"><span class="comment"># 當socket關閉後，本地端用於該socket的端口就可以立刻被重用</span></span><br><span class="line">client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)</span><br><span class="line">client.connect((socket.gethostname(), <span class="number">5037</span>))</span><br><span class="line"></span><br><span class="line">transport = <span class="string">&#x27;host:transport:192.168.2.131:5555&#x27;</span></span><br><span class="line">client.send(<span class="built_in">bytes</span>(<span class="string">&#x27;%0.4X&#x27;</span> % <span class="built_in">len</span>(transport) + transport, <span class="string">&#x27;ascii&#x27;</span>))</span><br><span class="line"><span class="built_in">print</span>(client.recv(<span class="number">4</span>))</span><br><span class="line">client.send(<span class="string">b&#x27;0012localabstract:test&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(client.recv(<span class="number">4</span>))</span><br><span class="line">client.send(<span class="string">b&#x27;Hello&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(client.recv(<span class="number">1024</span>))</span><br></pre></td></tr></table></figure>
 
 <p>參考<a target="_blank" rel="noopener" href="https://duanqz.github.io/2015-05-21-Intro-adb">https://duanqz.github.io/2015-05-21-Intro-adb</a></p>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
 
     </div>
 
@@ -374,7 +378,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>

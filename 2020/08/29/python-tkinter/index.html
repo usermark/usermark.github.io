@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 7.3.0">
+<meta name="generator" content="Hexo 8.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
@@ -315,6 +315,10 @@
 
 <p>解法二，將實作元件部分抽成 function，使用閉包捕捉上一層的變數來用。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> tkinter.ttk <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> tkinter.ttk <span class="keyword">import</span> Button, Entry</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_view</span>(<span class="params">index</span>):</span><br><span class="line">    <span class="comment"># 使用閉包抓住變數</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">submit</span>():</span><br><span class="line">        <span class="built_in">print</span>(<span class="built_in">input</span>.get())</span><br><span class="line">    <span class="built_in">input</span> = Entry(window)</span><br><span class="line">    <span class="built_in">input</span>.insert(<span class="number">0</span>, <span class="built_in">str</span>(index))</span><br><span class="line">    <span class="built_in">input</span>.grid(row=i, column=<span class="number">0</span>)</span><br><span class="line">    test = Button(window, text=<span class="string">&quot;Click me!&quot;</span>, command=submit)</span><br><span class="line">    test.grid(row=i, column=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">window = Tk()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">    init_view(i)</span><br><span class="line"></span><br><span class="line">window.mainloop()</span><br></pre></td></tr></table></figure>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
 
     </div>
 
@@ -425,7 +429,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>

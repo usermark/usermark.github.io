@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 7.3.0">
+<meta name="generator" content="Hexo 8.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
@@ -262,7 +262,11 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -m 17230 -a 3 -1 ?l?u?d*!<span class="variable">$@_</span><span class="comment">#=; --increment --increment-min 8 hash.txt ?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1?1 --session my_session</span></span><br></pre></td></tr></table></figure>
 <p>-m 指定雜湊方法的類型為 17230 PKZIP (Mixed Multi-File Checksum-Only)<br>-1 客製化參數<br>--increment --increment-min 8 最小從 8 碼開始破解<br>--session 方便下次還原繼續跑，當要停止時按一次 c 做紀錄並等待離開</p>
 <p>恢復上次進度繼續跑</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat --restore --session my_session</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat --restore --session my_session</span><br></pre></td></tr></table></figure><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
     </div>
 
     
@@ -288,8 +292,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2024/05/24/esp32-camera-impl/" rel="prev" title="[ESP32] 安信可ESP32-CAM鏡頭實作">
-      <i class="fa fa-chevron-left"></i> [ESP32] 安信可ESP32-CAM鏡頭實作
+    <a href="/2024/05/24/esp32-camera-impl/" rel="prev" title="[ESP32] 安信可 ESP32-CAM 鏡頭實作">
+      <i class="fa fa-chevron-left"></i> [ESP32] 安信可 ESP32-CAM 鏡頭實作
     </a></div>
       <div class="post-nav-item">
     <a href="/2024/07/14/sql-impl/" rel="next" title="[SQL] 筆記">
@@ -368,7 +372,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>

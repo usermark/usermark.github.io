@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 7.3.0">
+<meta name="generator" content="Hexo 8.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
@@ -23,7 +23,7 @@
 
   <meta name="description" content="使用官方提供的範例，不需要Linux環境，使用Windows就可以囉。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="[ESP32] 安信可ESP32-CAM鏡頭實作">
+<meta property="og:title" content="[ESP32] 安信可 ESP32-CAM 鏡頭實作">
 <meta property="og:url" content="https://usermark.github.io/2024/05/24/esp32-camera-impl/index.html">
 <meta property="og:site_name" content="Mike的筆記">
 <meta property="og:description" content="使用官方提供的範例，不需要Linux環境，使用Windows就可以囉。">
@@ -41,10 +41,10 @@
 <meta property="og:image" content="https://usermark.github.io/assets/idf_6.png">
 <meta property="og:image" content="https://usermark.github.io/assets/cam_view.jpg">
 <meta property="article:published_time" content="2024-05-24T01:06:05.000Z">
-<meta property="article:modified_time" content="2024-09-26T13:00:55.067Z">
+<meta property="article:modified_time" content="2026-02-13T12:39:31.561Z">
 <meta property="article:author" content="Mike Chen">
-<meta property="article:tag" content="IOT">
 <meta property="article:tag" content="ESP32">
+<meta property="article:tag" content="IOT">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://usermark.github.io/assets/idf.png">
 
@@ -61,7 +61,7 @@
   };
 </script>
 
-  <title>[ESP32] 安信可ESP32-CAM鏡頭實作 | Mike的筆記</title>
+  <title>[ESP32] 安信可 ESP32-CAM 鏡頭實作 | Mike的筆記</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-707YEB6V4T"></script>
     <script>
@@ -199,7 +199,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          [ESP32] 安信可ESP32-CAM鏡頭實作
+          [ESP32] 安信可 ESP32-CAM 鏡頭實作
         </h1>
 
         <div class="post-meta">
@@ -216,7 +216,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2024-09-26 21:00:55" itemprop="dateModified" datetime="2024-09-26T21:00:55+08:00">2024-09-26</time>
+                <time title="修改時間：2026-02-13 20:39:31" itemprop="dateModified" datetime="2026-02-13T20:39:31+08:00">2026-02-13</time>
               </span>
 
           
@@ -260,7 +260,7 @@
 <p>阿怎麼會是亂碼呢？<br>因為Python不支援中文編碼，輸入下方指令切換成英文編碼模式即可。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chcp 437</span><br></pre></td></tr></table></figure>
 
-<p>Camera Web Server —&gt; Camera Pins —&gt; Select Camera Pinout —&gt; 選擇 ESP32-CAM by AI-Thinker<br><img src="/assets/idf_fix.png"></p>
+<p>Camera Web Server —&gt; Camera Pins —&gt; Select Camera Pinout —&gt; 選擇「ESP32-CAM by AI-Thinker」<br><img src="/assets/idf_fix.png"></p>
 <p><img src="/assets/idf_2.png"></p>
 <p><img src="/assets/idf_3.png"></p>
 <p><img src="/assets/idf_4.png"></p>
@@ -296,7 +296,7 @@
 <p>是因為bootloader.bin太大。<br>上述錯誤主要看這裡，bootloader.bin所能使用的空間為0x1000到0x8000，空間大小為28,672</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0x8000 partition_table/partition-table.bin </span><br><span class="line">0x1000 bootloader/bootloader.bin </span><br><span class="line">0x10000 camera_web_server.bin</span><br></pre></td></tr></table></figure>
 <p>但實際查看大小為29,296<br><img src="/assets/bootloader_bin.png"></p>
-<p>調整log層級即可，先重新執行idf.py menuconfig<br>Bootloader config —&gt; Bootloader log verbosity —&gt; 選擇 Error<br><img src="/assets/idf_5.png"></p>
+<p>調整log層級即可，先重新執行idf.py menuconfig<br>Bootloader config —&gt; Bootloader log verbosity —&gt; 選擇「Error」<br><img src="/assets/idf_5.png"></p>
 <p>重新編譯後，bootloader.bin大小剩下25,488<br><img src="/assets/bootloader_bin_2.png"></p>
 <p>再次執行idf.py -p COM6 flash，等出現這幾行表示燒錄成功。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Leaving...</span><br><span class="line">Hard resetting via RTS pin...</span><br><span class="line">Done</span><br></pre></td></tr></table></figure>
@@ -306,7 +306,7 @@
 
 <p>若發現log一直重複出現，並且有看到這行</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Brownout detector was triggered</span><br></pre></td></tr></table></figure>
-<p>表示供電不足，參考 <a target="_blank" rel="noopener" href="https://www.nmking.io/index.php/2022/12/15/713/">解決ESP32 CAM Brownout detector 問題</a>，所以如果中間有接USB延長線的先拿掉。<br>另外我的解法是調整Flash SPI speed，先重新執行idf.py menuconfig<br>Serial flasher config —&gt; Flash SPI speed —&gt; 選擇 40 MHz<br><img src="/assets/idf_6.png"></p>
+<p>表示供電不足，參考 <a target="_blank" rel="noopener" href="https://www.nmking.io/index.php/2022/12/15/713/">解決ESP32 CAM Brownout detector 問題</a>，所以如果中間有接USB延長線的先拿掉。<br>另外我的解法是調整Flash SPI speed，先重新執行idf.py menuconfig<br>Serial flasher config —&gt; Flash SPI speed —&gt; 選擇「40 MHz」<br><img src="/assets/idf_6.png"></p>
 <p>重新編譯和燒錄後，再次執行idf.py monitor</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">I (2921) camera wifi: wifi_init_softap finished.SSID:AiThinker password:12345678</span><br><span class="line">I (3081) phy: phy_version: 4180, cb3948e, Sep 12 2019, 16:39:13, 0, 2</span><br><span class="line">W (3081) phy_init: saving new calibration data because of checksum failure, mode(0)</span><br><span class="line">I (3141) wifi:mode : softAP (XX:XX:XX:XX:XX:XX)</span><br><span class="line">I (3141) wifi:Total power save buffer number: 8</span><br><span class="line">I (3141) wifi:Init max length of beacon: 752/752</span><br><span class="line">I (3141) wifi:Init max length of beacon: 752/752</span><br><span class="line">I (3151) wifi:Set ps type: 0</span><br><span class="line"></span><br><span class="line">I (3151) uart: queue free spaces: 20</span><br><span class="line">I (3151) camera_httpd: Starting web server on port: &#x27;80&#x27;</span><br><span class="line">I (3161) camera_httpd: Starting stream server on port: &#x27;81&#x27;</span><br><span class="line">I (3171) system_api: Base MAC address is not set, read default base MAC address from BLK0 of EFUSE</span><br><span class="line">I (3191) base MAC address: XX:XX:XX:XX:XX:XX</span><br><span class="line">I (3191) esp-cam Version:</span><br></pre></td></tr></table></figure>
 <p>等出現這幾行，就可以連上<a target="_blank" rel="noopener" href="http://192.168.4.1/">http://192.168.4.1</a><br><img src="/assets/cam_view.jpg"></p>
@@ -316,6 +316,10 @@
 <li><a target="_blank" rel="noopener" href="https://aithinker.blog.csdn.net/article/details/108000974?ydreferer=aHR0cHM6Ly9kb2NzLmFpLXRoaW5rZXIuY29tLw==">安信可 ESP32-CAM 摄像头开发 demo–局域网拍照、实时视频、人脸识别</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.csdn.net/sudaroot/article/details/105215080">ESP32 idf.py menuconfig 乱码</a></li>
 </ol>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
 
     </div>
 
@@ -426,7 +430,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>

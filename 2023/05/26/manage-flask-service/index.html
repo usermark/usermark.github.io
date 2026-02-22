@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 7.3.0">
+<meta name="generator" content="Hexo 8.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
@@ -31,8 +31,8 @@
 <meta property="article:published_time" content="2023-05-26T15:21:00.000Z">
 <meta property="article:modified_time" content="2024-09-18T11:24:17.262Z">
 <meta property="article:author" content="Mike Chen">
-<meta property="article:tag" content="Python">
 <meta property="article:tag" content="Flask">
+<meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://usermark.github.io/2023/05/26/manage-flask-service/">
@@ -250,6 +250,10 @@
 
 <h1 id="透過-API-關閉-Flask-服務"><a href="#透過-API-關閉-Flask-服務" class="headerlink" title="透過 API 關閉 Flask 服務"></a>透過 API 關閉 Flask 服務</h1><p>試過上述兩個方法，還是這個方法最簡單乾淨，只要留意好權限控管，避免被惡意呼叫關閉即可。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/shutdown&#x27;</span>, methods=[<span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">shutdown</span>():</span><br><span class="line">    os._exit(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
 
     </div>
 
@@ -360,7 +364,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>

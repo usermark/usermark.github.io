@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 7.3.0">
+<meta name="generator" content="Hexo 8.1.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
@@ -229,7 +229,11 @@
 <p>每次用 new 建立 MyObject 實體時，都會建立一個新的函式物件，並讓 getSize() 參考，在程式中隱含建立一個 Closure，需注意資源綁定的問題。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">MyObject</span>(<span class="params">name, size</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_name</span> = name;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_size</span> = size;</span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">MyObject</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">getSize</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">_size</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以避免產生 Closure，而要注意的是：prototype 可以在建構式到使用 new 呼叫之間修改。建構式被呼叫前，設定給 prototype 的東西才會被物件繼承。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">MyObject</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">color</span> = <span class="string">&quot;red&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> obj1 = <span class="keyword">new</span> <span class="title class_">MyObject</span>(); <span class="comment">// obj1.color 是 &quot;red&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">MyObject</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">color</span> = <span class="string">&quot;blue&quot;</span>;</span><br><span class="line"><span class="title class_">MyObject</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">sound</span> = <span class="string">&quot;Ah...&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> obj2 = <span class="keyword">new</span> <span class="title class_">MyObject</span>(); <span class="comment">// obj2.color 是 &quot;blue&quot;，obj2.sound 是 &quot;Ah...&quot;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">MyObject</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">color</span> = <span class="string">&quot;red&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> obj1 = <span class="keyword">new</span> <span class="title class_">MyObject</span>(); <span class="comment">// obj1.color 是 &quot;red&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="title class_">MyObject</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">color</span> = <span class="string">&quot;blue&quot;</span>;</span><br><span class="line"><span class="title class_">MyObject</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">sound</span> = <span class="string">&quot;Ah...&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> obj2 = <span class="keyword">new</span> <span class="title class_">MyObject</span>(); <span class="comment">// obj2.color 是 &quot;blue&quot;，obj2.sound 是 &quot;Ah...&quot;</span></span><br></pre></td></tr></table></figure><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
     </div>
 
     
@@ -337,7 +341,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-count">60</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
