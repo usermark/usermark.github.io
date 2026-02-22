@@ -19,7 +19,7 @@ comments: false
 
 # 其他
 
-- IoT：玩過樹莓派、Arduino、D1 mini、ESP32，[作品集](/iot-works)
+- IOT：玩過樹莓派、Arduino、D1 mini、ESP32，[作品集](/iot-works)
 - Blender：因興趣自學，[作品集](/blender-works)
 - 3D 列印：[作品集](/3d-print-works)
 

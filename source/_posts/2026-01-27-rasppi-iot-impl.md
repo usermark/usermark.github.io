@@ -32,18 +32,26 @@ import network
 import time
 
 motor = Servo(pin=0)
-angle = 0
+switch = 0
+reset = -1
 
 def handleCmd(socket, args):
-    global angle
-    print(angle)
-    if angle == 0:
-        motor.move(50)
-        angle = 50
+    if "angle" in args:
+        print(args["angle"])
+        motor.move(int(args["angle"]))
+        ESP8266WebServer.ok(socket, "200", "OK")
+        return
+    global switch, reset
+    print(switch)
+    reset = time.time() + 10
+    if switch == 0:
+        motor.move(75)
+        switch = 1
+        ESP8266WebServer.ok(socket, "200", "On")
     else:
         motor.move(0)
-        angle = 0
-    ESP8266WebServer.ok(socket, "200", "OK")
+        switch = 0
+        ESP8266WebServer.ok(socket, "200", "Off")
 
 sta_if = network.WLAN(network.STA_IF)
 sta_if.active(True)
@@ -58,8 +66,14 @@ print("address:" + sta_if.ifconfig()[0])
 
 while True:
     ESP8266WebServer.handleClient()
+    if reset != -1 and time.time() > reset:
+        print('reset')
+        reset = -1
+        motor.move(35)
 ```
 
+第12行：可傳入指定參數 angle 方便校準。
+第42行：保留直接手動開關電燈的方式，不讓伺服馬達的舵片卡著開關，10秒後會自動回到初始位置。
 Android 手機可以安裝 HTTP Request Shortcuts，方便用手機一鍵控制開關。
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/UQaciRk0dsg?si=Yivd59a6kDZQ43jw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -143,4 +157,4 @@ icon: mdi:lightbulb-on
 
 # 心得
 
-實際玩過，發現有時會想直接手動開關電燈，但伺服馬達的舵片會卡著。初步想到的解法是舵片不要鎖，方便隨時可取下，不影響到手動去開關。
+再也不用站起來開關電燈，躺著想睡，直接透過手機關燈～

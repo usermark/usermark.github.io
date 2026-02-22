@@ -17,4 +17,4 @@ tags:
 
 # 遠端遙控
 
-3D 列印 Pan-Tilt 支架<https://www.thingiverse.com/thing:2467743>
+3D 列印 Pan-Tilt 支架<https://www.thingiverse.com/thing:2467743>，縮放 102%
