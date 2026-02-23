@@ -45,6 +45,9 @@ E (100) vfs_fat_sdmmc: sdmmc_card_init failed (0x107).
 ## Startup Failure: Check SD card inserted 
 
 認真！換一張 SD 卡就好，原本用的是 SanDisk 64GB，已格式化成 FAT32，換成另一張 ADATA 64GB 就奇蹟可以使用了。
+註：後來發現還是與供電有關，電壓正常的話 SanDisk 64GB 也可以跑得起來。
+![](/assets/both_sd.jpg)
+
 ```
 =============== ESP-CAM_MJPEG 10.9.2 ===============
 [00:01:00.141 logSetup] Setup RAM based log, size 7168, starting from 1952
@@ -75,10 +78,27 @@ E (100) vfs_fat_sdmmc: sdmmc_card_init failed (0x107).
 ```
 ## Crash loop detected, check log (brownout)
 
-供電不足，
+供電不足，換個麵包板，或是不要透過麵包板，直接接杜邦線試試。
 
-等出現這幾行，就可以連上 http://192.168.4.1
+# 初始化
 
+透過 http://192.168.4.1 上的網頁選擇 wifi 路由器並輸入密碼。
+![](/assets/mjpeg_init.png)
+
+設定好後，會開始從 GitHub 下載相關網頁檔案。
+```
+[00:00:08.639 wgetFile] Downloading /data/common.js from /s60sc/ESP32-CAM_MJPEG2SD/master/data/common.js
+[00:00:09.564 wgetFile] Downloaded /data/common.js, size 51KB
+[00:00:10.170 wgetFile] Downloading /data/MJPEG2SD.htm from /s60sc/ESP32-CAM_MJPEG2SD/master/data/MJPEG2SD.htm
+[14:04:30.837 wgetFile] Downloaded /data/MJPEG2SD.htm, size 101KB
+[14:04:56.514 getLocalNTP] Using NTP server: pool.ntp.org
+[14:04:56.515 showLocalTime] Got current time from NTP: 23/02/2026 14:04:56 with tz: GMT0
+[14:05:26.426 setAlarm] Alarm scheduled at 24/02/2026 01:00:00
+[14:05:27.509 saveConfigVect] Config file saved 218 entries 
+```
+
+手動重啟並重新連上 wifi 路由器新指派的 ip
+![](/assets/mjpeg_web.png)
 
 # 遠端遙控
 
