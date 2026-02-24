@@ -216,12 +216,9 @@ idf.py monitor -p COM6
 ```
 Brownout detector was triggered
 ```
-表示供電不足，參考 [解決ESP32 CAM Brownout detector 問題](https://www.nmking.io/index.php/2022/12/15/713/)，所以如果中間有接USB延長線的先拿掉。
-另外我的解法是調整Flash SPI speed，先重新執行idf.py menuconfig
-Serial flasher config ---> Flash SPI speed ---> 選擇「40 MHz」
-![](/assets/idf_6.png)
+表示供電不足，參考 [ESP32-CAM Troubleshooting Guide: Most Common Problems Fixed](https://store.nerokas.co.ke/blog/ESP32-CAM_Troubleshooting_Guide_Most_Common_Problems_Fixed)。
+換個麵包板，或是不要透過麵包板，直接接杜邦線試試。
 
-重新編譯和燒錄後，再次執行idf.py monitor
 ```
 I (2921) camera wifi: wifi_init_softap finished.SSID:AiThinker password:12345678
 I (3081) phy: phy_version: 4180, cb3948e, Sep 12 2019, 16:39:13, 0, 2

@@ -11,7 +11,7 @@ tags:
 ---
 紀錄筆者從零開始一步步邁向創客的學習歷程。
 <!--more-->
-{% markmap %}
+{% markmap 300px %}
 ---
 markmap:
   colorFreezeLevel: 2

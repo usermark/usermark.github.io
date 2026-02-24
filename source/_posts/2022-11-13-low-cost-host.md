@@ -17,7 +17,7 @@ tags:
 
 ![](/assets/nginx.png)
 
-註冊一組 [no-ip](https://www.noip.com/)，並下載其工具，可將動態 IP 指派給固定網域，而且是免費的。
+註冊一組 [No-IP](https://www.noip.com/)，並下載其工具，可將動態 IP 指派給固定網域，而且是免費的。
 
 ![](/assets/duc.png)
 

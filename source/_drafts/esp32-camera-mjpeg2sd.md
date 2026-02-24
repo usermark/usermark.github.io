@@ -1,5 +1,5 @@
 ---
-title: "[ESP32] 安信可 ESP32-CAM 鏡頭實作錄影和回放"
+title: "[ESP32] 安信可 ESP32-CAM 鏡頭實作 - 錄影和回放"
 tags:
 - ESP32
 - Arduino IDE
@@ -45,7 +45,9 @@ E (100) vfs_fat_sdmmc: sdmmc_card_init failed (0x107).
 ## Startup Failure: Check SD card inserted 
 
 認真！換一張 SD 卡就好，原本用的是 SanDisk 64GB，已格式化成 FAT32，換成另一張 ADATA 64GB 就奇蹟可以使用了。
-註：後來發現還是與供電有關，電壓正常的話 SanDisk 64GB 也可以跑得起來。
+{% note info %}
+後來發現還是與供電有關，電壓正常的話 SanDisk 64GB 也可以跑得起來。
+{% endnote %}
 ![](/assets/both_sd.jpg)
 
 ```
@@ -78,7 +80,8 @@ E (100) vfs_fat_sdmmc: sdmmc_card_init failed (0x107).
 ```
 ## Crash loop detected, check log (brownout)
 
-供電不足，換個麵包板，或是不要透過麵包板，直接接杜邦線試試。
+表示供電不足，參考 [ESP32-CAM Troubleshooting Guide: Most Common Problems Fixed](https://store.nerokas.co.ke/blog/ESP32-CAM_Troubleshooting_Guide_Most_Common_Problems_Fixed)。
+換個麵包板，或是不要透過麵包板，直接接杜邦線試試。
 
 # 初始化
 
@@ -97,7 +100,7 @@ E (100) vfs_fat_sdmmc: sdmmc_card_init failed (0x107).
 [14:05:27.509 saveConfigVect] Config file saved 218 entries 
 ```
 
-手動重啟並重新連上 wifi 路由器新指派的 ip
+手動重啟並重新連上 wifi 路由器新指派的 IP 位址。
 ![](/assets/mjpeg_web.png)
 
 # 遠端遙控

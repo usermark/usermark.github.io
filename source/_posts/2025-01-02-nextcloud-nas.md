@@ -39,7 +39,7 @@ mysql -u root -p
 create database nextcloud;
 ```
 
-建立使用者 nc，後面的 % 字號表示允許任何主機連線。建議換成 WSL 的區網 IP 會更安全。輸入 ipconfig 後找到 `乙太網路卡 vEthernet (WSL)` 便是。
+建立使用者 nc，後面的 % 字號表示允許任何主機連線。建議換成 WSL 的區網 IP 會更安全。輸入 ipconfig 後找到「乙太網路卡 vEthernet (WSL)」便是。
 ```bash
 create user 'nc'@'%' identified by 'your-password';
 ```
