@@ -18,7 +18,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="先從小專案開始，慢慢加大規模。">
@@ -30,6 +30,7 @@
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://usermark.github.io/assets/light_switch.jpg">
 <meta property="og:image" content="https://usermark.github.io/assets/light_switch2.jpg">
+<meta property="og:image" content="https://usermark.github.io/assets/d1_mini_servo.png">
 <meta property="og:image" content="https://usermark.github.io/assets/rpi_imager_ha1.png">
 <meta property="og:image" content="https://usermark.github.io/assets/rpi_imager_ha2.png">
 <meta property="og:image" content="https://usermark.github.io/assets/rpi_imager_ha3.png">
@@ -46,7 +47,7 @@
 <meta property="og:image" content="https://usermark.github.io/assets/ha_edit4.png">
 <meta property="og:image" content="https://usermark.github.io/assets/ha_action_card.png">
 <meta property="article:published_time" content="2026-01-27T13:47:44.000Z">
-<meta property="article:modified_time" content="2026-02-21T13:42:10.444Z">
+<meta property="article:modified_time" content="2026-02-25T13:49:45.511Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="3D 列印">
 <meta property="article:tag" content="Home Assistant">
@@ -136,6 +137,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -165,11 +167,38 @@
     <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
      crossorigin="anonymous"></script>
 </div>
@@ -224,7 +253,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2026-02-21 21:42:10" itemprop="dateModified" datetime="2026-02-21T21:42:10+08:00">2026-02-21</time>
+                <time title="修改時間：2026-02-25 21:49:45" itemprop="dateModified" datetime="2026-02-25T21:49:45+08:00">2026-02-25</time>
               </span>
 
           
@@ -256,6 +285,7 @@
 </table>
 
 <p>3D 列印設計好的外殼 <a target="_blank" rel="noopener" href="https://www.tinkercad.com/things/2Xyr9GqkHPA-remote-control-light-switch">https://www.tinkercad.com/things/2Xyr9GqkHPA-remote-control-light-switch</a><br>使用 <a href="/assets/ESP8266WebServer.py">ESP8266WebServer</a> 模組提供網站功能，以及 <a href="/assets/servo.py">Servo</a> 模組控制伺服馬達的角度。</p>
+<p><img src="/assets/d1_mini_servo.png"></p>
 <p>main.py</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> machine <span class="keyword">import</span> Pin</span><br><span class="line"><span class="keyword">from</span> servo <span class="keyword">import</span> Servo</span><br><span class="line"><span class="keyword">import</span> ESP8266WebServer</span><br><span class="line"><span class="keyword">import</span> network</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">motor = Servo(pin=<span class="number">0</span>)</span><br><span class="line">switch = <span class="number">0</span></span><br><span class="line">reset = -<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handleCmd</span>(<span class="params">socket, args</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;angle&quot;</span> <span class="keyword">in</span> args:</span><br><span class="line">        <span class="built_in">print</span>(args[<span class="string">&quot;angle&quot;</span>])</span><br><span class="line">        motor.move(<span class="built_in">int</span>(args[<span class="string">&quot;angle&quot;</span>]))</span><br><span class="line">        ESP8266WebServer.ok(socket, <span class="string">&quot;200&quot;</span>, <span class="string">&quot;OK&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="keyword">global</span> switch, reset</span><br><span class="line">    <span class="built_in">print</span>(switch)</span><br><span class="line">    reset = time.time() + <span class="number">10</span></span><br><span class="line">    <span class="keyword">if</span> switch == <span class="number">0</span>:</span><br><span class="line">        motor.move(<span class="number">75</span>)</span><br><span class="line">        switch = <span class="number">1</span></span><br><span class="line">        ESP8266WebServer.ok(socket, <span class="string">&quot;200&quot;</span>, <span class="string">&quot;On&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        motor.move(<span class="number">0</span>)</span><br><span class="line">        switch = <span class="number">0</span></span><br><span class="line">        ESP8266WebServer.ok(socket, <span class="string">&quot;200&quot;</span>, <span class="string">&quot;Off&quot;</span>)</span><br><span class="line"></span><br><span class="line">sta_if = network.WLAN(network.STA_IF)</span><br><span class="line">sta_if.active(<span class="literal">True</span>)</span><br><span class="line">sta_if.connect(<span class="string">&#x27;無線網路名稱&#x27;</span>, <span class="string">&#x27;密碼&#x27;</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="keyword">not</span> sta_if.isconnected():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;連線中&#x27;</span>)</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line">ESP8266WebServer.begin(<span class="number">80</span>)</span><br><span class="line">ESP8266WebServer.onPath(<span class="string">&quot;/&quot;</span>, handleCmd)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;address:&quot;</span> + sta_if.ifconfig()[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    ESP8266WebServer.handleClient()</span><br><span class="line">    <span class="keyword">if</span> reset != -<span class="number">1</span> <span class="keyword">and</span> time.time() &gt; reset:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;reset&#x27;</span>)</span><br><span class="line">        reset = -<span class="number">1</span></span><br><span class="line">        motor.move(<span class="number">35</span>)</span><br></pre></td></tr></table></figure>
 
@@ -277,7 +307,7 @@
 <p><img src="/assets/file_editor_config.png"></p>
 <p>透過「File editor」，在 configuration.yaml 加入</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rest_command:</span><br><span class="line">  light_switch:</span><br><span class="line">    url: &quot;http://192.168.1.107/&quot;</span><br><span class="line">    method: GET</span><br></pre></td></tr></table></figure>
-<p>注意：記得先去路由器固定 ip，否則下次重新連線，會因為 ip 改變，而找不到。</p>
+<p>注意：記得先去路由器固定 IP，否則下次重新連線，會因為 IP 改變，而找不到。</p>
 <p>至「開發工具」重新載入 YAML 設定後，就可以在「動作」搜尋到建立好的 light_switch，可按下「執行動作」確認服務正常。<br><img src="/assets/ha_action.png"></p>
 <h1 id="新增電燈開關的卡片"><a href="#新增電燈開關的卡片" class="headerlink" title="新增電燈開關的卡片"></a>新增電燈開關的卡片</h1><p>至「總覽」&gt;「編輯儀表板」&gt;「接管」，接管後下次就不會再出現<br><img src="/assets/ha_edit.png"></p>
 <p>按下「自行編輯」<br><img src="/assets/ha_edit2.png"></p>
@@ -516,6 +546,10 @@
   
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 

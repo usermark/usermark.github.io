@@ -18,7 +18,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="使用官方提供的範例，不需要Linux環境，使用Windows就可以囉。">
@@ -34,14 +34,14 @@
 <meta property="og:image" content="https://usermark.github.io/assets/idf_3.png">
 <meta property="og:image" content="https://usermark.github.io/assets/idf_4.png">
 <meta property="og:image" content="https://usermark.github.io/assets/esp32cam.jpg">
+<meta property="og:image" content="https://usermark.github.io/assets/esp32_cam_ftdi.png">
 <meta property="og:image" content="https://usermark.github.io/assets/com_search.png">
 <meta property="og:image" content="https://usermark.github.io/assets/bootloader_bin.png">
 <meta property="og:image" content="https://usermark.github.io/assets/idf_5.png">
 <meta property="og:image" content="https://usermark.github.io/assets/bootloader_bin_2.png">
-<meta property="og:image" content="https://usermark.github.io/assets/idf_6.png">
 <meta property="og:image" content="https://usermark.github.io/assets/cam_view.jpg">
 <meta property="article:published_time" content="2024-05-24T01:06:05.000Z">
-<meta property="article:modified_time" content="2026-02-13T12:39:31.561Z">
+<meta property="article:modified_time" content="2026-02-25T14:25:53.510Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="ESP32">
 <meta property="article:tag" content="IOT">
@@ -128,6 +128,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -157,11 +158,38 @@
     <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
      crossorigin="anonymous"></script>
 </div>
@@ -216,7 +244,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2026-02-13 20:39:31" itemprop="dateModified" datetime="2026-02-13T20:39:31+08:00">2026-02-13</time>
+                <time title="修改時間：2026-02-25 22:25:53" itemprop="dateModified" datetime="2026-02-25T22:25:53+08:00">2026-02-25</time>
               </span>
 
           
@@ -286,6 +314,7 @@
 
 <p>直到出現這幾行表示編譯成功，就可以開始接上ESP32-CAM做燒錄。</p>
 <h1 id="燒錄"><a href="#燒錄" class="headerlink" title="燒錄"></a>燒錄</h1><p><img src="/assets/esp32cam.jpg"></p>
+<p><img src="/assets/esp32_cam_ftdi.png"></p>
 <p>先至裝置管理員查看連接埠，設備對接口為COM6<br><img src="/assets/com_search.png"></p>
 <p>輸入指令做燒錄</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">idf.py -p COM6 flash</span><br></pre></td></tr></table></figure>
@@ -306,8 +335,7 @@
 
 <p>若發現log一直重複出現，並且有看到這行</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Brownout detector was triggered</span><br></pre></td></tr></table></figure>
-<p>表示供電不足，參考 <a target="_blank" rel="noopener" href="https://www.nmking.io/index.php/2022/12/15/713/">解決ESP32 CAM Brownout detector 問題</a>，所以如果中間有接USB延長線的先拿掉。<br>另外我的解法是調整Flash SPI speed，先重新執行idf.py menuconfig<br>Serial flasher config —&gt; Flash SPI speed —&gt; 選擇「40 MHz」<br><img src="/assets/idf_6.png"></p>
-<p>重新編譯和燒錄後，再次執行idf.py monitor</p>
+<p>表示供電不足，參考 <a target="_blank" rel="noopener" href="https://store.nerokas.co.ke/blog/ESP32-CAM_Troubleshooting_Guide_Most_Common_Problems_Fixed">ESP32-CAM Troubleshooting Guide: Most Common Problems Fixed</a>。<br>換個麵包板，或是不要透過麵包板，直接接杜邦線試試。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">I (2921) camera wifi: wifi_init_softap finished.SSID:AiThinker password:12345678</span><br><span class="line">I (3081) phy: phy_version: 4180, cb3948e, Sep 12 2019, 16:39:13, 0, 2</span><br><span class="line">W (3081) phy_init: saving new calibration data because of checksum failure, mode(0)</span><br><span class="line">I (3141) wifi:mode : softAP (XX:XX:XX:XX:XX:XX)</span><br><span class="line">I (3141) wifi:Total power save buffer number: 8</span><br><span class="line">I (3141) wifi:Init max length of beacon: 752/752</span><br><span class="line">I (3141) wifi:Init max length of beacon: 752/752</span><br><span class="line">I (3151) wifi:Set ps type: 0</span><br><span class="line"></span><br><span class="line">I (3151) uart: queue free spaces: 20</span><br><span class="line">I (3151) camera_httpd: Starting web server on port: &#x27;80&#x27;</span><br><span class="line">I (3161) camera_httpd: Starting stream server on port: &#x27;81&#x27;</span><br><span class="line">I (3171) system_api: Base MAC address is not set, read default base MAC address from BLK0 of EFUSE</span><br><span class="line">I (3191) base MAC address: XX:XX:XX:XX:XX:XX</span><br><span class="line">I (3191) esp-cam Version:</span><br></pre></td></tr></table></figure>
 <p>等出現這幾行，就可以連上<a target="_blank" rel="noopener" href="http://192.168.4.1/">http://192.168.4.1</a><br><img src="/assets/cam_view.jpg"></p>
 <p>實測解析度為VGA(640x480)時，亮度較夠，且比較順。</p>
@@ -538,6 +566,10 @@
   
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 

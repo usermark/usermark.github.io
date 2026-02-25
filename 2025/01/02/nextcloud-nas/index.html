@@ -18,7 +18,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="暨上一篇完成後，幾個月玩下來，發現自己開電腦的次數，還比接上樹莓派多，也只有想到要備份時，才會將樹莓派接上電源。所以調整備份方式，改用電腦 Docker 架 NextCloud，外接硬碟就只拿來定時備份，而且這樣用電腦來整理重複照片也比較方便。">
@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://usermark.github.io/assets/nextcloud-init.png">
 <meta property="article:published_time" content="2025-01-02T13:01:08.000Z">
-<meta property="article:modified_time" content="2026-02-06T11:59:42.790Z">
+<meta property="article:modified_time" content="2026-02-24T12:49:47.912Z">
 <meta property="article:author" content="Mike Chen">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="MariaDB">
@@ -119,6 +119,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -148,11 +149,38 @@
     <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
      crossorigin="anonymous"></script>
 </div>
@@ -207,7 +235,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新於</span>
-                <time title="修改時間：2026-02-06 19:59:42" itemprop="dateModified" datetime="2026-02-06T19:59:42+08:00">2026-02-06</time>
+                <time title="修改時間：2026-02-24 20:49:47" itemprop="dateModified" datetime="2026-02-24T20:49:47+08:00">2026-02-24</time>
               </span>
 
           
@@ -241,7 +269,7 @@
 
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> database nextcloud;</span><br></pre></td></tr></table></figure>
 
-<p>建立使用者 nc，後面的 % 字號表示允許任何主機連線。建議換成 WSL 的區網 IP 會更安全。輸入 ipconfig 後找到 <code>乙太網路卡 vEthernet (WSL)</code> 便是。</p>
+<p>建立使用者 nc，後面的 % 字號表示允許任何主機連線。建議換成 WSL 的區網 IP 會更安全。輸入 ipconfig 後找到「乙太網路卡 vEthernet (WSL)」便是。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create user <span class="string">&#x27;nc&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified by <span class="string">&#x27;your-password&#x27;</span>;</span><br></pre></td></tr></table></figure>
 
 <p>授予使用者權限</p>
@@ -508,6 +536,10 @@
   
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 
