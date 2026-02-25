@@ -14,8 +14,9 @@ tags:
 
 下載整個專案，解壓縮後如果後面有版號或 master 後輟，要拿掉，只保留 ESP32-CAM_MJPEG2SD 資料夾名稱，接著用 Arduino IDE 開啟專案內的 ino 檔。
 檢查下 appGlobals.h 預設是選擇 #define CAMERA_MODEL_AI_THINKER，因筆者使用的就是 AI-Thinker ESP32-CAM 所以可以不用調整。
+將 #define INCLUDE_PERIPH 設成 true，後面會用到。
 選擇「工具」>「Partition Scheme」>「Minimal SPIFFS (...)」後開始燒錄。
-![](/assets/esp32-cam-4mb.png)
+![](/assets/esp32_cam_4mb.png)
 
 燒錄完成後，執行會看到以下訊息
 ```

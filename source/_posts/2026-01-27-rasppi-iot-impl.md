@@ -23,6 +23,8 @@ date: 2026-01-27 21:47:44
 3D 列印設計好的外殼 <https://www.tinkercad.com/things/2Xyr9GqkHPA-remote-control-light-switch>
 使用 [ESP8266WebServer](/assets/ESP8266WebServer.py) 模組提供網站功能，以及 [Servo](/assets/servo.py) 模組控制伺服馬達的角度。
 
+![](/assets/d1_mini_servo.png)
+
 main.py
 ```python
 from machine import Pin

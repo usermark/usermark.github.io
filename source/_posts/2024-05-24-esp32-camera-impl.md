@@ -160,6 +160,8 @@ or run 'idf.py -p (PORT) flash'
 
 ![](/assets/esp32cam.jpg)
 
+![](/assets/esp32_cam_ftdi.png)
+
 先至裝置管理員查看連接埠，設備對接口為COM6
 ![](/assets/com_search.png)
 
