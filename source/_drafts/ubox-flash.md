@@ -1,0 +1,202 @@
+---
+title: "[Armbian] 機上盒刷機"
+tags:
+  - Armbian
+  - 刷機
+---
+這次使用的是安博盒子 UBOX 9 PRO MAX，CPU 比較夠力，刷 Armbian 跑看看。
+<!--more-->
+
+完整的啟動資訊如下
+```sh
+[399]HELLO! BOOT0 is starting!
+[402]BOOT0 commit : 4656b05
+[405]set pll start
+[407]periph0 has been enabled
+[410]set pll end
+[412]unknow PMU
+[414]PMU: AXP806
+[421]vaild para:16  select dram para4
+[425]board init ok
+[426]DRAM BOOT DRIVE INFO: V0.532
+[430]the chip id is 0x5000
+[432]chip id check OK
+[435]DRAM_VCC set to 1500 mv
+[439]read_calibration error
+[443]read_calibration error
+[447]read_calibration error
+[451]read_calibration error
+[455]read_calibration error
+[459]read_calibration error
+[463]read_calibration error
+[467]read_calibration error
+[471]read_calibration error
+[475]read_calibration error
+[477]retraining final error
+[484][AUTO DEBUG]32bit,1 ranks training success!
+[491]DRAM CLK =648 MHZ
+[493]DRAM Type =3 (3:DDR3,4:DDR4,7:LPDDR3,8:LPDDR4)
+[500]Actual DRAM SIZE =4096 M
+[502]DRAM SIZE =4096 MBytes, para1 = 310b, para2 = 10000000, dram_tpr13 = 6041
+[515]DRAM simple test OK.
+[517]rtc standby flag is 0x0, super standby flag is 0x0
+[523]dram size =4096
+[526]card no is 2
+[527]sdcard 2 line count 8
+[530][mmc]: mmc driver ver 2019-12-19 10:41
+[534][mmc]: set f_max to 50M, set f_max_ddr to 50M
+[539][mmc]: mmc 2 bias 4
+[547][mmc]: ***Try MMC card 2***
+[560][mmc]: MMC 5.0
+[562][mmc]: HSDDR52/DDR50 8 bit
+[565][mmc]: 50000000 Hz
+[568][mmc]: 59008 MB
+[570][mmc]: ***SD/MMC 2 init OK!!!***
+[639]Loading boot-pkg Succeed(index=0).
+[643]Entry_name        = u-boot
+[652]Entry_name        = monitor
+[656]Entry_name        = dtbo
+[659]Entry_name        = dtb
+[662]tunning data addr:0x4a0003e8
+[665]Jump to second Boot.
+NOTICE:  BL3-1: v1.0(debug):09e19e7
+NOTICE:  BL3-1: Built : 11:30:42, 2020-09-29
+NOTICE:  BL3-1 commit: 8
+ERROR:   Error initializing runtime service tspd_fast
+NOTICE:  BL3-1: Preparing for EL3 exit to normal world
+NOTICE:  BL3-1: Next image address = 0x4a000000
+NOTICE:  BL3-1: Next image spsr = 0x1d3
+
+U-Boot 2018.05-00007-g782b5e0-dirty (Aug 16 2021 - 10:46:05 +0800) Allwinner Tec                                                                                                                                                             hnology
+
+[00.741]CPU:   Allwinner Family
+[00.744]Model: sun50iw9
+I2C:   ready
+[00.748]DRAM:  2 GiB
+[00.751]Relocation Offset is: 75ec5000
+[00.789]secure enable bit: 0
+[00.792]pmu_axp152_probe pmic_bus_read fail
+[00.796]PMU: AXP806
+[00.801]CPU=1008 MHz,PLL6=600 Mhz,AHB=200 Mhz, APB1=100Mhz  MBus=400Mhz
+[00.992]sunxi overlay merged okqv
+[00.995]drv_disp_init
+[01.026]__clk_enable: clk is null.
+[01.032]drv_disp_init finish
+[01.034]gic: 20201231 sec monitor mode
+[01.048]flash init start
+[01.050]workmode = 0,storage type = 2
+[01.053]MMC:     2
+[01.055]********* 20210428 0************
+[01.058]********* 20210428 1************
+[01.062]get mem for descripter OK !
+[01.071]get sdc2 sdc_boot0_sup_1v8 fail.
+[01.076]io is 1.8V
+[01.077]********* 20210428 2************
+
+[01.081]********* 20210428 3************
+[01.085]********* 20210428 mmc_start_init ************
+sprite_led_gpio start
+[01.094]********* 20210428 gpio ok************
+[01.098]********* 20210428 6************
+[01.102]********* 20210428 7************
+[01.105]********* 20210428 8************
+[01.109]********* 20210428 9************
+[01.130]already at HSSDR52_SDR25 mode
+[01.133]sunxi flash init ok
+[01.137]Loading Environment from SUNXI_FLASH... OK
+[01.147]usb burn from boot
+delay time 0
+weak:otg_phy_config
+[01.160]usb prepare ok
+[01.963]overtime
+[01.967]do_burn_from_boot usb : no usb exist
+[01.971]boot_gui_init:start
+FAT: Misaligned buffer address (bbe80cd8)
+32 bytes read in 5 ms (5.9 KiB/s)
+sprite_time_func= blue only
+[02.259]boot_gui_init:finish
+[02.262]bmp_name=bootlogo.bmp
+2764856 bytes read in 24 ms (109.9 MiB/s)
+[02.307]hsddr 2-50000000
+[02.309]hs200 5-200000000
+[02.311]hs400 3-100000000
+[02.314]get max-frequency ok 100000000 Hz
+[02.318]0 0 0: 0 0 0
+[02.323]update dts
+** Unrecognized filesystem type **
+[02.338]load file(ULI/factory/rootwait init.txt) error.
+[02.343]name in map snum
+[02.345]name in map mac
+** Unrecognized filesystem type **
+[02.361]load file(ULI/factory/wifi_mac.txt) error.
+** Unrecognized filesystem type **
+[02.379]load file(ULI/factory/bt_mac.txt) error.
+** Unrecognized filesystem type **
+[02.397]load file(ULI/factory/selinux.txt) error.
+** Unrecognized filesystem type **
+[02.414]load file(ULI/factory/specialstr.txt) error.
+[02.433]update part info
+[02.452]update bootcmd
+[02.454]No ethernet found.
+Hit any key to stop autoboot:  0
+[04.685]Starting kernel ...
+
+[04.687]mmc exit start
+[04.699]mmc 2 exit ok
+[    0.000000] Booting Linux on physical CPU 0x0
+[    0.000000] Linux version 4.9.170 (yifan@yifan-Z270-HD3) (gcc version 5.3.1 2                                                                                                                                                             0160412 (Linaro GCC 5.3-2016.05) ) #17 SMP PREEMPT Sun Aug 15 10:12:32 CST 2021
+[    0.000000] Boot CPU: AArch64 Processor [410fd034]
+[    0.000000] bootconsole [earlycon0] enabled
+[    0.027741] BOOTEVENT:        27.727749: ON
+[    0.251878] sunxi_i2c_probe()2209 - [i2c3] warning: failed to get regulator i                                                                                                                                                             d
+[    0.252877] sunxi_i2c_probe()2209 - [i2c5] warning: failed to get regulator i                                                                                                                                                             d
+[    0.303860] acx00_i2c_probe,l:282
+[    0.304019] [ac200] pwm is NULL! Just initialize it.
+[    0.304813] [ac200] pwm enable
+[    0.304846] [ac200] pwm is initialized
+[    0.304923] acx00_init_work,l:130
+[    0.305644] acx00_init_work,l:137
+[    0.306130] sunxi_i2c_do_xfer()1935 - [i2c5] incomplete xfer (status: 0x20, d                                                                                                                                                             ev addr: 0x10)
+[    0.312013] [ac200] get ave_regulator_name failed!
+[    0.403127] failed to get standby led pin assign
+[ ▒[    0.409753] uart uart1: get regulator failed
+[    0.442077] [NAND][NE] Not found valid nand node on dts
+[    0.450795] sunxi-wlan soc@03000000:wlan: get gpio chip_en failed
+[    0.457679] sunxi-wlan soc@03000000:wlan: get gpio power_en failed
+[    0.596362] hci: request ohci1-controller gpio:232
+[    0.787556] axp2101_pek: axp2101-pek can not register without irq
+[    0.797816] sunxi_ir_startup: get ir protocol failed
+[    0.806014] VE: get debugfs_mpp_root is NULL, please check mpp
+[    0.806014]
+[    0.814271] VE: sunxi ve debug register driver failed!
+[    0.814271]
+[    0.829634] mmc:failed to get gpios
+[    0.909011] mmc:failed to get gpios
+[    0.945678] sunxi-mmc sdc1: smc 2 p1 err, cmd 52, RTO !!
+[    0.952484] sunxi-mmc sdc1: smc 2 p1 err, cmd 52, RTO !!
+[    0.954243] failed get gpio-spdif gpio from dts,spdif_gpio:-2
+[    0.956129] [sunxi_internal_codec_probe]:get audio avcc failed
+[    0.956165] [sunxi_internal_codec_probe]:get audio vcc3v3-audio failed
+[    0.956399] [audio-codec]dachpf_cfg configurations missing or invalid.
+[    0.956409] lineout_vol:26, linein_gain:3, fmin_gain:3, digital_vol:0, adcdrc                                                                                                                                                             _cfg:0, adchpf_cfg:0, dacdrc_cfg:0, dachpf_cfg:0, ramp_func_used:1, pa_msleep_ti                                                                                                                                                             me:160, pa_ctl_level:0, gpio-spk:0
+[    1.006385] sndhdmi sndhdmi: ASoC: CPU DAI (null) not registered
+[    1.013225] sndhdmi sndhdmi: snd_soc_register_card() failed: -517
+[    1.020095] sunxi-mmc sdc1: smc 2 p1 err, cmd 5, RTO !!
+[    1.026015] sunxi-mmc sdc1: smc 2 p1 err, cmd 5, RTO !!
+[    1.031947] sunxi-mmc sdc1: smc 2 p1 err, cmd 5, RTO !!
+[    1.037851] sunxi-mmc sdc1: smc 2 p1 err, cmd 5, RTO !!
+[    1.050226] sunxi-ahub-cpudai 5097000.cpudai3-controller: ahub cpudai id inva                                                                                                                                                             lid
+[    1.083034] ERROR: pinctrl_get for HDMI2.0 DDC fail
+[    1.098010] tv_probe()1435 - of_property_read_string tv_power failed!
+[    1.106292] tv_probe()1435 - of_property_read_string tv_power failed!
+[    1.184353] cpu cpu1: opp_list_debug_create_link: Failed to create link
+[    1.191827] cpu cpu1: _add_opp_dev: Failed to register opp debugfs (-12)
+[    1.199442] cpu cpu2: opp_list_debug_create_link: Failed to create link
+[    1.206906] cpu cpu2: _add_opp_dev: Failed to register opp debugfs (-12)
+[    1.214505] cpu cpu3: opp_list_debug_create_link: Failed to create link
+[    1.221958] cpu cpu3: _add_opp_dev: Failed to register opp debugfs (-12)
+```
+
+# 燒錄
+
+這台機上盒使用的 CPU 是 Allwinner H616
