@@ -1,11 +1,21 @@
 ---
-title: "[Armbian] 機上盒刷機"
+title: "[Armbian] 安博機上盒刷機"
 tags:
   - Armbian
   - 刷機
 ---
-這次使用的是安博盒子 UBOX 9 PRO MAX，CPU 比較夠力，刷 Armbian 跑看看。
+這次使用的是安博盒子 UBOX 9 PRO MAX，CPU 比較夠力，刷 Armbian 跑看看。順便認識 linux kernel 編譯。
 <!--more-->
+
+![](/assets/tx6s.jpg)
+
+# 拆解
+
+![](/assets/tx6s2.jpg)
+
+拆解後，找到 TTL 接腳 (紅框)，依標示接上 CP2102 (USB 轉 TTL) 的晶片，波特率為 115200。
+
+![](/assets/tx6s3.jpg)
 
 完整的啟動資訊如下
 ```sh
@@ -181,22 +191,40 @@ Hit any key to stop autoboot:  0
 [    0.956409] lineout_vol:26, linein_gain:3, fmin_gain:3, digital_vol:0, adcdrc                                                                                                                                                             _cfg:0, adchpf_cfg:0, dacdrc_cfg:0, dachpf_cfg:0, ramp_func_used:1, pa_msleep_ti                                                                                                                                                             me:160, pa_ctl_level:0, gpio-spk:0
 [    1.006385] sndhdmi sndhdmi: ASoC: CPU DAI (null) not registered
 [    1.013225] sndhdmi sndhdmi: snd_soc_register_card() failed: -517
-[    1.020095] sunxi-mmc sdc1: smc 2 p1 err, cmd 5, RTO !!
-[    1.026015] sunxi-mmc sdc1: smc 2 p1 err, cmd 5, RTO !!
-[    1.031947] sunxi-mmc sdc1: smc 2 p1 err, cmd 5, RTO !!
-[    1.037851] sunxi-mmc sdc1: smc 2 p1 err, cmd 5, RTO !!
-[    1.050226] sunxi-ahub-cpudai 5097000.cpudai3-controller: ahub cpudai id inva                                                                                                                                                             lid
-[    1.083034] ERROR: pinctrl_get for HDMI2.0 DDC fail
-[    1.098010] tv_probe()1435 - of_property_read_string tv_power failed!
-[    1.106292] tv_probe()1435 - of_property_read_string tv_power failed!
-[    1.184353] cpu cpu1: opp_list_debug_create_link: Failed to create link
-[    1.191827] cpu cpu1: _add_opp_dev: Failed to register opp debugfs (-12)
-[    1.199442] cpu cpu2: opp_list_debug_create_link: Failed to create link
-[    1.206906] cpu cpu2: _add_opp_dev: Failed to register opp debugfs (-12)
-[    1.214505] cpu cpu3: opp_list_debug_create_link: Failed to create link
-[    1.221958] cpu cpu3: _add_opp_dev: Failed to register opp debugfs (-12)
 ```
 
 # 燒錄
 
-這台機上盒使用的 CPU 是 Allwinner H616
+這台機上盒使用的 CPU 是 Allwinner H616，板子為 TX6s，可惜 Armbian 沒有對應的板子
+
+## 編譯
+
+筆者使用 Ubuntu 24.04 (WSL2) 進行編譯
+
+下載 Armbian
+```shell
+git clone https://github.com/armbian/build
+cd build
+```
+
+安裝工具包
+```shell
+sudo apt-get update -y
+sudo apt-get full-upgrade -y
+sudo apt-get install -y acl aptly aria2 axel bc binfmt-support binutils-aarch64-linux-gnu bison bsdextrautils btrfs-progs build-essential busybox ca-certificates ccache clang coreutils cpio crossbuild-essential-arm64 cryptsetup curl debian-archive-keyring debian-keyring debootstrap device-tree-compiler dialog dirmngr distcc dosfstools dwarves e2fsprogs expect f2fs-tools fakeroot fdisk file flex gawk gcc-arm-linux-gnueabi gdisk git gpg gzip imagemagick jq kmod libbison-dev libc6-dev-armhf-cross libcrypto++-dev libelf-dev libfdt-dev libfile-fcntllock-perl libfl-dev libfuse-dev libgcc-12-dev-arm64-cross libgmp3-dev liblz4-tool libmpc-dev libncurses-dev libpython3-dev libssl-dev libusb-1.0-0-dev linux-base lld llvm locales lz4 lzma lzop make mtools ncurses-base ncurses-term nfs-kernel-server ntpdate openssl p7zip p7zip-full parallel parted patchutils pbzip2 pigz pixz pkg-config pv python3 python3-dev python3-setuptools qemu-user-static rdfind rename rsync sudo swig tar tree u-boot-tools udev unzip util-linux uuid uuid-dev uuid-runtime vim wget whiptail xfsprogs xsltproc xz-utils zip zlib1g-dev zstd
+```
+
+## 取得設備樹
+
+將設備樹複製到電腦上分析，筆者透過 TFTP 取檔
+```shell
+su
+busybox tftp -p -l /sys/firmware/fdt -r tx6s.dtb 192.168.1.100
+```
+
+回到 Ubuntu，把檔案放到 \\\\wsl$\Ubuntu\home\your_name 底下，輸入以下指令將二進位 dtb 轉為可讀的 dts
+```shell
+dtc -I dtb -O dts -o tx6s.dts tx6s.dtb
+```
+
+獲得轉換後的檔案 [tx6s.dts](/assets/tx6s.dts)
