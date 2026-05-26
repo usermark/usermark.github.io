@@ -228,3 +228,55 @@ dtc -I dtb -O dts -o tx6s.dts tx6s.dtb
 ```
 
 獲得轉換後的檔案 [tx6s.dts](/assets/tx6s.dts)
+
+# 新增設備
+
+```shell
+./compile.sh BOARD=tanix-tx6 BRANCH=current kernel-patch
+```
+
+看到暫停提示，先不要按 Enter
+```
+[💲|🚸] Make your changes in this directory: [ /home/XXX/build/cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64 ]
+[💲|🚸] Press <ENTER> after you are done [ editing files in /home/XXX/build/cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64 ]
+Press ENTER to show a preview of your patch, or type 'stop' to stop patching...
+```
+
+另開視窗將 dts 檔複製進去
+```shell
+sudo cp ../tx6s.dts cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64/arch/arm64/boot/dts/allwinner/sun50i-h616-tx6s.dts
+sudo nano cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64/arch/arm64/boot/dts/allwinner/Makefile
+```
+
+Makefile 加入底下這段
+```
+dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-tx6s.dtb
+```
+
+回到原本的視窗按下 Enter
+會在底下自動生成 output/patch/kernel-sunxi64-current.patch
+
+
+```shell
+mkdir -p userpatches/kernel/sunxi64-current/
+cp output/patch/kernel-sunxi64-current.patch userpatches/kernel/sunxi64-current/
+```
+
+新增開發板設定檔
+nano config/boards/tx6s.conf
+```
+# Allwinner H616 TVBox with 4GB of RAM and EMMC
+BOARD_NAME="Unblock TX6s"
+BOARD_VENDOR="allwinner"
+BOARDFAMILY="sun50iw9"
+BOARD_MAINTAINER=""
+INTRODUCED="2021"
+KERNEL_TARGET="current,edge"
+KERNEL_TEST_TARGET="current"
+OVERLAY_PREFIX="sun50i-h616"
+KERNEL_CONFIG="linux-sunxi64-current.config"
+```
+
+```shell
+./compile.sh BOARD=tx6s RELEASE=trixie BUILD_DESKTOP=no BUILD_MINIMAL=yes KERNEL_CONFIGURE=no
+```
