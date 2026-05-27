@@ -260,7 +260,7 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-tx6s.dtb
 
 ```shell
 mkdir -p userpatches/kernel/sunxi64-current/
-cp output/patch/kernel-sunxi64-current.patch userpatches/kernel/sunxi64-current/
+mv output/patch/kernel-sunxi64-current.patch userpatches/kernel/sunxi64-current/
 ```
 
 新增開發板設定檔
@@ -272,6 +272,7 @@ BOARD_VENDOR="allwinner"
 BOARDFAMILY="sun50iw9"
 BOARD_MAINTAINER=""
 INTRODUCED="2021"
+BOOTCONFIG="tx6s_defconfig"
 KERNEL_TARGET="current,edge"
 KERNEL_TEST_TARGET="current"
 OVERLAY_PREFIX="sun50i-h616"
@@ -281,8 +282,14 @@ KERNEL_CONFIG="linux-sunxi64-current.config"
 ```shell
 ./compile.sh BOARD=tx6s BRANCH=current uboot-patch
 ```
+一樣看到暫停提示，先不要按 Enter
 
+另開視窗
+```shell
 sudo nano cache/sources/u-boot-worktree/u-boot/v2024.01/configs/tx6s_defconfig
+```
+
+tx6s_defconfig 加入底下這些
 ```
 CONFIG_ARM=y
 CONFIG_ARCH_SUNXI=y
@@ -294,15 +301,15 @@ CONFIG_DRAM_ODT_EN=y
 CONFIG_DRAM_SUNXI_UNKNOWN_FEATURE=y
 CONFIG_DRAM_SUNXI_BIT_DELAY_COMPENSATION=y
 CONFIG_DRAM_SUNXI_READ_CALIBRATION=y
-CONFIG_DRAM_SUNXI_DX_ODT=0x03030303
-CONFIG_DRAM_SUNXI_DX_DRI=0x0e0e0e0e
-CONFIG_DRAM_SUNXI_CA_DRI=0x00001c12
-CONFIG_DRAM_SUNXI_ODT_EN=0x00000001
-CONFIG_DRAM_SUNXI_TPR0=0xc0000c05
-CONFIG_DRAM_SUNXI_TPR2=0x00000000
-CONFIG_DRAM_SUNXI_TPR10=0x2f0007
-CONFIG_DRAM_SUNXI_TPR11=0xffffdddd
-CONFIG_DRAM_SUNXI_TPR12=0xfedf7557
+CONFIG_DRAM_SUN50I_H616_DX_ODT=0x03030303
+CONFIG_DRAM_SUN50I_H616_DX_DRI=0x0e0e0e0e
+CONFIG_DRAM_SUN50I_H616_CA_DRI=0x00001c12
+CONFIG_DRAM_SUN50I_H616_ODT_EN=0x00000001
+CONFIG_DRAM_SUN50I_H616_TPR0=0xc0000c05
+CONFIG_DRAM_SUN50I_H616_TPR2=0x00000000
+CONFIG_DRAM_SUN50I_H616_TPR10=0x2f0007
+CONFIG_DRAM_SUN50I_H616_TPR11=0xffffdddd
+CONFIG_DRAM_SUN50I_H616_TPR12=0xfedf7557
 CONFIG_MACH_SUN50I_H616=y
 CONFIG_R_I2C_ENABLE=y
 CONFIG_SPL_I2C=y
@@ -334,6 +341,10 @@ CONFIG_CMD_WGET_LWIP=y
 CONFIG_BOOTCOMMAND="if dhcp ${scriptaddr} /PXEclient/pxelinux.cfg/sun50i-h616-tx6s.scr; then source ${scriptaddr}; fi; run distro_bootcmd"
 CONFIG_CMD_MII=y
 CONFIG_CMD_MDIO=y
+```
+
+```shell
+mv output/patch/u-boot-sunxi64-current.patch userpatches/u-boot/u-boot-sunxi/
 ```
 
 ```shell
