@@ -286,6 +286,20 @@ KERNEL_CONFIG="linux-sunxi64-current.config"
 
 另開視窗
 ```shell
+sudo cp ../tx6s.dts cache/sources/u-boot-worktree/u-boot/v2024.01/arch/arm/dts/sun50i-h616-tx6s.dts
+sudo nano cache/sources/u-boot-worktree/u-boot/v2024.01/arch/arm/dts/Makefile
+```
+
+Makefile 中找到 dtb-$(CONFIG_MACH_SUN50I_H616) 並修改底下這段
+```
+dtb-$(CONFIG_MACH_SUN50I_H616) += \
+        sun50i-h616-orangepi-zero2.dtb \
+        sun50i-h618-orangepi-zero3.dtb \
+        sun50i-h616-x96-mate.dtb \
+        sun50i-h616-tx6s.dtb
+```
+
+```shell
 sudo nano cache/sources/u-boot-worktree/u-boot/v2024.01/configs/tx6s_defconfig
 ```
 
