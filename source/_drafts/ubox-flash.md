@@ -195,11 +195,11 @@ Hit any key to stop autoboot:  0
 
 # 燒錄
 
-這台機上盒使用的 CPU 是 Allwinner H616，板子為 TX6s，可惜 Armbian 沒有對應的板子
+這台機上盒使用的 CPU 是 Allwinner H616，板子為 TX6s，可惜在 Armbian 沒有找到對應的板子，筆者實測用最接近的 X96 Mate 燒錄後，可以開機啟動，但找不到有線網路，表示設備樹需調整。因此會以 X96 Mate 為基礎，來新增設定檔和修改 DTS 設備樹。
 
-## 編譯
+## 環境建置
 
-筆者使用 Ubuntu 24.04 (WSL2) 進行編譯
+使用 Ubuntu 24.04 (WSL2) 進行編譯
 
 下載 Armbian
 ```shell
@@ -214,7 +214,36 @@ sudo apt-get full-upgrade -y
 sudo apt-get install -y acl aptly aria2 axel bc binfmt-support binutils-aarch64-linux-gnu bison bsdextrautils btrfs-progs build-essential busybox ca-certificates ccache clang coreutils cpio crossbuild-essential-arm64 cryptsetup curl debian-archive-keyring debian-keyring debootstrap device-tree-compiler dialog dirmngr distcc dosfstools dwarves e2fsprogs expect f2fs-tools fakeroot fdisk file flex gawk gcc-arm-linux-gnueabi gdisk git gpg gzip imagemagick jq kmod libbison-dev libc6-dev-armhf-cross libcrypto++-dev libelf-dev libfdt-dev libfile-fcntllock-perl libfl-dev libfuse-dev libgcc-12-dev-arm64-cross libgmp3-dev liblz4-tool libmpc-dev libncurses-dev libpython3-dev libssl-dev libusb-1.0-0-dev linux-base lld llvm locales lz4 lzma lzop make mtools ncurses-base ncurses-term nfs-kernel-server ntpdate openssl p7zip p7zip-full parallel parted patchutils pbzip2 pigz pixz pkg-config pv python3 python3-dev python3-setuptools qemu-user-static rdfind rename rsync sudo swig tar tree u-boot-tools udev unzip util-linux uuid uuid-dev uuid-runtime vim wget whiptail xfsprogs xsltproc xz-utils zip zlib1g-dev zstd
 ```
 
-## 取得設備樹
+## 新增設備
+
+參考 <https://github.com/armbian/build/blob/main/config/boards/x96-mate.tvb>，新增板子的設定檔
+
+```shell
+nano config/boards/tx6s.conf
+```
+
+```
+# Allwinner H616 TVBox with 4GB of RAM and EMMC
+BOARD_NAME="Unblock TX6s"
+BOARD_VENDOR="allwinner"
+BOARDFAMILY="sun50iw9"
+BOARD_MAINTAINER=""
+INTRODUCED="2021"
+BOOTCONFIG="tx6s_defconfig"
+BOOT_LOGO="desktop"
+KERNEL_TARGET="current,edge"
+KERNEL_TEST_TARGET="current"
+FORCE_BOOTSCRIPT_UPDATE="yes"
+OVERLAY_PREFIX="sun50i-h616"
+
+enable_extension "uwe5622-allwinner"
+```
+
+## 取得原廠 DTS
+
+有兩個方式，獲得轉換後的檔案 [tx6s.dts](/assets/tx6s.dts)
+
+### 方法一：從原裝置取得
 
 將設備樹複製到電腦上分析，筆者透過 TFTP 取檔
 ```shell
@@ -227,70 +256,135 @@ busybox tftp -p -l /sys/firmware/fdt -r tx6s.dtb 192.168.1.100
 dtc -I dtb -O dts -o tx6s.dts tx6s.dtb
 ```
 
-獲得轉換後的檔案 [tx6s.dts](/assets/tx6s.dts)
-
-# 新增設備
+### 方法二：從原廠 IMG 取得
 
 ```shell
-./compile.sh BOARD=tanix-tx6 BRANCH=current kernel-patch
+7z l x11_20210824.2008.img
 ```
 
-看到暫停提示，先不要按 Enter
+輸出結果
 ```
-[💲|🚸] Make your changes in this directory: [ /home/XXX/build/cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64 ]
-[💲|🚸] Press <ENTER> after you are done [ editing files in /home/XXX/build/cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64 ]
-Press ENTER to show a preview of your patch, or type 'stop' to stop patching...
+   Date      Time    Attr         Size   Compressed  Name
+------------------- ----- ------------ ------------  ------------------------
+                    .....     33554432     33554432  0.bootloader.img
+                    .....     16777216     16777216  1.env.img
+                    .....     33554432     33554432  2.boot.img
+                    .....   2147483648   2147483648  3.super.img
+                    .....   2147483648   2147483648  4.sysrecovery.img
+                    .....     16777216     16777216  5.misc.img
+                    .....     33554432     33554432  6.recovery.img
+                    .....   1006632960   1006632960  7.cache.img
+                    .....     16777216     16777216  8.vbmeta.img
+                    .....     16777216     16777216  9.vbmeta_system.img
+                    .....     16777216     16777216  10.vbmeta_vendor.img
+                    .....     16777216     16777216  11.metadata.img
+                    .....     16777216     16777216  12.private.img
+                    .....       524288       524288  13.frp.img
+                    .....     16252928     16252928  14.empty.img
+                    .....     16777216     16777216  15.media_data.img
+                    .....     16777216     16777216  16.Reserve0.img
+                    .....         8192         8192  17.UDISK.img
+------------------- ----- ------------ ------------  ------------------------
+                            5570043904   5570043904  18 files
 ```
 
-另開視窗將 dts 檔複製進去
+解壓縮取得 0.bootloader.img 後，安裝 extract-dtb，用於取得 dtb
 ```shell
-cd build
-sudo cp ../tx6s.dts cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64/arch/arm64/boot/dts/allwinner/sun50i-h616-tx6s.dts
-sudo nano cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64/arch/arm64/boot/dts/allwinner/Makefile
+7z x x11_20210824.2008.img 0.bootloader.img
+sudo apt install python3.12-venv
+python3 -m venv myenv
+source myenv/bin/activate
+pip install extract-dtb
+extract-dtb 0.bootloader.img -o extracted_dtb
+deactivate
 ```
 
-Makefile 加入底下這段
-```
-dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-tx6s.dtb
-```
+注意這裡會同時得到 dtb 和 kernel，kernel 後續還有用到。
 
-回到原本的視窗按下 Enter
-會在底下自動生成 output/patch/kernel-sunxi64-current.patch
-
-
+輸入以下指令將二進位 dtb 轉為可讀的 dts
 ```shell
-mkdir -p userpatches/kernel/sunxi64-current/
-mv output/patch/kernel-sunxi64-current.patch userpatches/kernel/sunxi64-current/
+dtc -I dtb -O dts -o tx6s.dts extracted_dtb/01_dtbdump_,sun50iw9.dtb
 ```
 
-新增開發板設定檔
-nano config/boards/tx6s.conf
-```
-# Allwinner H616 TVBox with 4GB of RAM and EMMC
-BOARD_NAME="Unblock TX6s"
-BOARD_VENDOR="allwinner"
-BOARDFAMILY="sun50iw9"
-BOARD_MAINTAINER=""
-INTRODUCED="2021"
-BOOTCONFIG="tx6s_defconfig"
-KERNEL_TARGET="current,edge"
-KERNEL_TEST_TARGET="current"
-OVERLAY_PREFIX="sun50i-h616"
-KERNEL_CONFIG="linux-sunxi64-current.config"
-```
+## 修改 DTS
 
 ```shell
 ./compile.sh BOARD=tx6s BRANCH=current uboot-patch
 ```
-一樣看到暫停提示，先不要按 Enter
+
+看到暫停提示，先不要按 Enter
+```
+[💲|🚸] Make your changes in this directory: [ /home/XXX/build/cache/sources/u-boot-worktree/u-boot/v2024.01 ]
+[💲|🚸] Press <ENTER> after you are done [ editing files in /home/XXX/build/cache/sources/u-boot-worktree/u-boot/v2024.01 ]
+Press ENTER to show a preview of your patch, or type 'stop' to stop patching...
+```
 
 另開視窗
 ```shell
-sudo cp ../tx6s.dts cache/sources/u-boot-worktree/u-boot/v2024.01/arch/arm/dts/sun50i-h616-tx6s.dts
-sudo nano cache/sources/u-boot-worktree/u-boot/v2024.01/arch/arm/dts/Makefile
+cd build/cache/sources/u-boot-worktree/u-boot/v2024.01/arch/arm/dts/
+sudo cp sun50i-h616-x96-mate.dts sun50i-h616-tx6s.dts
 ```
 
-Makefile 中找到 dtb-$(CONFIG_MACH_SUN50I_H616) 並修改底下這段
+比對原廠 DTS (tx6s.dts) 和 [X96 Mate DTS](https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts)，發現 sun50i-h616-x96-mate.dts 支援 AXP305, AXP805, AXP806 的電源管理晶片，正好符合實際裝置上的 AXP305。
+
+```
+&r_rsb {
+	status = "okay";
+
+	axp305: pmic@745 {
+		compatible = "x-powers,axp305", "x-powers,axp805",
+			     "x-powers,axp806";
+```
+
+至於為何原廠 DTS 只支援 AXP806，卻也跑得起來就不清楚了。
+```
+pmu {
+	compatible = "x-powers,axp806";
+	reg = <0x36>;
+```
+
+接著在原廠 DTS 找有線網路 eth 開頭的，
+```
+eth@05030000 {
+			compatible = "allwinner,sunxi-gmac";
+			reg = <0x00 0x5030000 0x00 0x10000 0x00 0x3000034 0x00 0x04>;
+			interrupts = <0x00 0x0f 0x04>;
+			interrupt-names = "gmacirq";
+			clocks = <0xd5>;
+			clock-names = "gmac";
+			device_type = "gmac1";
+			pinctrl-0 = <0xd6>;
+			pinctrl-1 = <0xd7>;
+			pinctrl-names = "default\0sleep";
+			phy-mode = "rmii";
+			tx-delay = <0x07>;
+			rx-delay = <0x1f>;
+			phy-rst;
+			gmac-power0;
+			gmac-power1;
+			gmac-power2;
+			status = "okay";
+			linux,phandle = <0x17b>;
+			phandle = <0x17b>;
+		};
+```
+
+```shell
+sudo nano sun50i-h616-tx6s.dts
+```
+
+修改內容
+```
+/ {
+  model = "sun50iw9";
+  compatible = "hechuang,x96-mate", "allwinner,sun50i-h616", "allwinner,h616\0arm,sun50iw9p1";
+```
+
+```shell
+sudo nano Makefile
+```
+
+Makefile 中使用 Ctrl + W 找尋 H616 並修改底下這段
 ```
 dtb-$(CONFIG_MACH_SUN50I_H616) += \
         sun50i-h616-orangepi-zero2.dtb \
@@ -300,14 +394,14 @@ dtb-$(CONFIG_MACH_SUN50I_H616) += \
 ```
 
 ```shell
-sudo nano cache/sources/u-boot-worktree/u-boot/v2024.01/configs/tx6s_defconfig
+sudo nano ../../../configs/tx6s_defconfig
 ```
 
 tx6s_defconfig 加入底下這些
 ```
 CONFIG_ARM=y
 CONFIG_ARCH_SUNXI=y
-CONFIG_DEFAULT_DEVICE_TREE="allwinner/sun50i-h616-tx6s"
+CONFIG_DEFAULT_DEVICE_TREE="sun50i-h616-tx6s"
 CONFIG_SPL=y
 CONFIG_SUNXI_DRAM_H616_DDR3_1333=y
 CONFIG_DRAM_CLK=648
@@ -357,10 +451,50 @@ CONFIG_CMD_MII=y
 CONFIG_CMD_MDIO=y
 ```
 
+回到原本的視窗按下 Enter，會在底下自動生成 output/patch/u-boot-sunxi64-current.patch
+
 ```shell
-mv output/patch/u-boot-sunxi64-current.patch userpatches/u-boot/u-boot-sunxi/
+mv output/patch/u-boot-sunxi64-current.patch userpatches/u-boot/u-boot-sunxi/tx6s.patch
 ```
 
 ```shell
 ./compile.sh BOARD=tx6s RELEASE=trixie BUILD_DESKTOP=no BUILD_MINIMAL=yes KERNEL_CONFIGURE=no
 ```
+
+
+
+# 筆記
+
+```shell
+./compile.sh BOARD=tx6s BRANCH=current kernel-patch
+```
+
+看到暫停提示，先不要按 Enter
+```
+[💲|🚸] Make your changes in this directory: [ /home/XXX/build/cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64 ]
+[💲|🚸] Press <ENTER> after you are done [ editing files in /home/XXX/build/cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64 ]
+Press ENTER to show a preview of your patch, or type 'stop' to stop patching...
+```
+
+另開視窗將 dts 檔複製進去
+```shell
+cd build
+sudo cp ../tx6s.dts cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64/arch/arm64/boot/dts/allwinner/sun50i-h616-tx6s.dts
+sudo nano cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64/arch/arm64/boot/dts/allwinner/Makefile
+```
+
+Makefile 加入底下這段
+```
+dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-tx6s.dtb
+```
+
+回到原本的視窗按下 Enter
+會在底下自動生成 output/patch/kernel-sunxi64-current.patch
+
+
+```shell
+mkdir -p userpatches/kernel/sunxi64-current/
+mv output/patch/kernel-sunxi64-current.patch userpatches/kernel/sunxi64-current/
+```
+
+一樣看到暫停提示，先不要按 Enter
