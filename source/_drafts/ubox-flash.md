@@ -77,7 +77,7 @@ NOTICE:  BL3-1: Preparing for EL3 exit to normal world
 NOTICE:  BL3-1: Next image address = 0x4a000000
 NOTICE:  BL3-1: Next image spsr = 0x1d3
 
-U-Boot 2018.05-00007-g782b5e0-dirty (Aug 16 2021 - 10:46:05 +0800) Allwinner Tec                                                                                                                                                             hnology
+U-Boot 2018.05-00007-g782b5e0-dirty (Aug 16 2021 - 10:46:05 +0800) Allwinner Technology
 
 [00.741]CPU:   Allwinner Family
 [00.744]Model: sun50iw9
@@ -154,19 +154,19 @@ Hit any key to stop autoboot:  0
 [04.687]mmc exit start
 [04.699]mmc 2 exit ok
 [    0.000000] Booting Linux on physical CPU 0x0
-[    0.000000] Linux version 4.9.170 (yifan@yifan-Z270-HD3) (gcc version 5.3.1 2                                                                                                                                                             0160412 (Linaro GCC 5.3-2016.05) ) #17 SMP PREEMPT Sun Aug 15 10:12:32 CST 2021
+[    0.000000] Linux version 4.9.170 (yifan@yifan-Z270-HD3) (gcc version 5.3.1 20160412 (Linaro GCC 5.3-2016.05) ) #17 SMP PREEMPT Sun Aug 15 10:12:32 CST 2021
 [    0.000000] Boot CPU: AArch64 Processor [410fd034]
 [    0.000000] bootconsole [earlycon0] enabled
 [    0.027741] BOOTEVENT:        27.727749: ON
-[    0.251878] sunxi_i2c_probe()2209 - [i2c3] warning: failed to get regulator i                                                                                                                                                             d
-[    0.252877] sunxi_i2c_probe()2209 - [i2c5] warning: failed to get regulator i                                                                                                                                                             d
+[    0.251878] sunxi_i2c_probe()2209 - [i2c3] warning: failed to get regulator id
+[    0.252877] sunxi_i2c_probe()2209 - [i2c5] warning: failed to get regulator id
 [    0.303860] acx00_i2c_probe,l:282
 [    0.304019] [ac200] pwm is NULL! Just initialize it.
 [    0.304813] [ac200] pwm enable
 [    0.304846] [ac200] pwm is initialized
 [    0.304923] acx00_init_work,l:130
 [    0.305644] acx00_init_work,l:137
-[    0.306130] sunxi_i2c_do_xfer()1935 - [i2c5] incomplete xfer (status: 0x20, d                                                                                                                                                             ev addr: 0x10)
+[    0.306130] sunxi_i2c_do_xfer()1935 - [i2c5] incomplete xfer (status: 0x20, dev addr: 0x10)
 [    0.312013] [ac200] get ave_regulator_name failed!
 [    0.403127] failed to get standby led pin assign
 [ ▒[    0.409753] uart uart1: get regulator failed
@@ -188,14 +188,14 @@ Hit any key to stop autoboot:  0
 [    0.956129] [sunxi_internal_codec_probe]:get audio avcc failed
 [    0.956165] [sunxi_internal_codec_probe]:get audio vcc3v3-audio failed
 [    0.956399] [audio-codec]dachpf_cfg configurations missing or invalid.
-[    0.956409] lineout_vol:26, linein_gain:3, fmin_gain:3, digital_vol:0, adcdrc                                                                                                                                                             _cfg:0, adchpf_cfg:0, dacdrc_cfg:0, dachpf_cfg:0, ramp_func_used:1, pa_msleep_ti                                                                                                                                                             me:160, pa_ctl_level:0, gpio-spk:0
+[    0.956409] lineout_vol:26, linein_gain:3, fmin_gain:3, digital_vol:0, adcdrc_cfg:0, adchpf_cfg:0, dacdrc_cfg:0, dachpf_cfg:0, ramp_func_used:1, pa_msleep_time:160, pa_ctl_level:0, gpio-spk:0
 [    1.006385] sndhdmi sndhdmi: ASoC: CPU DAI (null) not registered
 [    1.013225] sndhdmi sndhdmi: snd_soc_register_card() failed: -517
 ```
 
 # 燒錄
 
-這台機上盒使用的 CPU 是 Allwinner H616，板子為 TX6s，可惜在 Armbian 沒有找到對應的板子，筆者實測用最接近的 X96 Mate 燒錄後，可以開機啟動，但找不到有線網路，表示設備樹需調整。因此會以 X96 Mate 為基礎，來新增設定檔和修改 DTS 設備樹。
+這台機上盒使用的 Soc 是 Allwinner H616，板子為 TX6s，可惜在 Armbian 沒有找到對應的板子，筆者實測用最接近的 X96 Mate 燒錄後，可以開機啟動，但找不到有線網路，表示設備樹需調整。因此會以 X96 Mate 為基礎，來新增設定檔和修改 DTS 設備樹。
 
 ## 環境建置
 
@@ -321,8 +321,8 @@ Press ENTER to show a preview of your patch, or type 'stop' to stop patching...
 
 另開視窗
 ```shell
-cd build/cache/sources/u-boot-worktree/u-boot/v2024.01/arch/arm/dts/
-sudo cp sun50i-h616-x96-mate.dts sun50i-h616-tx6s.dts
+cd build/cache/sources/u-boot-worktree/u-boot/v2024.01/
+sudo cp arch/arm/dts/sun50i-h616-x96-mate.dts arch/arm/dts/sun50i-h616-tx6s.dts
 ```
 
 比對原廠 DTS (tx6s.dts) 和 [X96 Mate DTS](https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts)，發現 sun50i-h616-x96-mate.dts 支援 AXP305, AXP805, AXP806 的電源管理晶片，正好符合實際裝置上的 AXP305。
@@ -343,34 +343,34 @@ pmu {
 	reg = <0x36>;
 ```
 
-接著在原廠 DTS 找有線網路 eth 開頭的，
+接著在原廠 DTS 找有線網路 eth 開頭的，底下表示 H616 內建的 PHY / 10/100 Ethernet
 ```
 eth@05030000 {
-			compatible = "allwinner,sunxi-gmac";
-			reg = <0x00 0x5030000 0x00 0x10000 0x00 0x3000034 0x00 0x04>;
-			interrupts = <0x00 0x0f 0x04>;
-			interrupt-names = "gmacirq";
-			clocks = <0xd5>;
-			clock-names = "gmac";
-			device_type = "gmac1";
-			pinctrl-0 = <0xd6>;
-			pinctrl-1 = <0xd7>;
-			pinctrl-names = "default\0sleep";
-			phy-mode = "rmii";
-			tx-delay = <0x07>;
-			rx-delay = <0x1f>;
-			phy-rst;
-			gmac-power0;
-			gmac-power1;
-			gmac-power2;
-			status = "okay";
-			linux,phandle = <0x17b>;
-			phandle = <0x17b>;
-		};
+  compatible = "allwinner,sunxi-gmac";
+  reg = <0x00 0x5030000 0x00 0x10000 0x00 0x3000034 0x00 0x04>;
+  interrupts = <0x00 0x0f 0x04>;
+  interrupt-names = "gmacirq";
+  clocks = <0xd5>;
+  clock-names = "gmac";
+  device_type = "gmac1";
+  pinctrl-0 = <0xd6>;
+  pinctrl-1 = <0xd7>;
+  pinctrl-names = "default\0sleep";
+  phy-mode = "rmii";
+  tx-delay = <0x07>;
+  rx-delay = <0x1f>;
+  phy-rst;
+  gmac-power0;
+  gmac-power1;
+  gmac-power2;
+  status = "okay";
+  linux,phandle = <0x17b>;
+  phandle = <0x17b>;
+};
 ```
 
 ```shell
-sudo nano sun50i-h616-tx6s.dts
+sudo nano arch/arm/dts/sun50i-h616-tx6s.dts
 ```
 
 修改內容
@@ -381,7 +381,7 @@ sudo nano sun50i-h616-tx6s.dts
 ```
 
 ```shell
-sudo nano Makefile
+sudo nano arch/arm/dts/Makefile
 ```
 
 Makefile 中使用 Ctrl + W 找尋 H616 並修改底下這段
@@ -394,61 +394,36 @@ dtb-$(CONFIG_MACH_SUN50I_H616) += \
 ```
 
 ```shell
-sudo nano ../../../configs/tx6s_defconfig
+sudo cp configs/x96_mate_defconfig configs/tx6s_defconfig
+sudo nano configs/tx6s_defconfig
 ```
 
-tx6s_defconfig 加入底下這些
+tx6s_defconfig 只改 CONFIG_DEFAULT_DEVICE_TREE，內容修改如下
 ```
 CONFIG_ARM=y
 CONFIG_ARCH_SUNXI=y
 CONFIG_DEFAULT_DEVICE_TREE="sun50i-h616-tx6s"
 CONFIG_SPL=y
-CONFIG_SUNXI_DRAM_H616_DDR3_1333=y
-CONFIG_DRAM_CLK=648
-CONFIG_DRAM_ODT_EN=y
-CONFIG_DRAM_SUNXI_UNKNOWN_FEATURE=y
-CONFIG_DRAM_SUNXI_BIT_DELAY_COMPENSATION=y
-CONFIG_DRAM_SUNXI_READ_CALIBRATION=y
 CONFIG_DRAM_SUN50I_H616_DX_ODT=0x03030303
 CONFIG_DRAM_SUN50I_H616_DX_DRI=0x0e0e0e0e
-CONFIG_DRAM_SUN50I_H616_CA_DRI=0x00001c12
-CONFIG_DRAM_SUN50I_H616_ODT_EN=0x00000001
+CONFIG_DRAM_SUN50I_H616_CA_DRI=0x1c12
 CONFIG_DRAM_SUN50I_H616_TPR0=0xc0000c05
-CONFIG_DRAM_SUN50I_H616_TPR2=0x00000000
 CONFIG_DRAM_SUN50I_H616_TPR10=0x2f0007
 CONFIG_DRAM_SUN50I_H616_TPR11=0xffffdddd
 CONFIG_DRAM_SUN50I_H616_TPR12=0xfedf7557
 CONFIG_MACH_SUN50I_H616=y
+CONFIG_SUNXI_DRAM_H616_DDR3_1333=y
 CONFIG_R_I2C_ENABLE=y
+# CONFIG_SYS_MALLOC_CLEAR_ON_INIT is not set
 CONFIG_SPL_I2C=y
-CONFIG_SPL_I2C_SUPPORT=y
 CONFIG_SPL_SYS_I2C_LEGACY=y
 CONFIG_SYS_I2C_MVTWSI=y
 CONFIG_SYS_I2C_SLAVE=0x7f
-CONFIG_SYS_I2C_SPEED=100000
-CONFIG_PHY_REALTEK=y
-CONFIG_SUN8I_EMAC=y
-CONFIG_I2C3_ENABLE=y
+CONFIG_SYS_I2C_SPEED=400000
+CONFIG_SUPPORT_EMMC_BOOT=y
+CONFIG_AXP305_POWER=y
 CONFIG_USB_EHCI_HCD=y
 CONFIG_USB_OHCI_HCD=y
-CONFIG_USB_MUSB_GADGET=y
-CONFIG_SUPPORT_EMMC_BOOT=y
-CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR=0x40
-CONFIG_MMC_SUNXI_SLOT_EXTRA=2
-CONFIG_OF_LIBFDT_OVERLAY=y
-CONFIG_CMD_NET=y
-CONFIG_CMD_DHCP=y
-CONFIG_CMD_WGET=y
-CONFIG_CMD_TFTPBOOT=y
-CONFIG_CMD_PING=y
-CONFIG_PROT_TCP=y
-CONFIG_LIB_RAND=y
-CONFIG_WGET=y
-CONFIG_NET_LWIP=y
-CONFIG_CMD_WGET_LWIP=y
-CONFIG_BOOTCOMMAND="if dhcp ${scriptaddr} /PXEclient/pxelinux.cfg/sun50i-h616-tx6s.scr; then source ${scriptaddr}; fi; run distro_bootcmd"
-CONFIG_CMD_MII=y
-CONFIG_CMD_MDIO=y
 ```
 
 回到原本的視窗按下 Enter，會在底下自動生成 output/patch/u-boot-sunxi64-current.patch

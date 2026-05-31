@@ -6,7 +6,7 @@ tags:
 - IOT
 - Servo
 ---
-目的是有一個家用攝影機，隨時錄製，且可移動鏡頭，並在需要時回放觀看。
+目的是有一個家用攝影機，偵測到物體移動後錄製，並在需要時回放觀看。
 已有完整的開源專案<https://github.com/s60sc/ESP32-CAM_MJPEG2SD>，這篇記錄筆者一步步摸索踩坑的過程。
 <!--more-->
 
@@ -104,6 +104,5 @@ E (100) vfs_fat_sdmmc: sdmmc_card_init failed (0x107).
 手動重啟並重新連上 wifi 路由器新指派的 IP 位址。
 ![](/assets/mjpeg_web.png)
 
-# 遠端遙控
+# 遠端監控
 
-3D 列印 Pan-Tilt 支架<https://www.thingiverse.com/thing:2467743>，縮放 102%
