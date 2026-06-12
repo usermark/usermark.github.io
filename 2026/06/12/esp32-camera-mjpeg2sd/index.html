@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="IUJ04DyRucs8xo_BKf0Q-i4i4IC2yI3u8vnYlmlJvX8">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="目的是有一個家用攝影機，偵測到物體移動後錄製，並在需要時回放觀看。已有完整的開源專案https:&#x2F;&#x2F;github.com&#x2F;s60sc&#x2F;ESP32-CAM_MJPEG2SD，這篇記錄筆者一步步摸索踩坑的過程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[ESP32] 安信可 ESP32-CAM 鏡頭實作 - 整合 Home Assistant">
+<meta property="og:url" content="https://usermark.github.io/2026/06/12/esp32-camera-mjpeg2sd/index.html">
+<meta property="og:site_name" content="Mike的筆記">
+<meta property="og:description" content="目的是有一個家用攝影機，偵測到物體移動後錄製，並在需要時回放觀看。已有完整的開源專案https:&#x2F;&#x2F;github.com&#x2F;s60sc&#x2F;ESP32-CAM_MJPEG2SD，這篇記錄筆者一步步摸索踩坑的過程。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://usermark.github.io/assets/esp32_cam_4mb.png">
+<meta property="og:image" content="https://usermark.github.io/assets/both_sd.jpg">
+<meta property="og:image" content="https://usermark.github.io/assets/mjpeg_init.png">
+<meta property="og:image" content="https://usermark.github.io/assets/mjpeg_web.png">
+<meta property="og:image" content="https://usermark.github.io/assets/mjpeg_disable_ap.png">
+<meta property="og:image" content="https://usermark.github.io/assets/rtsp_enable.png">
+<meta property="og:image" content="https://usermark.github.io/assets/motioneye_rtsp.png">
+<meta property="article:published_time" content="2026-06-12T15:13:24.000Z">
+<meta property="article:modified_time" content="2026-06-12T15:13:24.726Z">
+<meta property="article:author" content="Mike Chen">
+<meta property="article:tag" content="Arduino IDE">
+<meta property="article:tag" content="ESP32">
+<meta property="article:tag" content="Home Assistant">
+<meta property="article:tag" content="IOT">
+<meta property="article:tag" content="motionEye">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://usermark.github.io/assets/esp32_cam_4mb.png">
+
+<link rel="canonical" href="https://usermark.github.io/2026/06/12/esp32-camera-mjpeg2sd/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[ESP32] 安信可 ESP32-CAM 鏡頭實作 - 整合 Home Assistant | Mike的筆記</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-707YEB6V4T"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-707YEB6V4T');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mike的筆記</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2026/06/12/esp32-camera-mjpeg2sd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [ESP32] 安信可 ESP32-CAM 鏡頭實作 - 整合 Home Assistant
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2026-06-12 23:13:24" itemprop="dateCreated datePublished" datetime="2026-06-12T23:13:24+08:00">2026-06-12</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="閱讀次數" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">閱讀次數：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>目的是有一個家用攝影機，偵測到物體移動後錄製，並在需要時回放觀看。<br>已有完整的開源專案<a target="_blank" rel="noopener" href="https://github.com/s60sc/ESP32-CAM_MJPEG2SD">https://github.com/s60sc/ESP32-CAM_MJPEG2SD</a>，這篇記錄筆者一步步摸索踩坑的過程。</p>
+<span id="more"></span>
+
+<h1 id="ESP32-CAM-MJPEG2SD"><a href="#ESP32-CAM-MJPEG2SD" class="headerlink" title="ESP32-CAM_MJPEG2SD"></a>ESP32-CAM_MJPEG2SD</h1><p>下載整個專案，解壓縮後如果後面有版號或 master 後輟，要拿掉，只保留 ESP32-CAM_MJPEG2SD 資料夾名稱，接著用 Arduino IDE 開啟專案內的 ino 檔。<br>檢查下 appGlobals.h 預設是選擇 #define CAMERA_MODEL_AI_THINKER，因筆者使用的就是 AI-Thinker ESP32-CAM 所以可以不用調整。<br>將 #define INCLUDE_RTSP 設成 true，後面會用到，同時安裝好 ESP32-RTSPServer 套件。<br>選擇「工具」&gt;「Partition Scheme」&gt;「Minimal SPIFFS (…)」後開始編譯和燒錄。<br><img src="/assets/esp32_cam_4mb.png"></p>
+<h2 id="Compilation-error-error-“Need-to-install-ESP32-RTSPServer-library”"><a href="#Compilation-error-error-“Need-to-install-ESP32-RTSPServer-library”" class="headerlink" title="Compilation error: #error “Need to install ESP32-RTSPServer library”"></a>Compilation error: #error “Need to install ESP32-RTSPServer library”</h2><p>將專案移到 C:\Users\XXX\Documents\Arduino 底下即可。</p>
+<p>燒錄完成後，執行會看到以下訊息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">=============== ESP-CAM_MJPEG 10.9.2 ===============</span><br><span class="line">[00:00:00.490 logSetup] Setup RAM based log, size 7168, starting from 55</span><br><span class="line">[00:00:00.491 boardInfo] Chip ESP32-D0WD-V3, 2 cores @ 240Mhz, rev 3</span><br><span class="line">[00:00:00.501 boardInfo] Flash 4.0MB, mode QIO @ 80Mhz</span><br><span class="line">[00:00:00.501 boardInfo] PSRAM 4.0MB, mode QSPI @ 80Mhz</span><br><span class="line">[00:00:00.512 logSetup] Compiled with arduino-esp32 v3.3.6</span><br><span class="line">[00:00:00.512 printResetReason] Power on reset</span><br><span class="line">[00:00:00.522 printWakeupReason] Wakeup by reset</span><br><span class="line">[00:00:00.522 setup] Selected board CAMERA_MODEL_AI_THINKER</span><br><span class="line">E (100) sdmmc_common: sdmmc_init_ocr: send_op_cond (1) returned 0x107</span><br><span class="line">E (100) vfs_fat_sdmmc: sdmmc_card_init failed (0x107).</span><br><span class="line">[00:00:00.562 WARN prepSD_MMC] SD card mount failed </span><br><span class="line">[00:00:00.669 onNetEvent] Wifi Station started, connecting to: </span><br><span class="line">[00:00:00.676 onNetEvent] Wifi AP stopped: </span><br><span class="line">[00:00:00.679 onNetEvent] Wifi AP stopped: </span><br><span class="line">[00:00:00.780 setWifiSTA] Wifi Station IP from DHCP</span><br><span class="line">[00:00:03.170 WARN startWifi] SSID  not connected not available, use AP </span><br><span class="line">[00:00:03.179 startWebServer] Starting web server on port: 80</span><br><span class="line">[00:00:03.180 startWebServer] Remote server certificates not checked</span><br><span class="line">[00:00:03.180 WARN startWebServer] Startup Failure: Check SD card inserted </span><br><span class="line">[00:00:03.190 loop] =============== Total tasks: 12 ===============</span><br></pre></td></tr></table></figure>
+
+<h2 id="Startup-Failure-Check-SD-card-inserted"><a href="#Startup-Failure-Check-SD-card-inserted" class="headerlink" title="Startup Failure: Check SD card inserted"></a>Startup Failure: Check SD card inserted</h2><p>換一張 SD 卡試試，原本用的是 SanDisk 64GB，已格式化成 FAT32，換成另一張 ADATA 64GB 就奇蹟可以使用了。</p>
+<div class="note info">
+            <p>後來發現還是與供電有關，電壓正常的話 SanDisk 64GB 也可以跑得起來。</p>
+          </div>
+<p><img src="/assets/both_sd.jpg"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">=============== ESP-CAM_MJPEG 10.9.2 ===============</span><br><span class="line">[00:01:00.141 logSetup] Setup RAM based log, size 7168, starting from 1952</span><br><span class="line">[00:01:00.141 WARN initBrownout] Brownout occurred due to inadequate power supply </span><br><span class="line">[00:01:00.152 boardInfo] Chip ESP32-D0WD-V3, 2 cores @ 240Mhz, rev 3</span><br><span class="line">[00:01:00.162 boardInfo] Flash 4.0MB, mode QIO @ 80Mhz</span><br><span class="line">[00:01:00.162 boardInfo] PSRAM 4.0MB, mode QSPI @ 80Mhz</span><br><span class="line">[00:01:00.173 logSetup] Compiled with arduino-esp32 v3.3.6</span><br><span class="line">[00:01:00.173 printResetReason] Software reset due to brownout</span><br><span class="line">[00:01:00.183 printWakeupReason] Wakeup by reset</span><br><span class="line">[00:01:00.184 setup] Selected board CAMERA_MODEL_AI_THINKER</span><br><span class="line">[00:01:00.231 infoSD] SD card type SDHC, Size: 59.5GB, using 1 bit mode @ 40MHz</span><br><span class="line">[00:01:00.232 listFolder] Sketch size 1.6MB</span><br><span class="line">[00:01:00.542 listFolder] File: /data/configs.txt, size: 8266 bytes, Date: 01 Jan 1980 00:00:00</span><br><span class="line">[00:01:00.543 listFolder] SD_MMC: 80KB used of 59.5GB</span><br><span class="line">[00:01:00.553 loadConfig] Load config</span><br><span class="line">[00:01:00.839 updateAppStatus] Enabling motion detection by camera</span><br><span class="line">[00:01:00.844 prepCam] Max frame size for 4.0MB PSRAM is UXGA </span><br><span class="line">[00:01:01.113 prepCam] Camera model OV2640 ready @ 20MHz</span><br><span class="line">[00:01:01.214 onNetEvent] Wifi Station started, connecting to: </span><br><span class="line">[00:01:01.215 onNetEvent] Wifi AP SSID: ESP-CAM_MJPEG_800825182EC8 started, use &#x27;http://192.168.4.1&#x27; to connect</span><br><span class="line">[00:01:01.370 setWifiSTA] Wifi Station IP from DHCP</span><br><span class="line">[00:01:03.772 WARN startWifi] SSID  not connected not available, use AP </span><br><span class="line">[00:01:03.775 startWebServer] Starting web server on port: 80</span><br><span class="line">[00:01:03.776 startWebServer] Remote server certificates not checked</span><br><span class="line">[00:01:03.786 WARN startWebServer] Startup Failure: Crash loop detected, check log (brownout) </span><br><span class="line">[00:01:03.796 loop] =============== Total tasks: 13 ===============</span><br></pre></td></tr></table></figure>
+<h2 id="Crash-loop-detected-check-log-brownout"><a href="#Crash-loop-detected-check-log-brownout" class="headerlink" title="Crash loop detected, check log (brownout)"></a>Crash loop detected, check log (brownout)</h2><p>表示供電不足，參考 <a target="_blank" rel="noopener" href="https://store.nerokas.co.ke/blog/ESP32-CAM_Troubleshooting_Guide_Most_Common_Problems_Fixed">ESP32-CAM Troubleshooting Guide: Most Common Problems Fixed</a>。<br>換個麵包板，或是不要透過麵包板，直接接杜邦線試試。</p>
+<h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><p>透過 <a target="_blank" rel="noopener" href="http://192.168.4.1/">http://192.168.4.1</a> 上的網頁選擇 wifi 路由器並輸入密碼。<br><img src="/assets/mjpeg_init.png"></p>
+<p>設定好後，會開始從 GitHub 下載相關網頁檔案。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[00:00:08.639 wgetFile] Downloading /data/common.js from /s60sc/ESP32-CAM_MJPEG2SD/master/data/common.js</span><br><span class="line">[00:00:09.564 wgetFile] Downloaded /data/common.js, size 51KB</span><br><span class="line">[00:00:10.170 wgetFile] Downloading /data/MJPEG2SD.htm from /s60sc/ESP32-CAM_MJPEG2SD/master/data/MJPEG2SD.htm</span><br><span class="line">[14:04:30.837 wgetFile] Downloaded /data/MJPEG2SD.htm, size 101KB</span><br><span class="line">[14:04:56.514 getLocalNTP] Using NTP server: pool.ntp.org</span><br><span class="line">[14:04:56.515 showLocalTime] Got current time from NTP: 23/02/2026 14:04:56 with tz: GMT0</span><br><span class="line">[14:05:26.426 setAlarm] Alarm scheduled at 24/02/2026 01:00:00</span><br><span class="line">[14:05:27.509 saveConfigVect] Config file saved 218 entries </span><br></pre></td></tr></table></figure>
+
+<p>手動重啟並重新連上 wifi 路由器新指派的 IP 位址，就可以開啟鏡頭畫面查看。<br><img src="/assets/mjpeg_web.png"></p>
+<p>筆者接著會將 AP 模式關閉，避免外部人士連進來，造成隱私洩漏。<br>選擇「Edit Config」&gt;「Network」&gt; 關掉「Allow simultaneous AP」&gt; 記得「Save」<br><img src="/assets/mjpeg_disable_ap.png"></p>
+<h1 id="motionEye-遠端監控"><a href="#motionEye-遠端監控" class="headerlink" title="motionEye 遠端監控"></a>motionEye 遠端監控</h1><p>先打開 RTSP 串流，選擇「Edit Config」&gt;「Streaming」&gt; 開啟「Enable RTSP Video」&gt; 記得「Save」<br><img src="/assets/rtsp_enable.png"></p>
+<p>重啟後查看，可以看到服務已啟動。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[14:33:21.810 prepRTSP] RTSP server started successfully with transport: Video</span><br><span class="line">[14:33:21.810 prepRTSP] Connect to: rtsp://your_ip:554</span><br></pre></td></tr></table></figure>
+<p>Home Assistant 安裝 motionEye 後，進入 motionEye 「添加攝像頭」&gt; 選擇「網路攝影頭」，輸入 Log 看到的 RTSP 網址，以後便可透過 Home Assistant 查看。<br><img src="/assets/motioneye_rtsp.png"></p>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+    </div>
+
+    
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- post-body-end -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="9591303574"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/IOT/" rel="tag"># IOT</a>
+              <a href="/tags/ESP32/" rel="tag"># ESP32</a>
+              <a href="/tags/Home-Assistant/" rel="tag"># Home Assistant</a>
+              <a href="/tags/Arduino-IDE/" rel="tag"># Arduino IDE</a>
+              <a href="/tags/motionEye/" rel="tag"># motionEye</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/marker-markmap/" rel="prev" title="創客技能樹">
+      <i class="fa fa-chevron-left"></i> 創客技能樹
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ESP32-CAM-MJPEG2SD"><span class="nav-number">1.</span> <span class="nav-text">ESP32-CAM_MJPEG2SD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Compilation-error-error-%E2%80%9CNeed-to-install-ESP32-RTSPServer-library%E2%80%9D"><span class="nav-number">1.1.</span> <span class="nav-text">Compilation error: #error “Need to install ESP32-RTSPServer library”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Startup-Failure-Check-SD-card-inserted"><span class="nav-number">1.2.</span> <span class="nav-text">Startup Failure: Check SD card inserted</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Crash-loop-detected-check-log-brownout"><span class="nav-number">1.3.</span> <span class="nav-text">Crash loop detected, check log (brownout)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#motionEye-%E9%81%A0%E7%AB%AF%E7%9B%A3%E6%8E%A7"><span class="nav-number">3.</span> <span class="nav-text">motionEye 遠端監控</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mike Chen</p>
+  <div class="site-description" itemprop="description">現居高雄，熟悉 Android 和 Python 開發，喜歡學習新事物和閱讀。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">61</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">53</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/usermark" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;usermark" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:trexcobras@gmail.com" title="E-Mail → mailto:trexcobras@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mike Chen</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="訪客總數">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="總瀏覽次數">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'fe34fe28201c28ecaca2',
+      clientSecret: '6b0f055d80dc258148f06400ce27502351d56921',
+      repo        : 'usermark.github.io',
+      owner       : 'usermark',
+      admin       : ['usermark'],
+      id          : 'ba6cba05caf6481f961d6c9c6aafc18a',
+        language: 'zh-TW',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
