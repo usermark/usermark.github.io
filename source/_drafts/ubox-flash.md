@@ -325,7 +325,8 @@ cd build/cache/sources/u-boot-worktree/u-boot/v2024.01/
 sudo cp arch/arm/dts/sun50i-h616-x96-mate.dts arch/arm/dts/sun50i-h616-tx6s.dts
 ```
 
-比對原廠 DTS (tx6s.dts) 和 [X96 Mate DTS](https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/allwinner/sun50i-h616-x96-mate.dts)，發現 sun50i-h616-x96-mate.dts 支援 AXP305, AXP805, AXP806 的電源管理晶片，正好符合實際裝置上的 AXP305。
+比對原廠 DTS (tx6s.dts) 和 [X96 Mate DTS](https://github.com/u-boot/u-boot/blob/v2024.01/arch/arm/dts/sun50i-h616-x96-mate.dts) (sun50i-h616-x96-mate.dts)，發現 X96 Mate DTS 支援 AXP305, AXP805, AXP806 的電源管理晶片，正好符合實際裝置上的 AXP305。
+compatible 屬性值習慣上是製造商名稱再加上元件名稱。
 
 ```
 &r_rsb {
@@ -377,7 +378,7 @@ sudo nano arch/arm/dts/sun50i-h616-tx6s.dts
 ```
 / {
   model = "sun50iw9";
-  compatible = "hechuang,x96-mate", "allwinner,sun50i-h616", "allwinner,h616\0arm,sun50iw9p1";
+  compatible = "hechuang,x96-mate", "allwinner,sun50i-h616";
 ```
 
 ```shell
@@ -436,6 +437,8 @@ mv output/patch/u-boot-sunxi64-current.patch userpatches/u-boot/u-boot-sunxi/tx6
 ./compile.sh BOARD=tx6s RELEASE=trixie BUILD_DESKTOP=no BUILD_MINIMAL=yes KERNEL_CONFIGURE=no
 ```
 
+**參考資料**
+1. [Day 16 。初入嵌入式開發-設備樹 (上) - iT 邦幫忙::一起幫忙解決難題，拯救 IT 人的一天](https://ithelp.ithome.com.tw/articles/10344250)
 
 
 # 筆記

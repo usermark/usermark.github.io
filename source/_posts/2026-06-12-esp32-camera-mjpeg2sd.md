@@ -1,11 +1,14 @@
 ---
-title: "[ESP32] 安信可 ESP32-CAM 鏡頭實作 - 錄影和回放"
+title: '[ESP32] 安信可 ESP32-CAM 鏡頭實作 - 整合 Home Assistant'
 tags:
-- ESP32
-- Arduino IDE
-- IOT
-- Servo
+  - ESP32
+  - Arduino IDE
+  - IOT
+  - Home Assistant
+  - motionEye
+date: 2026-06-12 23:13:24
 ---
+
 目的是有一個家用攝影機，偵測到物體移動後錄製，並在需要時回放觀看。
 已有完整的開源專案<https://github.com/s60sc/ESP32-CAM_MJPEG2SD>，這篇記錄筆者一步步摸索踩坑的過程。
 <!--more-->
@@ -14,9 +17,13 @@ tags:
 
 下載整個專案，解壓縮後如果後面有版號或 master 後輟，要拿掉，只保留 ESP32-CAM_MJPEG2SD 資料夾名稱，接著用 Arduino IDE 開啟專案內的 ino 檔。
 檢查下 appGlobals.h 預設是選擇 #define CAMERA_MODEL_AI_THINKER，因筆者使用的就是 AI-Thinker ESP32-CAM 所以可以不用調整。
-將 #define INCLUDE_PERIPH 設成 true，後面會用到。
-選擇「工具」>「Partition Scheme」>「Minimal SPIFFS (...)」後開始燒錄。
+將 #define INCLUDE_RTSP 設成 true，後面會用到，同時安裝好 ESP32-RTSPServer 套件。
+選擇「工具」>「Partition Scheme」>「Minimal SPIFFS (...)」後開始編譯和燒錄。
 ![](/assets/esp32_cam_4mb.png)
+
+## Compilation error: #error "Need to install ESP32-RTSPServer library"
+
+將專案移到 C:\Users\XXX\Documents\Arduino 底下即可。
 
 燒錄完成後，執行會看到以下訊息
 ```
@@ -45,7 +52,7 @@ E (100) vfs_fat_sdmmc: sdmmc_card_init failed (0x107).
 
 ## Startup Failure: Check SD card inserted 
 
-認真！換一張 SD 卡就好，原本用的是 SanDisk 64GB，已格式化成 FAT32，換成另一張 ADATA 64GB 就奇蹟可以使用了。
+換一張 SD 卡試試，原本用的是 SanDisk 64GB，已格式化成 FAT32，換成另一張 ADATA 64GB 就奇蹟可以使用了。
 {% note info %}
 後來發現還是與供電有關，電壓正常的話 SanDisk 64GB 也可以跑得起來。
 {% endnote %}
@@ -101,8 +108,22 @@ E (100) vfs_fat_sdmmc: sdmmc_card_init failed (0x107).
 [14:05:27.509 saveConfigVect] Config file saved 218 entries 
 ```
 
-手動重啟並重新連上 wifi 路由器新指派的 IP 位址。
+手動重啟並重新連上 wifi 路由器新指派的 IP 位址，就可以開啟鏡頭畫面查看。
 ![](/assets/mjpeg_web.png)
 
-# 遠端監控
+筆者接著會將 AP 模式關閉，避免外部人士連進來，造成隱私洩漏。
+選擇「Edit Config」>「Network」> 關掉「Allow simultaneous AP」> 記得「Save」
+![](/assets/mjpeg_disable_ap.png)
 
+# motionEye 遠端監控
+
+先打開 RTSP 串流，選擇「Edit Config」>「Streaming」> 開啟「Enable RTSP Video」> 記得「Save」
+![](/assets/rtsp_enable.png)
+
+重啟後查看，可以看到服務已啟動。
+```
+[14:33:21.810 prepRTSP] RTSP server started successfully with transport: Video
+[14:33:21.810 prepRTSP] Connect to: rtsp://your_ip:554
+```
+Home Assistant 安裝 motionEye 後，進入 motionEye 「添加攝像頭」> 選擇「網路攝影頭」，輸入 Log 看到的 RTSP 網址，以後便可透過 Home Assistant 查看。
+![](/assets/motioneye_rtsp.png)
