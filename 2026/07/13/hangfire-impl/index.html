@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="IUJ04DyRucs8xo_BKf0Q-i4i4IC2yI3u8vnYlmlJvX8">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="公司還在使用工作排程器，隨著案子和排程越來越多，變得不好控管，若遇到狀況，還要遠端登入主機查看，或是重啟排程。才想來導入 Hangfire，它還有提供美美的網頁後台，省下登入主機查看的流程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Hangfire] 入門 + SQLite">
+<meta property="og:url" content="https://usermark.github.io/2026/07/13/hangfire-impl/index.html">
+<meta property="og:site_name" content="Mike的筆記">
+<meta property="og:description" content="公司還在使用工作排程器，隨著案子和排程越來越多，變得不好控管，若遇到狀況，還要遠端登入主機查看，或是重啟排程。才想來導入 Hangfire，它還有提供美美的網頁後台，省下登入主機查看的流程。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://usermark.github.io/assets/hangfire1.png">
+<meta property="og:image" content="https://usermark.github.io/assets/hangfire2.png">
+<meta property="og:image" content="https://usermark.github.io/assets/hangfire3.png">
+<meta property="og:image" content="https://usermark.github.io/assets/hangfire4.png">
+<meta property="article:published_time" content="2026-07-13T07:10:32.000Z">
+<meta property="article:modified_time" content="2026-07-13T13:45:10.777Z">
+<meta property="article:author" content="Mike Chen">
+<meta property="article:tag" content=".NET Framework">
+<meta property="article:tag" content="Hangfire">
+<meta property="article:tag" content="SQLite">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://usermark.github.io/assets/hangfire1.png">
+
+<link rel="canonical" href="https://usermark.github.io/2026/07/13/hangfire-impl/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[Hangfire] 入門 + SQLite | Mike的筆記</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-707YEB6V4T"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-707YEB6V4T');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mike的筆記</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2026/07/13/hangfire-impl/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [Hangfire] 入門 + SQLite
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2026-07-13 15:10:32 / 修改時間：21:45:10" itemprop="dateCreated datePublished" datetime="2026-07-13T15:10:32+08:00">2026-07-13</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="閱讀次數" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">閱讀次數：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>公司還在使用工作排程器，隨著案子和排程越來越多，變得不好控管，若遇到狀況，還要遠端登入主機查看，或是重啟排程。<br>才想來導入 Hangfire，它還有提供美美的網頁後台，省下登入主機查看的流程。</p>
+<span id="more"></span>
+
+<h1 id="安裝-Hangfire"><a href="#安裝-Hangfire" class="headerlink" title="安裝 Hangfire"></a>安裝 Hangfire</h1><p>使用 NuGet 套件管理員安裝以下套件</p>
+<ul>
+<li>Hangfire</li>
+<li>Hangfire.AspNet</li>
+<li>Hangfire.SQLite</li>
+<li>Microsoft.Owin</li>
+</ul>
+<p>修改 Startup.cs</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Hangfire;</span><br><span class="line"><span class="keyword">using</span> Hangfire.SQLite;</span><br><span class="line"><span class="keyword">using</span> Microsoft.Owin;</span><br><span class="line"><span class="keyword">using</span> Owin;</span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> System.Web.Hosting;</span><br><span class="line"></span><br><span class="line">[<span class="meta">assembly: OwinStartup(typeof(ETL.Startup))</span>]</span><br><span class="line"><span class="keyword">namespace</span> <span class="title">ETL</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Startup</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">readonly</span> <span class="built_in">string</span> SqliteDbPath = HostingEnvironment.MapPath(<span class="string">&quot;~/App_Data/Hangfire.sqlite&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> IEnumerable&lt;IDisposable&gt; <span class="title">GetHangfireConfiguration</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            GlobalConfiguration.Configuration</span><br><span class="line">                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)</span><br><span class="line">                .UseSimpleAssemblyNameTypeSerializer()</span><br><span class="line">                .UseRecommendedSerializerSettings()</span><br><span class="line">                .UseSQLiteStorage(<span class="string">$&quot;Data Source=<span class="subst">&#123;SqliteDbPath&#125;</span>;&quot;</span>);</span><br><span class="line"></span><br><span class="line">            GlobalJobFilters.Filters.Add(<span class="keyword">new</span> AutomaticRetryAttribute &#123; Attempts = <span class="number">0</span> &#125;);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// https://github.com/wanlitao/HangfireExtension/issues/3</span></span><br><span class="line">            <span class="function"><span class="keyword">yield</span> <span class="keyword">return</span> <span class="keyword">new</span> <span class="title">BackgroundJobServer</span>(<span class="params"><span class="keyword">new</span> BackgroundJobServerOptions &#123; WorkerCount = <span class="number">1</span> &#125;</span>)</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Configuration</span>(<span class="params">IAppBuilder app</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            app.UseHangfireAspNet(GetHangfireConfiguration);</span><br><span class="line">            app.UseHangfireDashboard();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 工作排程寫在這下面</span></span><br><span class="line">            MyTask.Setup();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第 14 行將 sqlite 檔放 App_Data 資料夾底下，不會被第三方取得。<br>第 24 行表示排程失敗的話，不會進行重試。<br>第 27 行是修正 Hangfire.SQLite 套件的 Bug，Hangfire 預設會開 20 條 Worker Thread，會出現同個排程一次同時跑 20 次，這裡先將 Worker Thread 改成 1 條來修正。<br>弟 33 行啟用網頁後台。</p>
+<p>新增 MyTask.cs</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Hangfire;</span><br><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">ETL</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyTask</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Setup</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            RecurringJob.AddOrUpdate(<span class="string">&quot;我是排程&quot;</span>, () =&gt; Run(), Cron.Daily(<span class="number">8</span>), <span class="keyword">new</span> RecurringJobOptions</span><br><span class="line">            &#123;</span><br><span class="line">                TimeZone = TimeZoneInfo.Local</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Run</span>()</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// do something</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第 11 行表示依當地時間，固定每天早上8點執行。</p>
+<h1 id="確保網站永遠處於執行狀態"><a href="#確保網站永遠處於執行狀態" class="headerlink" title="確保網站永遠處於執行狀態"></a>確保網站永遠處於執行狀態</h1><h2 id="應用程式初始化"><a href="#應用程式初始化" class="headerlink" title="應用程式初始化"></a>應用程式初始化</h2><p>確認已安裝「應用程式初始化」(ApplicationInitializationModule) 模組</p>
+<p><img src="/assets/hangfire1.png"></p>
+<p>如果還沒有，到伺服器管理員安裝</p>
+<p><img src="/assets/hangfire2.png"></p>
+<h2 id="IIS-相關設定"><a href="#IIS-相關設定" class="headerlink" title="IIS 相關設定"></a>IIS 相關設定</h2><p>應用程式集區 &gt;「進階設定」&gt;「啟動模式」設「AlwaysRunning」和「閒置逾時」設 0</p>
+<p><img src="/assets/hangfire3.png"></p>
+<p>站台 &gt;「進階設定」啟用「預先載入已啟用」</p>
+<p><img src="/assets/hangfire4.png"></p>
+<h2 id="新增-ApplicationPreload-cs"><a href="#新增-ApplicationPreload-cs" class="headerlink" title="新增 ApplicationPreload.cs"></a>新增 ApplicationPreload.cs</h2><p>Hangfire.AspNet 為官方出的套件，用來簡化讓服務可以始終運行的實作。</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> Hangfire;</span><br><span class="line"><span class="keyword">using</span> System.Web.Hosting;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">ETL</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ApplicationPreload</span> : <span class="title">IProcessHostPreloadClient</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Preload</span>(<span class="params"><span class="built_in">string</span>[] parameters</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            HangfireAspNet.Use(Startup.GetHangfireConfiguration);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>參考資料</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://blog.darkthread.net/blog/hangfire-sqlite/">Hangfire 筆記1 – 使用 SQLite</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.darkthread.net/blog/hangfire-recurringjob-notes/">Hangfire 筆記2 - 執行定期排程</a></li>
+</ol>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+    </div>
+
+    
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- post-body-end -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="9591303574"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SQLite/" rel="tag"># SQLite</a>
+              <a href="/tags/Hangfire/" rel="tag"># Hangfire</a>
+              <a href="/tags/NET-Framework/" rel="tag"># .NET Framework</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/06/12/esp32-camera-mjpeg2sd/" rel="prev" title="[ESP32] 安信可 ESP32-CAM 鏡頭實作 - 整合 Home Assistant">
+      <i class="fa fa-chevron-left"></i> [ESP32] 安信可 ESP32-CAM 鏡頭實作 - 整合 Home Assistant
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-Hangfire"><span class="nav-number">1.</span> <span class="nav-text">安裝 Hangfire</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A2%BA%E4%BF%9D%E7%B6%B2%E7%AB%99%E6%B0%B8%E9%81%A0%E8%99%95%E6%96%BC%E5%9F%B7%E8%A1%8C%E7%8B%80%E6%85%8B"><span class="nav-number">2.</span> <span class="nav-text">確保網站永遠處於執行狀態</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%87%89%E7%94%A8%E7%A8%8B%E5%BC%8F%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">2.1.</span> <span class="nav-text">應用程式初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IIS-%E7%9B%B8%E9%97%9C%E8%A8%AD%E5%AE%9A"><span class="nav-number">2.2.</span> <span class="nav-text">IIS 相關設定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E-ApplicationPreload-cs"><span class="nav-number">2.3.</span> <span class="nav-text">新增 ApplicationPreload.cs</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mike Chen</p>
+  <div class="site-description" itemprop="description">現居高雄，熟悉 Android 和 Python 開發，喜歡學習新事物和閱讀。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">55</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/usermark" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;usermark" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:trexcobras@gmail.com" title="E-Mail → mailto:trexcobras@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mike Chen</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="訪客總數">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="總瀏覽次數">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'fe34fe28201c28ecaca2',
+      clientSecret: '6b0f055d80dc258148f06400ce27502351d56921',
+      repo        : 'usermark.github.io',
+      owner       : 'usermark',
+      admin       : ['usermark'],
+      id          : 'f4b24da7525c6baaf19fbb0b25967c37',
+        language: 'zh-TW',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
