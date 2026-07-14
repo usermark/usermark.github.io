@@ -34,6 +34,8 @@ markmap:
 
 ## [[Raspberry Pi] 從遙控電燈開關開始 IOT 冒險 - 整合 Home Assistant](/2026/01/27/rasppi-iot-impl)<br/>認識 Home Assistant，並正式實作和應用 IOT
 
+### [[ESP32] 安信可 ESP32-CAM 鏡頭實作 - 整合 Home Assistant](/2026/06/12/esp32-camera-mjpeg2sd)
+
 # [[ESP32] 安信可 ESP32-CAM 鏡頭實作](/2024/05/24/esp32-camera-impl)<br/>從接線，編譯到燒錄
 
 ## [[OpenWrt] ASUS RT-N12+ B1 路由器刷機](/2024/09/27/asus-router-openwrt)<br/>認識 TTL 接腳，初探 U-Boot
