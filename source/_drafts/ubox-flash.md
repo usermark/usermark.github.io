@@ -476,3 +476,5 @@ mv output/patch/kernel-sunxi64-current.patch userpatches/kernel/sunxi64-current/
 ```
 
 一樣看到暫停提示，先不要按 Enter
+
+mmc rescan 無用，要用 sunxi_card0_probe
