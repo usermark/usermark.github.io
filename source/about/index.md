@@ -7,15 +7,21 @@ comments: false
 <img src="/assets/mike.png" width="200px" align="right"/>
 我是 Mike，高雄人，熟悉 Android 和 Python 開發。喜歡學習新事物和閱讀，偶爾會動手做些小東西，嘗試將所學紀錄於此，一半是自己看，一半是分享給各位。
 
+# 程式語言
+
+- Java
+- Python：有寫些小工具加強工作效率，用過 Flask、Tkinter
+- C#
+
 # 前端
 
 - Android：Java 是最熟悉的，Kotlin 和 Compose 尚在學習中
-- Python：有寫些小工具加強工作效率，用過 Flask、Tkinter
 - Flutter: 有上架作品：桌面條碼工具
 - Vue.js
 - Bootstrap：會套用並理解規則
 - jQuery：會基本用法，以及使用 ajax 傳送 json 資料
-- Unity3D、C#：處理與原生 Android 相關的插件用於遊戲開發，例如通知和推播
+- Unity3D：處理與原生 Android 相關的插件用於遊戲開發，例如通知和推播
+- Godot
 
 # 其他
 

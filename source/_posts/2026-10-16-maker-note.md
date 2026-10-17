@@ -35,9 +35,6 @@ date: 2026-10-16 23:07:41
 
 **參考資料**
 
-1. [
-【老司機帶路】焊接&解焊零件不藏私密技大公開/Know-how of Welding & Desoldering【Hedgehog刺蝟幫】](https://www.youtube.com/watch?v=VCyuhqx5eSg)
-2. [
-【教學】三用電表，第一次就上手，製作專題必備的工具](https://www.youtube.com/watch?v=Dvg1X1q7kQs)
-3. [
-插座配線接反-火線與中性線正確嗎? 如何偵測配線正確? 電器能用只是不安全](https://www.youtube.com/watch?v=6PTAmvsYlEA)
+1. [【老司機帶路】焊接&解焊零件不藏私密技大公開/Know-how of Welding & Desoldering【Hedgehog刺蝟幫】](https://www.youtube.com/watch?v=VCyuhqx5eSg)
+2. [【教學】三用電表，第一次就上手，製作專題必備的工具](https://www.youtube.com/watch?v=Dvg1X1q7kQs)
+3. [插座配線接反-火線與中性線正確嗎? 如何偵測配線正確? 電器能用只是不安全](https://www.youtube.com/watch?v=6PTAmvsYlEA)
