@@ -195,7 +195,23 @@ Hit any key to stop autoboot:  0
 
 # 燒錄
 
-這台機上盒使用的 Soc 是 Allwinner H616，板子為 TX6s，可惜在 Armbian 沒有找到對應的板子，筆者實測用最接近的 X96 Mate 燒錄後，可以開機啟動，但找不到有線網路，表示設備樹需調整。因此會以 X96 Mate 為基礎，來新增設定檔和修改 DTS 設備樹。
+這台機上盒使用的 Soc 是 Allwinner H616，電源管理晶片為 AXP305，板子為 TX6s，在 Armbian 找到對應的板子，進行下載後燒綠進 SD 卡。
+
+![](/assets/tx6s4.png)
+
+可惜實測運行時會找不到有線網路，日後再研究，先外接 USB 網卡取代。
+
+![](/assets/tx6s5.jpg)
+
+
+
+# 打通有線網路
+
+{% note info %}
+沒有成功，只是將研究過程紀錄下來
+{% endnote %}
+
+幾個月前 Armbian 還未支援 TX6s 的板子，所以筆者是用最接近的 X96 Mate 燒錄後運行，可以開機啟動，但找不到有線網路，表示設備樹需調整。因此會以 X96 Mate 為基礎，來新增設定檔和修改 DTS 設備樹。
 
 ## 環境建置
 
@@ -299,14 +315,14 @@ extract-dtb 0.bootloader.img -o extracted_dtb
 deactivate
 ```
 
-注意這裡會同時得到 dtb 和 kernel，kernel 後續還有用到。
+注意這裡會同時得到 dtb 和 kernel。
 
 輸入以下指令將二進位 dtb 轉為可讀的 dts
 ```shell
 dtc -I dtb -O dts -o tx6s.dts extracted_dtb/01_dtbdump_,sun50iw9.dtb
 ```
 
-## 修改 DTS
+## 修改 uboot 的 DTS
 
 ```shell
 ./compile.sh BOARD=tx6s BRANCH=current uboot-patch
@@ -437,11 +453,7 @@ mv output/patch/u-boot-sunxi64-current.patch userpatches/u-boot/u-boot-sunxi/tx6
 ./compile.sh BOARD=tx6s RELEASE=trixie BUILD_DESKTOP=no BUILD_MINIMAL=yes KERNEL_CONFIGURE=no
 ```
 
-**參考資料**
-1. [Day 16 。初入嵌入式開發-設備樹 (上) - iT 邦幫忙::一起幫忙解決難題，拯救 IT 人的一天](https://ithelp.ithome.com.tw/articles/10344250)
-
-
-# 筆記
+## 修改 kernel 的 DTS
 
 ```shell
 ./compile.sh BOARD=tx6s BRANCH=current kernel-patch
@@ -466,15 +478,12 @@ Makefile 加入底下這段
 dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-tx6s.dtb
 ```
 
-回到原本的視窗按下 Enter
-會在底下自動生成 output/patch/kernel-sunxi64-current.patch
-
+回到原本的視窗按下 Enter，會在底下自動生成 output/patch/kernel-sunxi64-current.patch
 
 ```shell
 mkdir -p userpatches/kernel/sunxi64-current/
 mv output/patch/kernel-sunxi64-current.patch userpatches/kernel/sunxi64-current/
 ```
 
-一樣看到暫停提示，先不要按 Enter
-
-mmc rescan 無用，要用 sunxi_card0_probe
+**參考資料**
+1. [Day 16 。初入嵌入式開發-設備樹 (上) - iT 邦幫忙::一起幫忙解決難題，拯救 IT 人的一天](https://ithelp.ithome.com.tw/articles/10344250)
