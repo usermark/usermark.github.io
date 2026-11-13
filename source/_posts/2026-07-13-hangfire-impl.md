@@ -136,6 +136,17 @@ namespace ETL
 }
 ```
 
+# 建立只能手動觸發的排程
+
+在某些情境下很方便，像是補跑作業、外部單位通知才執行的不定期任務等。把排程設成一個實務上不會發生的時間 2/31，或是 Cron.Never() 效果一樣，就不會自動觸發。
+
+```cs
+RecurringJob.AddOrUpdate("全檔匯出", () => Run(), Cron.Never(), new RecurringJobOptions
+{
+    TimeZone = TimeZoneInfo.Local
+});
+```
+
 **參考資料**
 
 1. [Hangfire 筆記1 – 使用 SQLite](https://blog.darkthread.net/blog/hangfire-sqlite/)
