@@ -1,9 +1,12 @@
 ---
-title: "[Armbian] 安博機上盒刷機"
+title: '[Armbian] 安博機上盒刷機'
 tags:
   - Armbian
   - 刷機
+  - NAS
+date: 2026-11-13 22:46:20
 ---
+
 這次使用的是安博盒子 UBOX 9 PRO MAX，CPU 比較夠力，刷 Armbian 跑看看。順便認識 linux kernel 編譯。
 <!--more-->
 
@@ -199,11 +202,33 @@ Hit any key to stop autoboot:  0
 
 ![](/assets/tx6s4.png)
 
+![](/assets/tx6s5.png)
+
 可惜實測運行時會找不到有線網路，日後再研究，先外接 USB 網卡取代。
 
-![](/assets/tx6s5.jpg)
+![](/assets/tx6s6.jpg)
 
+# 初始化
 
+啟動後，等待一段時間，使用 ssh 指令登入，預設密碼是 1234
+
+```sh
+ssh root@<your-board-ip>
+```
+
+做完相關設定後，第一步就完成囉！
+接下來就看想玩什麼，像是自架 NAS。
+
+## 安裝 OMV
+
+參考 <https://docs.armbian.com/software/omv/>，會透過網路下載和安裝 OMV，需要一些時間
+
+```sh
+armbian-config --cmd OMV001
+```
+
+完成後，瀏覽 http://<your.IP>:80
+預設帳密為 admin / openmediavault
 
 # 打通有線網路
 
