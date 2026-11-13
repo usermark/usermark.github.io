@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="IUJ04DyRucs8xo_BKf0Q-i4i4IC2yI3u8vnYlmlJvX8">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"usermark.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="這次使用的是安博盒子 UBOX 9 PRO MAX，CPU 比較夠力，刷 Armbian 跑看看。順便認識 linux kernel 編譯。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Armbian] 安博機上盒刷機">
+<meta property="og:url" content="https://usermark.github.io/2026/11/13/ubox-flash/index.html">
+<meta property="og:site_name" content="Mike的筆記">
+<meta property="og:description" content="這次使用的是安博盒子 UBOX 9 PRO MAX，CPU 比較夠力，刷 Armbian 跑看看。順便認識 linux kernel 編譯。">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://usermark.github.io/assets/tx6s.jpg">
+<meta property="og:image" content="https://usermark.github.io/assets/tx6s2.jpg">
+<meta property="og:image" content="https://usermark.github.io/assets/tx6s3.jpg">
+<meta property="og:image" content="https://usermark.github.io/assets/tx6s4.png">
+<meta property="og:image" content="https://usermark.github.io/assets/tx6s5.png">
+<meta property="og:image" content="https://usermark.github.io/assets/tx6s6.jpg">
+<meta property="article:published_time" content="2026-11-13T14:46:20.000Z">
+<meta property="article:modified_time" content="2026-11-13T14:46:36.080Z">
+<meta property="article:author" content="Mike Chen">
+<meta property="article:tag" content="Armbian">
+<meta property="article:tag" content="NAS">
+<meta property="article:tag" content="刷機">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://usermark.github.io/assets/tx6s.jpg">
+
+<link rel="canonical" href="https://usermark.github.io/2026/11/13/ubox-flash/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>[Armbian] 安博機上盒刷機 | Mike的筆記</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-707YEB6V4T"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-707YEB6V4T');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mike的筆記</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜尋
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜尋..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="https://usermark.github.io/2026/11/13/ubox-flash/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Mike Chen">
+      <meta itemprop="description" content="現居高雄，熟悉 Android 和 Python 開發，喜歡學習新事物和閱讀。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mike的筆記">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [Armbian] 安博機上盒刷機
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+              
+
+              <time title="創建時間：2026-11-13 22:46:20 / 修改時間：22:46:36" itemprop="dateCreated datePublished" datetime="2026-11-13T22:46:20+08:00">2026-11-13</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="閱讀次數" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">閱讀次數：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>這次使用的是安博盒子 UBOX 9 PRO MAX，CPU 比較夠力，刷 Armbian 跑看看。順便認識 linux kernel 編譯。</p>
+<span id="more"></span>
+
+<p><img src="/assets/tx6s.jpg"></p>
+<h1 id="拆解"><a href="#拆解" class="headerlink" title="拆解"></a>拆解</h1><p><img src="/assets/tx6s2.jpg"></p>
+<p>拆解後，找到 TTL 接腳 (紅框)，依標示接上 CP2102 (USB 轉 TTL) 的晶片，波特率為 115200。</p>
+<p><img src="/assets/tx6s3.jpg"></p>
+<p>完整的啟動資訊如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br></pre></td><td class="code"><pre><span class="line">[399]HELLO! BOOT0 is starting!</span><br><span class="line">[402]BOOT0 commit : 4656b05</span><br><span class="line">[405]<span class="built_in">set</span> pll start</span><br><span class="line">[407]periph0 has been enabled</span><br><span class="line">[410]<span class="built_in">set</span> pll end</span><br><span class="line">[412]unknow PMU</span><br><span class="line">[414]PMU: AXP806</span><br><span class="line">[421]vaild para:16  <span class="keyword">select</span> dram para4</span><br><span class="line">[425]board init ok</span><br><span class="line">[426]DRAM BOOT DRIVE INFO: V0.532</span><br><span class="line">[430]the chip <span class="built_in">id</span> is 0x5000</span><br><span class="line">[432]chip <span class="built_in">id</span> check OK</span><br><span class="line">[435]DRAM_VCC <span class="built_in">set</span> to 1500 <span class="built_in">mv</span></span><br><span class="line">[439]read_calibration error</span><br><span class="line">[443]read_calibration error</span><br><span class="line">[447]read_calibration error</span><br><span class="line">[451]read_calibration error</span><br><span class="line">[455]read_calibration error</span><br><span class="line">[459]read_calibration error</span><br><span class="line">[463]read_calibration error</span><br><span class="line">[467]read_calibration error</span><br><span class="line">[471]read_calibration error</span><br><span class="line">[475]read_calibration error</span><br><span class="line">[477]retraining final error</span><br><span class="line">[484][AUTO DEBUG]32bit,1 ranks training success!</span><br><span class="line">[491]DRAM CLK =648 MHZ</span><br><span class="line">[493]DRAM Type =3 (3:DDR3,4:DDR4,7:LPDDR3,8:LPDDR4)</span><br><span class="line">[500]Actual DRAM SIZE =4096 M</span><br><span class="line">[502]DRAM SIZE =4096 MBytes, para1 = 310b, para2 = 10000000, dram_tpr13 = 6041</span><br><span class="line">[515]DRAM simple <span class="built_in">test</span> OK.</span><br><span class="line">[517]rtc standby flag is 0x0, super standby flag is 0x0</span><br><span class="line">[523]dram size =4096</span><br><span class="line">[526]card no is 2</span><br><span class="line">[527]sdcard 2 line count 8</span><br><span class="line">[530][mmc]: mmc driver ver 2019-12-19 10:41</span><br><span class="line">[534][mmc]: <span class="built_in">set</span> f_max to 50M, <span class="built_in">set</span> f_max_ddr to 50M</span><br><span class="line">[539][mmc]: mmc 2 bias 4</span><br><span class="line">[547][mmc]: ***Try MMC card 2***</span><br><span class="line">[560][mmc]: MMC 5.0</span><br><span class="line">[562][mmc]: HSDDR52/DDR50 8 bit</span><br><span class="line">[565][mmc]: 50000000 Hz</span><br><span class="line">[568][mmc]: 59008 MB</span><br><span class="line">[570][mmc]: ***SD/MMC 2 init OK!!!***</span><br><span class="line">[639]Loading boot-pkg Succeed(index=0).</span><br><span class="line">[643]Entry_name        = u-boot</span><br><span class="line">[652]Entry_name        = monitor</span><br><span class="line">[656]Entry_name        = dtbo</span><br><span class="line">[659]Entry_name        = dtb</span><br><span class="line">[662]tunning data addr:0x4a0003e8</span><br><span class="line">[665]Jump to second Boot.</span><br><span class="line">NOTICE:  BL3-1: v1.0(debug):09e19e7</span><br><span class="line">NOTICE:  BL3-1: Built : 11:30:42, 2020-09-29</span><br><span class="line">NOTICE:  BL3-1 commit: 8</span><br><span class="line">ERROR:   Error initializing runtime service tspd_fast</span><br><span class="line">NOTICE:  BL3-1: Preparing <span class="keyword">for</span> EL3 <span class="built_in">exit</span> to normal world</span><br><span class="line">NOTICE:  BL3-1: Next image address = 0x4a000000</span><br><span class="line">NOTICE:  BL3-1: Next image spsr = 0x1d3</span><br><span class="line"></span><br><span class="line">U-Boot 2018.05-00007-g782b5e0-dirty (Aug 16 2021 - 10:46:05 +0800) Allwinner Technology</span><br><span class="line"></span><br><span class="line">[00.741]CPU:   Allwinner Family</span><br><span class="line">[00.744]Model: sun50iw9</span><br><span class="line">I2C:   ready</span><br><span class="line">[00.748]DRAM:  2 GiB</span><br><span class="line">[00.751]Relocation Offset is: 75ec5000</span><br><span class="line">[00.789]secure <span class="built_in">enable</span> bit: 0</span><br><span class="line">[00.792]pmu_axp152_probe pmic_bus_read fail</span><br><span class="line">[00.796]PMU: AXP806</span><br><span class="line">[00.801]CPU=1008 MHz,PLL6=600 Mhz,AHB=200 Mhz, APB1=100Mhz  MBus=400Mhz</span><br><span class="line">[00.992]sunxi overlay merged okqv</span><br><span class="line">[00.995]drv_disp_init</span><br><span class="line">[01.026]__clk_enable: clk is null.</span><br><span class="line">[01.032]drv_disp_init finish</span><br><span class="line">[01.034]gic: 20201231 sec monitor mode</span><br><span class="line">[01.048]flash init start</span><br><span class="line">[01.050]workmode = 0,storage <span class="built_in">type</span> = 2</span><br><span class="line">[01.053]MMC:     2</span><br><span class="line">[01.055]********* 20210428 0************</span><br><span class="line">[01.058]********* 20210428 1************</span><br><span class="line">[01.062]get mem <span class="keyword">for</span> descripter OK !</span><br><span class="line">[01.071]get sdc2 sdc_boot0_sup_1v8 fail.</span><br><span class="line">[01.076]io is 1.8V</span><br><span class="line">[01.077]********* 20210428 2************</span><br><span class="line"></span><br><span class="line">[01.081]********* 20210428 3************</span><br><span class="line">[01.085]********* 20210428 mmc_start_init ************</span><br><span class="line">sprite_led_gpio start</span><br><span class="line">[01.094]********* 20210428 gpio ok************</span><br><span class="line">[01.098]********* 20210428 6************</span><br><span class="line">[01.102]********* 20210428 7************</span><br><span class="line">[01.105]********* 20210428 8************</span><br><span class="line">[01.109]********* 20210428 9************</span><br><span class="line">[01.130]already at HSSDR52_SDR25 mode</span><br><span class="line">[01.133]sunxi flash init ok</span><br><span class="line">[01.137]Loading Environment from SUNXI_FLASH... OK</span><br><span class="line">[01.147]usb burn from boot</span><br><span class="line">delay time 0</span><br><span class="line">weak:otg_phy_config</span><br><span class="line">[01.160]usb prepare ok</span><br><span class="line">[01.963]overtime</span><br><span class="line">[01.967]do_burn_from_boot usb : no usb exist</span><br><span class="line">[01.971]boot_gui_init:start</span><br><span class="line">FAT: Misaligned buffer address (bbe80cd8)</span><br><span class="line">32 bytes <span class="built_in">read</span> <span class="keyword">in</span> 5 ms (5.9 KiB/s)</span><br><span class="line">sprite_time_func= blue only</span><br><span class="line">[02.259]boot_gui_init:finish</span><br><span class="line">[02.262]bmp_name=bootlogo.bmp</span><br><span class="line">2764856 bytes <span class="built_in">read</span> <span class="keyword">in</span> 24 ms (109.9 MiB/s)</span><br><span class="line">[02.307]hsddr 2-50000000</span><br><span class="line">[02.309]hs200 5-200000000</span><br><span class="line">[02.311]hs400 3-100000000</span><br><span class="line">[02.314]get max-frequency ok 100000000 Hz</span><br><span class="line">[02.318]0 0 0: 0 0 0</span><br><span class="line">[02.323]update dts</span><br><span class="line">** Unrecognized filesystem <span class="built_in">type</span> **</span><br><span class="line">[02.338]load file(ULI/factory/rootwait init.txt) error.</span><br><span class="line">[02.343]name <span class="keyword">in</span> map snum</span><br><span class="line">[02.345]name <span class="keyword">in</span> map mac</span><br><span class="line">** Unrecognized filesystem <span class="built_in">type</span> **</span><br><span class="line">[02.361]load file(ULI/factory/wifi_mac.txt) error.</span><br><span class="line">** Unrecognized filesystem <span class="built_in">type</span> **</span><br><span class="line">[02.379]load file(ULI/factory/bt_mac.txt) error.</span><br><span class="line">** Unrecognized filesystem <span class="built_in">type</span> **</span><br><span class="line">[02.397]load file(ULI/factory/selinux.txt) error.</span><br><span class="line">** Unrecognized filesystem <span class="built_in">type</span> **</span><br><span class="line">[02.414]load file(ULI/factory/specialstr.txt) error.</span><br><span class="line">[02.433]update part info</span><br><span class="line">[02.452]update bootcmd</span><br><span class="line">[02.454]No ethernet found.</span><br><span class="line">Hit any key to stop autoboot:  0</span><br><span class="line">[04.685]Starting kernel ...</span><br><span class="line"></span><br><span class="line">[04.687]mmc <span class="built_in">exit</span> start</span><br><span class="line">[04.699]mmc 2 <span class="built_in">exit</span> ok</span><br><span class="line">[    0.000000] Booting Linux on physical CPU 0x0</span><br><span class="line">[    0.000000] Linux version 4.9.170 (yifan@yifan-Z270-HD3) (gcc version 5.3.1 20160412 (Linaro GCC 5.3-2016.05) ) <span class="comment">#17 SMP PREEMPT Sun Aug 15 10:12:32 CST 2021</span></span><br><span class="line">[    0.000000] Boot CPU: AArch64 Processor [410fd034]</span><br><span class="line">[    0.000000] bootconsole [earlycon0] enabled</span><br><span class="line">[    0.027741] BOOTEVENT:        27.727749: ON</span><br><span class="line">[    0.251878] sunxi_i2c_probe()2209 - [i2c3] warning: failed to get regulator <span class="built_in">id</span></span><br><span class="line">[    0.252877] sunxi_i2c_probe()2209 - [i2c5] warning: failed to get regulator <span class="built_in">id</span></span><br><span class="line">[    0.303860] acx00_i2c_probe,l:282</span><br><span class="line">[    0.304019] [ac200] pwm is NULL! Just initialize it.</span><br><span class="line">[    0.304813] [ac200] pwm <span class="built_in">enable</span></span><br><span class="line">[    0.304846] [ac200] pwm is initialized</span><br><span class="line">[    0.304923] acx00_init_work,l:130</span><br><span class="line">[    0.305644] acx00_init_work,l:137</span><br><span class="line">[    0.306130] sunxi_i2c_do_xfer()1935 - [i2c5] incomplete xfer (status: 0x20, dev addr: 0x10)</span><br><span class="line">[    0.312013] [ac200] get ave_regulator_name failed!</span><br><span class="line">[    0.403127] failed to get standby led pin assign</span><br><span class="line">[ ▒[    0.409753] uart uart1: get regulator failed</span><br><span class="line">[    0.442077] [NAND][NE] Not found valid nand node on dts</span><br><span class="line">[    0.450795] sunxi-wlan soc@03000000:wlan: get gpio chip_en failed</span><br><span class="line">[    0.457679] sunxi-wlan soc@03000000:wlan: get gpio power_en failed</span><br><span class="line">[    0.596362] hci: request ohci1-controller gpio:232</span><br><span class="line">[    0.787556] axp2101_pek: axp2101-pek can not register without irq</span><br><span class="line">[    0.797816] sunxi_ir_startup: get ir protocol failed</span><br><span class="line">[    0.806014] VE: get debugfs_mpp_root is NULL, please check mpp</span><br><span class="line">[    0.806014]</span><br><span class="line">[    0.814271] VE: sunxi ve debug register driver failed!</span><br><span class="line">[    0.814271]</span><br><span class="line">[    0.829634] mmc:failed to get gpios</span><br><span class="line">[    0.909011] mmc:failed to get gpios</span><br><span class="line">[    0.945678] sunxi-mmc sdc1: smc 2 p1 err, cmd 52, RTO !!</span><br><span class="line">[    0.952484] sunxi-mmc sdc1: smc 2 p1 err, cmd 52, RTO !!</span><br><span class="line">[    0.954243] failed get gpio-spdif gpio from dts,spdif_gpio:-2</span><br><span class="line">[    0.956129] [sunxi_internal_codec_probe]:get audio avcc failed</span><br><span class="line">[    0.956165] [sunxi_internal_codec_probe]:get audio vcc3v3-audio failed</span><br><span class="line">[    0.956399] [audio-codec]dachpf_cfg configurations missing or invalid.</span><br><span class="line">[    0.956409] lineout_vol:26, linein_gain:3, fmin_gain:3, digital_vol:0, adcdrc_cfg:0, adchpf_cfg:0, dacdrc_cfg:0, dachpf_cfg:0, ramp_func_used:1, pa_msleep_time:160, pa_ctl_level:0, gpio-spk:0</span><br><span class="line">[    1.006385] sndhdmi sndhdmi: ASoC: CPU DAI (null) not registered</span><br><span class="line">[    1.013225] sndhdmi sndhdmi: snd_soc_register_card() failed: -517</span><br></pre></td></tr></table></figure>
+
+<h1 id="燒錄"><a href="#燒錄" class="headerlink" title="燒錄"></a>燒錄</h1><p>這台機上盒使用的 Soc 是 Allwinner H616，電源管理晶片為 AXP305，板子為 TX6s，在 Armbian 找到對應的板子，進行下載後燒綠進 SD 卡。</p>
+<p><img src="/assets/tx6s4.png"></p>
+<p><img src="/assets/tx6s5.png"></p>
+<p>可惜實測運行時會找不到有線網路，日後再研究，先外接 USB 網卡取代。</p>
+<p><img src="/assets/tx6s6.jpg"></p>
+<h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><p>啟動後，等待一段時間，使用 ssh 指令登入，預設密碼是 1234</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh root@&lt;your-board-ip&gt;</span><br></pre></td></tr></table></figure>
+
+<p>做完相關設定後，第一步就完成囉！<br>接下來就看想玩什麼，像是自架 NAS。</p>
+<h2 id="安裝-OMV"><a href="#安裝-OMV" class="headerlink" title="安裝 OMV"></a>安裝 OMV</h2><p>參考 <a target="_blank" rel="noopener" href="https://docs.armbian.com/software/omv/">https://docs.armbian.com/software/omv/</a>，會透過網路下載和安裝 OMV，需要一些時間</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">armbian-config --cmd OMV001</span><br></pre></td></tr></table></figure>
+
+<p>完成後，瀏覽 http:&#x2F;&#x2F;&lt;your.IP&gt;:80<br>預設帳密為 admin &#x2F; openmediavault</p>
+<h1 id="打通有線網路"><a href="#打通有線網路" class="headerlink" title="打通有線網路"></a>打通有線網路</h1><div class="note info">
+            <p>沒有成功，只是將研究過程紀錄下來</p>
+          </div>
+
+<p>幾個月前 Armbian 還未支援 TX6s 的板子，所以筆者是用最接近的 X96 Mate 燒錄後運行，可以開機啟動，但找不到有線網路，表示設備樹需調整。因此會以 X96 Mate 為基礎，來新增設定檔和修改 DTS 設備樹。</p>
+<h2 id="環境建置"><a href="#環境建置" class="headerlink" title="環境建置"></a>環境建置</h2><p>使用 Ubuntu 24.04 (WSL2) 進行編譯</p>
+<p>下載 Armbian</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/armbian/build</span><br><span class="line">cd build</span><br></pre></td></tr></table></figure>
+
+<p>安裝工具包</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update -y</span><br><span class="line">sudo apt-get full-upgrade -y</span><br><span class="line">sudo apt-get install -y acl aptly aria2 axel bc binfmt-support binutils-aarch64-linux-gnu bison bsdextrautils btrfs-progs build-essential busybox ca-certificates ccache clang coreutils cpio crossbuild-essential-arm64 cryptsetup curl debian-archive-keyring debian-keyring debootstrap device-tree-compiler dialog dirmngr distcc dosfstools dwarves e2fsprogs expect f2fs-tools fakeroot fdisk file flex gawk gcc-arm-linux-gnueabi gdisk git gpg gzip imagemagick jq kmod libbison-dev libc6-dev-armhf-cross libcrypto++-dev libelf-dev libfdt-dev libfile-fcntllock-perl libfl-dev libfuse-dev libgcc-12-dev-arm64-cross libgmp3-dev liblz4-tool libmpc-dev libncurses-dev libpython3-dev libssl-dev libusb-1.0-0-dev linux-base lld llvm locales lz4 lzma lzop make mtools ncurses-base ncurses-term nfs-kernel-server ntpdate openssl p7zip p7zip-full parallel parted patchutils pbzip2 pigz pixz pkg-config pv python3 python3-dev python3-setuptools qemu-user-static rdfind rename rsync sudo swig tar tree u-boot-tools udev unzip util-linux uuid uuid-dev uuid-runtime vim wget whiptail xfsprogs xsltproc xz-utils zip zlib1g-dev zstd</span><br></pre></td></tr></table></figure>
+
+<h2 id="新增設備"><a href="#新增設備" class="headerlink" title="新增設備"></a>新增設備</h2><p>參考 <a target="_blank" rel="noopener" href="https://github.com/armbian/build/blob/main/config/boards/x96-mate.tvb">https://github.com/armbian/build/blob/main/config/boards/x96-mate.tvb</a>，新增板子的設定檔</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano config/boards/tx6s.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># Allwinner H616 TVBox with 4GB of RAM and EMMC</span><br><span class="line">BOARD_NAME=&quot;Unblock TX6s&quot;</span><br><span class="line">BOARD_VENDOR=&quot;allwinner&quot;</span><br><span class="line">BOARDFAMILY=&quot;sun50iw9&quot;</span><br><span class="line">BOARD_MAINTAINER=&quot;&quot;</span><br><span class="line">INTRODUCED=&quot;2021&quot;</span><br><span class="line">BOOTCONFIG=&quot;tx6s_defconfig&quot;</span><br><span class="line">BOOT_LOGO=&quot;desktop&quot;</span><br><span class="line">KERNEL_TARGET=&quot;current,edge&quot;</span><br><span class="line">KERNEL_TEST_TARGET=&quot;current&quot;</span><br><span class="line">FORCE_BOOTSCRIPT_UPDATE=&quot;yes&quot;</span><br><span class="line">OVERLAY_PREFIX=&quot;sun50i-h616&quot;</span><br><span class="line"></span><br><span class="line">enable_extension &quot;uwe5622-allwinner&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="取得原廠-DTS"><a href="#取得原廠-DTS" class="headerlink" title="取得原廠 DTS"></a>取得原廠 DTS</h2><p>有兩個方式，獲得轉換後的檔案 <a href="/assets/tx6s.dts">tx6s.dts</a></p>
+<h3 id="方法一：從原裝置取得"><a href="#方法一：從原裝置取得" class="headerlink" title="方法一：從原裝置取得"></a>方法一：從原裝置取得</h3><p>將設備樹複製到電腦上分析，筆者透過 TFTP 取檔</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">su</span><br><span class="line">busybox tftp -p -l /sys/firmware/fdt -r tx6s.dtb 192.168.1.100</span><br></pre></td></tr></table></figure>
+
+<p>回到 Ubuntu，把檔案放到 \\wsl$\Ubuntu\home\your_name 底下，輸入以下指令將二進位 dtb 轉為可讀的 dts</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dtc -I dtb -O dts -o tx6s.dts tx6s.dtb</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法二：從原廠-IMG-取得"><a href="#方法二：從原廠-IMG-取得" class="headerlink" title="方法二：從原廠 IMG 取得"></a>方法二：從原廠 IMG 取得</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">7z l x11_20210824.2008.img</span><br></pre></td></tr></table></figure>
+
+<p>輸出結果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">   Date      Time    Attr         Size   Compressed  Name</span><br><span class="line">------------------- ----- ------------ ------------  ------------------------</span><br><span class="line">                    .....     33554432     33554432  0.bootloader.img</span><br><span class="line">                    .....     16777216     16777216  1.env.img</span><br><span class="line">                    .....     33554432     33554432  2.boot.img</span><br><span class="line">                    .....   2147483648   2147483648  3.super.img</span><br><span class="line">                    .....   2147483648   2147483648  4.sysrecovery.img</span><br><span class="line">                    .....     16777216     16777216  5.misc.img</span><br><span class="line">                    .....     33554432     33554432  6.recovery.img</span><br><span class="line">                    .....   1006632960   1006632960  7.cache.img</span><br><span class="line">                    .....     16777216     16777216  8.vbmeta.img</span><br><span class="line">                    .....     16777216     16777216  9.vbmeta_system.img</span><br><span class="line">                    .....     16777216     16777216  10.vbmeta_vendor.img</span><br><span class="line">                    .....     16777216     16777216  11.metadata.img</span><br><span class="line">                    .....     16777216     16777216  12.private.img</span><br><span class="line">                    .....       524288       524288  13.frp.img</span><br><span class="line">                    .....     16252928     16252928  14.empty.img</span><br><span class="line">                    .....     16777216     16777216  15.media_data.img</span><br><span class="line">                    .....     16777216     16777216  16.Reserve0.img</span><br><span class="line">                    .....         8192         8192  17.UDISK.img</span><br><span class="line">------------------- ----- ------------ ------------  ------------------------</span><br><span class="line">                            5570043904   5570043904  18 files</span><br></pre></td></tr></table></figure>
+
+<p>解壓縮取得 0.bootloader.img 後，安裝 extract-dtb，用於取得 dtb</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">7z x x11_20210824.2008.img 0.bootloader.img</span><br><span class="line">sudo apt install python3.12-venv</span><br><span class="line">python3 -m venv myenv</span><br><span class="line">source myenv/bin/activate</span><br><span class="line">pip install extract-dtb</span><br><span class="line">extract-dtb 0.bootloader.img -o extracted_dtb</span><br><span class="line">deactivate</span><br></pre></td></tr></table></figure>
+
+<p>注意這裡會同時得到 dtb 和 kernel。</p>
+<p>輸入以下指令將二進位 dtb 轉為可讀的 dts</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dtc -I dtb -O dts -o tx6s.dts extracted_dtb/01_dtbdump_,sun50iw9.dtb</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改-uboot-的-DTS"><a href="#修改-uboot-的-DTS" class="headerlink" title="修改 uboot 的 DTS"></a>修改 uboot 的 DTS</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./compile.sh BOARD=tx6s BRANCH=current uboot-patch</span><br></pre></td></tr></table></figure>
+
+<p>看到暫停提示，先不要按 Enter</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[💲|🚸] Make your changes in this directory: [ /home/XXX/build/cache/sources/u-boot-worktree/u-boot/v2024.01 ]</span><br><span class="line">[💲|🚸] Press &lt;ENTER&gt; after you are done [ editing files in /home/XXX/build/cache/sources/u-boot-worktree/u-boot/v2024.01 ]</span><br><span class="line">Press ENTER to show a preview of your patch, or type &#x27;stop&#x27; to stop patching...</span><br></pre></td></tr></table></figure>
+
+<p>另開視窗</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd build/cache/sources/u-boot-worktree/u-boot/v2024.01/</span><br><span class="line">sudo cp arch/arm/dts/sun50i-h616-x96-mate.dts arch/arm/dts/sun50i-h616-tx6s.dts</span><br></pre></td></tr></table></figure>
+
+<p>比對原廠 DTS (tx6s.dts) 和 <a target="_blank" rel="noopener" href="https://github.com/u-boot/u-boot/blob/v2024.01/arch/arm/dts/sun50i-h616-x96-mate.dts">X96 Mate DTS</a> (sun50i-h616-x96-mate.dts)，發現 X96 Mate DTS 支援 AXP305, AXP805, AXP806 的電源管理晶片，正好符合實際裝置上的 AXP305。<br>compatible 屬性值習慣上是製造商名稱再加上元件名稱。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&amp;r_rsb &#123;</span><br><span class="line">	status = &quot;okay&quot;;</span><br><span class="line"></span><br><span class="line">	axp305: pmic@745 &#123;</span><br><span class="line">		compatible = &quot;x-powers,axp305&quot;, &quot;x-powers,axp805&quot;,</span><br><span class="line">			     &quot;x-powers,axp806&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>至於為何原廠 DTS 只支援 AXP806，卻也跑得起來就不清楚了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pmu &#123;</span><br><span class="line">	compatible = &quot;x-powers,axp806&quot;;</span><br><span class="line">	reg = &lt;0x36&gt;;</span><br></pre></td></tr></table></figure>
+
+<p>接著在原廠 DTS 找有線網路 eth 開頭的，底下表示 H616 內建的 PHY &#x2F; 10&#x2F;100 Ethernet</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">eth@05030000 &#123;</span><br><span class="line">  compatible = &quot;allwinner,sunxi-gmac&quot;;</span><br><span class="line">  reg = &lt;0x00 0x5030000 0x00 0x10000 0x00 0x3000034 0x00 0x04&gt;;</span><br><span class="line">  interrupts = &lt;0x00 0x0f 0x04&gt;;</span><br><span class="line">  interrupt-names = &quot;gmacirq&quot;;</span><br><span class="line">  clocks = &lt;0xd5&gt;;</span><br><span class="line">  clock-names = &quot;gmac&quot;;</span><br><span class="line">  device_type = &quot;gmac1&quot;;</span><br><span class="line">  pinctrl-0 = &lt;0xd6&gt;;</span><br><span class="line">  pinctrl-1 = &lt;0xd7&gt;;</span><br><span class="line">  pinctrl-names = &quot;default\0sleep&quot;;</span><br><span class="line">  phy-mode = &quot;rmii&quot;;</span><br><span class="line">  tx-delay = &lt;0x07&gt;;</span><br><span class="line">  rx-delay = &lt;0x1f&gt;;</span><br><span class="line">  phy-rst;</span><br><span class="line">  gmac-power0;</span><br><span class="line">  gmac-power1;</span><br><span class="line">  gmac-power2;</span><br><span class="line">  status = &quot;okay&quot;;</span><br><span class="line">  linux,phandle = &lt;0x17b&gt;;</span><br><span class="line">  phandle = &lt;0x17b&gt;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano arch/arm/dts/sun50i-h616-tx6s.dts</span><br></pre></td></tr></table></figure>
+
+<p>修改內容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/ &#123;</span><br><span class="line">  model = &quot;sun50iw9&quot;;</span><br><span class="line">  compatible = &quot;hechuang,x96-mate&quot;, &quot;allwinner,sun50i-h616&quot;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano arch/arm/dts/Makefile</span><br></pre></td></tr></table></figure>
+
+<p>Makefile 中使用 Ctrl + W 找尋 H616 並修改底下這段</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dtb-$(CONFIG_MACH_SUN50I_H616) += \</span><br><span class="line">        sun50i-h616-orangepi-zero2.dtb \</span><br><span class="line">        sun50i-h618-orangepi-zero3.dtb \</span><br><span class="line">        sun50i-h616-x96-mate.dtb \</span><br><span class="line">        sun50i-h616-tx6s.dtb</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo cp configs/x96_mate_defconfig configs/tx6s_defconfig</span><br><span class="line">sudo nano configs/tx6s_defconfig</span><br></pre></td></tr></table></figure>
+
+<p>tx6s_defconfig 只改 CONFIG_DEFAULT_DEVICE_TREE，內容修改如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">CONFIG_ARM=y</span><br><span class="line">CONFIG_ARCH_SUNXI=y</span><br><span class="line">CONFIG_DEFAULT_DEVICE_TREE=&quot;sun50i-h616-tx6s&quot;</span><br><span class="line">CONFIG_SPL=y</span><br><span class="line">CONFIG_DRAM_SUN50I_H616_DX_ODT=0x03030303</span><br><span class="line">CONFIG_DRAM_SUN50I_H616_DX_DRI=0x0e0e0e0e</span><br><span class="line">CONFIG_DRAM_SUN50I_H616_CA_DRI=0x1c12</span><br><span class="line">CONFIG_DRAM_SUN50I_H616_TPR0=0xc0000c05</span><br><span class="line">CONFIG_DRAM_SUN50I_H616_TPR10=0x2f0007</span><br><span class="line">CONFIG_DRAM_SUN50I_H616_TPR11=0xffffdddd</span><br><span class="line">CONFIG_DRAM_SUN50I_H616_TPR12=0xfedf7557</span><br><span class="line">CONFIG_MACH_SUN50I_H616=y</span><br><span class="line">CONFIG_SUNXI_DRAM_H616_DDR3_1333=y</span><br><span class="line">CONFIG_R_I2C_ENABLE=y</span><br><span class="line"># CONFIG_SYS_MALLOC_CLEAR_ON_INIT is not set</span><br><span class="line">CONFIG_SPL_I2C=y</span><br><span class="line">CONFIG_SPL_SYS_I2C_LEGACY=y</span><br><span class="line">CONFIG_SYS_I2C_MVTWSI=y</span><br><span class="line">CONFIG_SYS_I2C_SLAVE=0x7f</span><br><span class="line">CONFIG_SYS_I2C_SPEED=400000</span><br><span class="line">CONFIG_SUPPORT_EMMC_BOOT=y</span><br><span class="line">CONFIG_AXP305_POWER=y</span><br><span class="line">CONFIG_USB_EHCI_HCD=y</span><br><span class="line">CONFIG_USB_OHCI_HCD=y</span><br></pre></td></tr></table></figure>
+
+<p>回到原本的視窗按下 Enter，會在底下自動生成 output&#x2F;patch&#x2F;u-boot-sunxi64-current.patch</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv output/patch/u-boot-sunxi64-current.patch userpatches/u-boot/u-boot-sunxi/tx6s.patch</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./compile.sh BOARD=tx6s RELEASE=trixie BUILD_DESKTOP=no BUILD_MINIMAL=yes KERNEL_CONFIGURE=no</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改-kernel-的-DTS"><a href="#修改-kernel-的-DTS" class="headerlink" title="修改 kernel 的 DTS"></a>修改 kernel 的 DTS</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./compile.sh BOARD=tx6s BRANCH=current kernel-patch</span><br></pre></td></tr></table></figure>
+
+<p>看到暫停提示，先不要按 Enter</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[💲|🚸] Make your changes in this directory: [ /home/XXX/build/cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64 ]</span><br><span class="line">[💲|🚸] Press &lt;ENTER&gt; after you are done [ editing files in /home/XXX/build/cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64 ]</span><br><span class="line">Press ENTER to show a preview of your patch, or type &#x27;stop&#x27; to stop patching...</span><br></pre></td></tr></table></figure>
+
+<p>另開視窗將 dts 檔複製進去</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd build</span><br><span class="line">sudo cp ../tx6s.dts cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64/arch/arm64/boot/dts/allwinner/sun50i-h616-tx6s.dts</span><br><span class="line">sudo nano cache/sources/linux-kernel-worktree/6.18__sunxi64__arm64/arch/arm64/boot/dts/allwinner/Makefile</span><br></pre></td></tr></table></figure>
+
+<p>Makefile 加入底下這段</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-tx6s.dtb</span><br></pre></td></tr></table></figure>
+
+<p>回到原本的視窗按下 Enter，會在底下自動生成 output&#x2F;patch&#x2F;kernel-sunxi64-current.patch</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p userpatches/kernel/sunxi64-current/</span><br><span class="line">mv output/patch/kernel-sunxi64-current.patch userpatches/kernel/sunxi64-current/</span><br></pre></td></tr></table></figure>
+
+<p><strong>參考資料</strong></p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10344250">Day 16 。初入嵌入式開發-設備樹 (上) - iT 邦幫忙::一起幫忙解決難題，拯救 IT 人的一天</a></li>
+</ol>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10/dist/style.css"><script src="https://fastly.jsdelivr.net/npm/d3@7"></script><script src="https://fastly.jsdelivr.net/npm/markmap-view@0.18.10"></script><script src="https://fastly.jsdelivr.net/npm/markmap-toolbar@0.18.10"></script>
+<link rel="stylesheet" href="/css/markmap.css">
+
+<script src="/js/markmap.js"></script>
+
+    </div>
+
+    
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1615854091847831"
+     crossorigin="anonymous"></script>
+<!-- post-body-end -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-1615854091847831"
+     data-ad-slot="9591303574"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/NAS/" rel="tag"># NAS</a>
+              <a href="/tags/%E5%88%B7%E6%A9%9F/" rel="tag"># 刷機</a>
+              <a href="/tags/Armbian/" rel="tag"># Armbian</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2026/10/16/maker-note/" rel="prev" title="創客入門">
+      <i class="fa fa-chevron-left"></i> 創客入門
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8B%86%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">拆解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%87%92%E9%8C%84"><span class="nav-number">2.</span> <span class="nav-text">燒錄</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">3.</span> <span class="nav-text">初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%9D-OMV"><span class="nav-number">3.1.</span> <span class="nav-text">安裝 OMV</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%93%E9%80%9A%E6%9C%89%E7%B7%9A%E7%B6%B2%E8%B7%AF"><span class="nav-number">4.</span> <span class="nav-text">打通有線網路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%92%B0%E5%A2%83%E5%BB%BA%E7%BD%AE"><span class="nav-number">4.1.</span> <span class="nav-text">環境建置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E8%A8%AD%E5%82%99"><span class="nav-number">4.2.</span> <span class="nav-text">新增設備</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%96%E5%BE%97%E5%8E%9F%E5%BB%A0-DTS"><span class="nav-number">4.3.</span> <span class="nav-text">取得原廠 DTS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E5%BE%9E%E5%8E%9F%E8%A3%9D%E7%BD%AE%E5%8F%96%E5%BE%97"><span class="nav-number">4.3.1.</span> <span class="nav-text">方法一：從原裝置取得</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%BE%9E%E5%8E%9F%E5%BB%A0-IMG-%E5%8F%96%E5%BE%97"><span class="nav-number">4.3.2.</span> <span class="nav-text">方法二：從原廠 IMG 取得</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-uboot-%E7%9A%84-DTS"><span class="nav-number">4.4.</span> <span class="nav-text">修改 uboot 的 DTS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-kernel-%E7%9A%84-DTS"><span class="nav-number">4.5.</span> <span class="nav-text">修改 kernel 的 DTS</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Mike Chen</p>
+  <div class="site-description" itemprop="description">現居高雄，熟悉 Android 和 Python 開發，喜歡學習新事物和閱讀。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">56</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/usermark" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;usermark" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:trexcobras@gmail.com" title="E-Mail → mailto:trexcobras@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mike Chen</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 強力驅動
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="訪客總數">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="總瀏覽次數">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'fe34fe28201c28ecaca2',
+      clientSecret: '6b0f055d80dc258148f06400ce27502351d56921',
+      repo        : 'usermark.github.io',
+      owner       : 'usermark',
+      admin       : ['usermark'],
+      id          : '6f479387ef475ab5fda959e6b24c9610',
+        language: 'zh-TW',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
