@@ -46,7 +46,7 @@ create user 'nc'@'%' identified by 'your-password';
 
 授予使用者權限
 ```bash
-grant all on nextcloud.* to 'nc'%'%';
+grant all on nextcloud.* to 'nc'@'%';
 ```
 
 完成後，就能再次回到 http://localhost:8080 輸入對應資料安裝囉！資料庫主機記得輸入的是 WSL 的區網 IP。

@@ -4,6 +4,8 @@ tags:
   - Armbian
   - 刷機
   - NAS
+  - OMV
+  - NextCloud
 date: 2026-11-13 22:46:20
 ---
 
@@ -20,7 +22,9 @@ date: 2026-11-13 22:46:20
 
 ![](/assets/tx6s3.jpg)
 
-完整的啟動資訊如下
+<details>
+    <summary>完整的啟動資訊</summary>
+
 ```sh
 [399]HELLO! BOOT0 is starting!
 [402]BOOT0 commit : 4656b05
@@ -195,6 +199,7 @@ Hit any key to stop autoboot:  0
 [    1.006385] sndhdmi sndhdmi: ASoC: CPU DAI (null) not registered
 [    1.013225] sndhdmi sndhdmi: snd_soc_register_card() failed: -517
 ```
+</details>
 
 # 燒錄
 
@@ -210,16 +215,31 @@ Hit any key to stop autoboot:  0
 
 # 初始化
 
-啟動後，等待一段時間，使用 ssh 指令登入，預設密碼是 1234
+![](/assets/tx6s7.png)
+
+啟動後，等待一段時間，看到該畫面，就可以使用電腦 ssh 指令登入，預設密碼是 1234
 
 ```sh
 ssh root@<your-board-ip>
 ```
 
 做完相關設定後，第一步就完成囉！
+
+輸入以下指令將 armbian 安裝進 eMMC 內
+```sh
+armbian-install
+```
+
+![](/assets/tvbox_armbian.png)
+
+![](/assets/tvbox_armbian2.png)
+
+![](/assets/tvbox_armbian3.png)
+
+跑完後，就可以拔掉 SD 卡，重啟設備囉！
 接下來就看想玩什麼，像是自架 NAS。
 
-## 安裝 OMV
+# 安裝 OMV
 
 參考 <https://docs.armbian.com/software/omv/>，會透過網路下載和安裝 OMV，需要一些時間
 
@@ -228,7 +248,94 @@ armbian-config --cmd OMV001
 ```
 
 完成後，瀏覽 http://<your.IP>:80
-預設帳密為 admin / openmediavault
+預設帳密為 admin / openmediavault，登入後記得先去改密碼。
+
+## 掛載硬碟
+
+先至「儲存裝置」>「檔案系統」>「Btrfs」>「新建」，將外接硬碟加入。
+
+![](/assets/tvbox_ext_drive.png)
+
+加入後，接著選「掛載」，後面才可以分享出來。
+
+![](/assets/tvbox_ext_drive2.png)
+
+完成後，長這樣
+
+![](/assets/tvbox_ext_drive3.png)
+
+## 共享資料夾
+
+至「儲存裝置」>「共享資料夾」>「新建」，名稱可自訂，打算分享整個硬碟，因此相對路徑為 /。
+
+![](/assets/tvbox_share.png)
+
+完成後，長這樣
+
+![](/assets/tvbox_share2.png)
+
+至「服務」>「SMB/CIFS」>「設定」，勾選 「已啟用」後儲存。
+
+![](/assets/tvbox_smb.png)
+
+跳至「共享」>「新建」，將前面儲存裝置共享的資料夾加入。
+
+![](/assets/tvbox_share3.png)
+
+最後至「用戶管理」>「用戶」>「新建」，新增一個使用者，群組選 sambashare
+
+![](/assets/tvbox_share_user.png)
+
+便可以回到 Windows 用 \\\\\<your-board-ip\> 實際登入看看囉！
+
+# 安裝 NextCloud
+
+沒想到 armbian 也支援一鍵安裝 NextCloud，便裝來跑看看。參考 <https://docs.armbian.com/software/nextcloud/>
+
+```sh
+armbian-config --cmd NCT001
+```
+
+完成後，瀏覽 https://<your.IP>:1443
+
+![](/assets/tvbox_nc.png)
+
+到這步停下，筆者要用 MariaDB 作為資料庫，參考 <https://docs.armbian.com/software/mariadb/>
+好方便，常用的工具都能一鍵安裝！
+
+```sh
+armbian-config --cmd DAT001
+```
+
+安裝完後，用 root 連進去，建立資料庫 nextcloud
+```sh
+docker exec -it mariadb mariadb -u root
+```
+
+```sql
+create database nextcloud;
+```
+
+建立使用者 nc，後面的 % 字號表示允許任何主機連線。
+```sql
+create user 'nc'@'%' identified by 'your-password';
+```
+
+授予使用者權限
+```sql
+grant all on nextcloud.* to 'nc'@'%';
+```
+
+回到 https://<your.IP>:1443 完成相關設定
+
+![](/assets/tvbox_nc2.png)
+
+# 好用指令
+
+監控 CPU 溫度
+```sh
+sudo armbianmonitor -m
+```
 
 # 打通有線網路
 
