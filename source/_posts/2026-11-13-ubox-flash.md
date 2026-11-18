@@ -236,6 +236,8 @@ armbian-install
 
 ![](/assets/tvbox_armbian3.png)
 
+![](/assets/tvbox_armbian4.png)
+
 跑完後，就可以拔掉 SD 卡，重啟設備囉！
 接下來就看想玩什麼，像是自架 NAS。
 
@@ -292,6 +294,14 @@ armbian-config --cmd OMV001
 
 沒想到 armbian 也支援一鍵安裝 NextCloud，便裝來跑看看。參考 <https://docs.armbian.com/software/nextcloud/>
 
+說明下這裡有個坑，NextCloud 其實是跑在 docker 上面，data 資料夾預設不會指到外接硬碟。
+先建立好資料夾，並掛載到外接硬碟底下。
+```sh
+mkdir -p /armbian/nextcloud/data
+mkdir -p /srv/dev-disk-by-uuid-6dc3060c-6c71-4376-bdc9-73386e93f321/nc_data
+mount --bind /srv/dev-disk-by-uuid-6dc3060c-6c71-4376-bdc9-73386e93f321/nc_data /armbian/nextcloud/data
+```
+
 ```sh
 armbian-config --cmd NCT001
 ```
@@ -329,6 +339,11 @@ grant all on nextcloud.* to 'nc'@'%';
 回到 https://<your.IP>:1443 完成相關設定
 
 ![](/assets/tvbox_nc2.png)
+
+資料庫主機記得輸入的是 docker 的區網 IP，輸入以下指令，找 docker 命名的
+```sh
+ip a
+```
 
 # 好用指令
 

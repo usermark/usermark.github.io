@@ -41,4 +41,5 @@ markmap:
 ## [[OpenWrt] ASUS RT-N12+ B1 路由器刷機](/2024/09/27/asus-router-openwrt)<br/>認識 TTL 接腳，初探 U-Boot
 
 ### [[LibreELEC] 機上盒刷機](/2024/09/30/ovo-flash)<br/>嘗試找其它板子的 TTL
+### [[Armbian] 安博機上盒刷機](/2026/11/13/ubox-flash/)<br/>認識 kernel
 {% endmarkmap %}
